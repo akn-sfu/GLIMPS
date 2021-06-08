@@ -43,4 +43,4 @@ deploy:
     - git pull
     - docker-compose -f docker-compose.yml -f docker-compose.deploy.yml build
     - docker-compose -f docker-compose.yml -f docker-compose.deploy.yml up --force-recreate -d
-    - sleep 15 && docker exec -it glimps_api npx typeorm migration:run
+    - sleep 15 && docker exec glimps_api npx typeorm migration:run
