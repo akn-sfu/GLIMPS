@@ -1,13 +1,46 @@
-before_script:
-  - ./devops/tests/lockfiles.sh
+stages:
+  - test
+  - deploy
 
-build_image:
-  stage: build
+variables:
+  DEPLOY_BRANCH: "master"
+
+check_lockfiles:
+  stage: test
+  tags:
+    - shell
+  rules:
+    - if: '$CI_MERGE_REQUEST_ID != null'
+      when: on_success
+    - when: never
+  script:
+    - ./devops/tests/lockfiles.sh
+
+test_build:
+  stage: test
+  tags:
+    - shell
+  rules:
+    - if: '$CI_MERGE_REQUEST_ID != null'
+      when: on_success
+    - when: never
   script:
     - docker build -t ci-build:${CI_COMMIT_SHORT_SHA} -f devops/docker/Dockerfile .
-
-clean_up:
-  stage: .post
-  script:
+  after_script:
     - docker container prune -f
     - docker image rm ci-build:${CI_COMMIT_SHORT_SHA}
+
+deploy:
+  stage: deploy
+  tags:
+    - shell
+  rules:
+    - if: '$CI_MERGE_REQUEST_ID == null && $CI_COMMIT_BRANCH == $DEPLOY_BRANCH'
+      when: on_success
+    - when: never
+  script:
+    - cd /home/server/glimps-tool
+    - git pull
+    - docker-compose -f docker-compose.yml -f docker-compose.deploy.yml build
+    - docker-compose -f docker-compose.yml -f docker-compose.deploy.yml up --force-recreate -d
+    - sleep 15 && docker exec -it glimps_api npx typeorm migration:run

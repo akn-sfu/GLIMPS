@@ -26,8 +26,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const REDIRECT_URL =
-  process.env.REACT_APP_SFU_REDIRECT || 'http://localhost:3000/sfu';
+const REDIRECT_URL = `${window.location.protocol}//${window.location.host}/sfu`;
 
 const HomeLogin: React.FC = () => {
   const classes = useStyles();
