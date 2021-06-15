@@ -79,7 +79,7 @@ const TablePaginationActions: React.FC<TablePaginationProps> = (
   const handleBackButtonClick = (
     event: React.MouseEvent<HTMLButtonElement>,
   ) => {
-    onChangePage(event, page);
+    onChangePage(event, page - 1);
   };
 
   const handleNextButtonClick = (

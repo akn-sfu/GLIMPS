@@ -59,29 +59,29 @@ const CompactTableHeaders: React.FC = () => {
   );
 };
 
-const RegularTableHeaders: React.FC = () => {
-  return (
-    <Box pr={6} pl={2} py={1}>
-      <Grid container>
-        <Grid item xs={6}>
-          <Typography>Title</Typography>
-        </Grid>
-        <Grid item xs={2}>
-          <Typography>Author</Typography>
-        </Grid>
-        <Grid item xs={2}>
-          <Typography>Date</Typography>
-        </Grid>
-        <Grid item xs={1}>
-          <Typography>Score</Typography>
-        </Grid>
-        <Grid item xs={1}>
-          <Typography>Σ Commits</Typography>
-        </Grid>
-      </Grid>
-    </Box>
-  );
-};
+// const RegularTableHeaders: React.FC = () => {
+//   return (
+//     <Box pr={6} pl={2} py={1}>
+//       <Grid container>
+//         <Grid item xs={6}>
+//           <Typography>Title</Typography>
+//         </Grid>
+//         <Grid item xs={2}>
+//           <Typography>Author</Typography>
+//         </Grid>
+//         <Grid item xs={2}>
+//           <Typography>Date</Typography>
+//         </Grid>
+//         <Grid item xs={1}>
+//           <Typography>Score</Typography>
+//         </Grid>
+//         <Grid item xs={1}>
+//           <Typography>Σ Commits</Typography>
+//         </Grid>
+//       </Grid>
+//     </Box>
+//   );
+// };
 
 const ListMergeRequestPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -164,7 +164,7 @@ const ListMergeRequestPage = () => {
                   </DefaultPageTitleFormat>
                 </Box>
                 {!showSpiltView ? (
-                  <RegularTableHeaders />
+                  <CompactTableHeaders />
                 ) : (
                   <CompactTableHeaders />
                 )}
