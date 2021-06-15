@@ -145,7 +145,7 @@ const ListMergeRequestPage = () => {
     } else {
       b = DateTime.fromISO(b.committed_date);
     }
-    return b - a;
+    return a - b;
   });
 
   const showSpiltView = activeMergeRequest || activeCommit;
