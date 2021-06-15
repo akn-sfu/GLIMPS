@@ -14,32 +14,32 @@ import CommitOrMergeRequestRenderer from './components/CommitOrMergeRequestRende
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import DefaultPageTitleFormat from '../../components/DefaultPageTitleFormat';
-import styled from 'styled-components';
+// import styled from 'styled-components';
 import { useFilterContext } from '../../contexts/FilterContext';
 import { ScoreOverrideQueueProvider } from './contexts/ScoreOverrideQueue';
 import ScoreOverrideQueueInfo from './components/ScoreOverrideQueueInfo';
 import { useInfiniteCommit } from '../../api/commit';
 import { DateTime } from 'luxon';
 
-const IndependentScrollGrid = styled(Grid)`
-  height: 100vh;
-  position: fixed;
-  margin-left: 5rem;
-  padding-right: 8rem;
-  & > * {
-    height: 100vh;
-    overflow: hidden;
+// const IndependentScrollGrid = styled(Grid)`
+//   height: 100vh;
+//   position: fixed;
+//   margin-left: 5rem;
+//   padding-right: 8rem;
+//   & > * {
+//     height: 100vh;
+//     overflow: hidden;
 
-    & > * {
-      // hack to hide scrollbar: https://stackoverflow.com/questions/16670931/hide-scroll-bar-but-while-still-being-able-to-scroll
-      padding-right: 30px;
-      height: 100vh;
-      width: 100%;
-      overflow-y: scroll;
-      box-sizing: content-box;
-    }
-  }
-`;
+//     & > * {
+//       // hack to hide scrollbar: https://stackoverflow.com/questions/16670931/hide-scroll-bar-but-while-still-being-able-to-scroll
+//       padding-right: 30px;
+//       height: 100vh;
+//       width: 100%;
+//       overflow-y: scroll;
+//       box-sizing: content-box;
+//     }
+//   }
+// `;
 
 const CompactTableHeaders: React.FC = () => {
   return (
@@ -59,29 +59,29 @@ const CompactTableHeaders: React.FC = () => {
   );
 };
 
-// const RegularTableHeaders: React.FC = () => {
-//   return (
-//     <Box pr={6} pl={2} py={1}>
-//       <Grid container>
-//         <Grid item xs={6}>
-//           <Typography>Title</Typography>
-//         </Grid>
-//         <Grid item xs={2}>
-//           <Typography>Author</Typography>
-//         </Grid>
-//         <Grid item xs={2}>
-//           <Typography>Date</Typography>
-//         </Grid>
-//         <Grid item xs={1}>
-//           <Typography>Score</Typography>
-//         </Grid>
-//         <Grid item xs={1}>
-//           <Typography>Σ Commits</Typography>
-//         </Grid>
-//       </Grid>
-//     </Box>
-//   );
-// };
+const RegularTableHeaders: React.FC = () => {
+  return (
+    <Box pr={6} pl={2} py={1}>
+      <Grid container>
+        <Grid item xs={6}>
+          <Typography>Title</Typography>
+        </Grid>
+        <Grid item xs={2}>
+          <Typography>Author</Typography>
+        </Grid>
+        <Grid item xs={2}>
+          <Typography>Date</Typography>
+        </Grid>
+        <Grid item xs={1}>
+          <Typography>Score</Typography>
+        </Grid>
+        <Grid item xs={1}>
+          <Typography>Σ Commits</Typography>
+        </Grid>
+      </Grid>
+    </Box>
+  );
+};
 
 const ListMergeRequestPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -149,13 +149,13 @@ const ListMergeRequestPage = () => {
   });
 
   const showSpiltView = activeMergeRequest || activeCommit;
-  const GridComponent = showSpiltView ? IndependentScrollGrid : Grid;
+  const GridComponent = showSpiltView ? Grid : Grid;
   return (
     <>
       <DefaultPageLayout>
         <ScoreOverrideQueueProvider>
           <GridComponent container spacing={showSpiltView ? 3 : 0}>
-            <Grid item xs={showSpiltView ? 5 : 12}>
+            <Grid item xs={showSpiltView ? 5 : 5}>
               <Container>
                 <ScoreOverrideQueueInfo />
                 <Box my={2}>
@@ -164,7 +164,7 @@ const ListMergeRequestPage = () => {
                   </DefaultPageTitleFormat>
                 </Box>
                 {!showSpiltView ? (
-                  <CompactTableHeaders />
+                  <RegularTableHeaders />
                 ) : (
                   <CompactTableHeaders />
                 )}
