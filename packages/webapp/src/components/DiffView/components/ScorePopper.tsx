@@ -75,7 +75,7 @@ const ScorePopover: React.FC<ScorePopperProps> = ({
         disableRestoreFocus
       >
         <div className={classes.summaryFlex}>
-          <Typography display='inline'>original score: </Typography>
+          <Typography display='inline'>lines added: </Typography>
           <Typography display='inline'>
             {scoreSummary.add.toFixed(1) || 0}
           </Typography>
@@ -87,7 +87,7 @@ const ScorePopover: React.FC<ScorePopperProps> = ({
           </Typography>
         </div>
         <div className={classes.summaryFlex}>
-          <Typography display='inline'>delete: </Typography>
+          <Typography display='inline'>lines deleted: </Typography>
           <Typography display='inline'>
             {scoreSummary.delete.toFixed(1) || 0}
           </Typography>
