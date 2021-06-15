@@ -7,7 +7,7 @@
 
 
 ## Setup Development Environment
-1. In the project root, run `docker-compose up -d db`. This command will start up the postgres database on port 5433 on your computer.
+1. In the project root, run `docker-compose up`. This command will start up the postgres database on port `5432` on your computer.
 2. In the project root, run `npm install` and then `npm run bootstrap`. This will install and link dependencies.
 3. In the project root, run `npm run build`, this will build all our packages in order.
 4. In **packages/api** folder run: `npm run migrate` and then `npm run start:dev` to start the API.
@@ -21,7 +21,23 @@
 * `packages/types`: Shared type definitons so the front end and back end know what resources are being transferred: run `npm run build` before running the api or webapp
 * `packages/webapp`: The frontend, which is a React application. Run `npm run start` (in `packages/webapp`) to start the front end in development mode.
 
+## Deployments
 
-### Docker 
-~~This is not needed to development purposes and is used to run the webapp without any setup:
-Run `docker-compose up` in the project root. This will take a few minutes to download and build everything, but once it's done it'll tell you to visit `http://localhost:3000`. You'll find the webapp there.~~ Docker needs to be updated since we introduced the `@ceres/types` package.
+Deployments run completely inside Docker. To manually deploy:
+
+1. Install Docker
+2. `git pull` the repository
+3. Create a `.env` file containing the following (`[]` not included):
+
+```
+DOMAIN=[the domain]
+DB_USERNAME=[any username]
+DB_PASSWORD=[pick something secure!]
+JWT_SIGNING_KEY=[pick something secure!]
+GITLAB_BASE_URL=[URL of the target GitLab instance]
+```
+
+4. Run `docker-compose -f docker-compose.yml -f docker-compose.deploy.yml build`
+5. Run `docker-compose -f docker-compose.yml -f docker-compose.deploy.yml up --force-recreate -d`
+6. Wait a few seconds and then run the database migrations: `docker exec -it glimps_api npx typeorm migration:run`
+7. You're done!

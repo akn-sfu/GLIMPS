@@ -1,0 +1,47 @@
+version: "3"
+
+services:
+  caddy:
+    container_name: glimps_caddy
+    restart: always
+    image: caddy:2.3.0
+    volumes:
+        - ./caddy/Caddyfile:/etc/caddy/Caddyfile
+        - caddy_data:/root/.caddy   # persist certificates
+    ports:
+        - 80:80
+        - 443:443
+    environment:
+        DOMAIN: ${DOMAIN}
+  db:
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+  api:
+    container_name: glimps_api
+    restart: always
+    build:
+      context: .
+      dockerfile: packages/api/Dockerfile
+    depends_on:
+      - db
+    environment:
+      PROD: 'true'
+      DOMAIN: ${DOMAIN}
+      TYPEORM_HOST: db
+      TYPEORM_PORT: 5432
+      TYPEORM_USERNAME: ${DB_USERNAME}
+      TYPEORM_PASSWORD: ${DB_PASSWORD}
+      JWT_SIGNING_KEY: ${JWT_SIGNING_KEY}
+      GITLAB_BASE_URL: ${GITLAB_BASE_URL}
+  webapp:
+    container_name: glimps_webapp
+    restart: always
+    build:
+      context: .
+      dockerfile: packages/webapp/Dockerfile
+
+volumes:
+  pgdata:
+  caddy_data:

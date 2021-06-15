@@ -7,7 +7,7 @@ const useStyles = makeStyles(() => ({
     height: '100vh',
     width: '100vw',
     overflow: 'hidden',
-    backgroundImage: `url(${process.env.PUBLIC_URL + '/landing-bg.jpg'})`,
+    backgroundImage: `url('/landing-bg.jpg')`,
     backgroundPosition: 'center',
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
