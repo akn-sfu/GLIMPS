@@ -7,7 +7,7 @@ import ScoringChip from '../../ScoringChip';
 
 interface ScorePopperProps {
   hasOverride?: boolean;
-  scoreCount: string;
+  score: string;
   scoreSummary?: Diff['summary'];
 }
 const useStyles = makeStyles((theme) => ({
@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
 
 const ScorePopover: React.FC<ScorePopperProps> = ({
   hasOverride,
-  scoreCount,
+  score,
   scoreSummary,
 }) => {
   const classes = useStyles();
@@ -40,7 +40,6 @@ const ScorePopover: React.FC<ScorePopperProps> = ({
   };
 
   const open = Boolean(anchorEl);
-
   return (
     <div>
       <Typography
@@ -50,7 +49,7 @@ const ScorePopover: React.FC<ScorePopperProps> = ({
         onMouseLeave={handlePopoverClose}
       >
         <ScoringChip size='small' hasOverride={hasOverride}>
-          {scoreCount || 0}
+          {score || 0}
         </ScoringChip>
       </Typography>
       <Popover
