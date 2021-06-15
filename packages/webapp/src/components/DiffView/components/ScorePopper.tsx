@@ -75,7 +75,7 @@ const ScorePopover: React.FC<ScorePopperProps> = ({
         disableRestoreFocus
       >
         <div className={classes.summaryFlex}>
-          <Typography display='inline'>add: </Typography>
+          <Typography display='inline'>original score: </Typography>
           <Typography display='inline'>
             {scoreSummary.add.toFixed(1) || 0}
           </Typography>

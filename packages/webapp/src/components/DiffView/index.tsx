@@ -155,20 +155,6 @@ const DiffView: React.FC<DiffViewProps> = ({
                   }
                 />
               </Grid>
-              {hasOverride && (
-                <Grid item xs={2}>
-                  <DiffFactWrapper
-                    name='Original Score'
-                    value={
-                      <ScorePopover
-                        hasOverride={false}
-                        score={extensions.score.toFixed(1)}
-                        scoreSummary={summary}
-                      />
-                    }
-                  />
-                </Grid>
-              )}
               <Grid item xs={2}>
                 <DiffFactWrapper
                   name='Weight'
