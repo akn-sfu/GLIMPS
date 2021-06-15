@@ -180,7 +180,7 @@ const ListMergeRequestPage = () => {
                         key={commitOrMergeRequest.meta.id}
                         mergeRequest={commitOrMergeRequest}
                         active={active}
-                        shrink={!!showSpiltView}
+                        shrink={!showSpiltView}
                         onClickSummary={() => {
                           setActiveCommit(undefined);
                           setActiveMergeRequest(

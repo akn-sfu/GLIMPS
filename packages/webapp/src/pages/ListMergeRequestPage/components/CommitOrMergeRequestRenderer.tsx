@@ -139,13 +139,21 @@ const CommitOrMergeRequestRenderer: React.FC<CommitOrMergeRequestRendererProps> 
           {shrink ? (
             <>
               <Grid item xs={2}>
+                <Typography>{author}</Typography>
+              </Grid>
+              <Grid item xs={2}>
+                <Typography>
+                  <SmartDate>{date}</SmartDate>
+                </Typography>
+              </Grid>
+              <Grid item xs={1}>
                 <Typography align='right'>
                   <ScoringChip hasOverride={diffHasOverride}>
                     {diffScoreSum}
                   </ScoringChip>
                 </Typography>
               </Grid>
-              <Grid item xs={2}>
+              <Grid item xs={1}>
                 <Typography align='right'>
                   <ScoringChip hasOverride={commitHasOverride}>
                     {mergeRequest ? commitScoreSum?.toFixed(1) : null}
