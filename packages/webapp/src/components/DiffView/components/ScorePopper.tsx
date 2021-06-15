@@ -52,53 +52,55 @@ const ScorePopover: React.FC<ScorePopperProps> = ({
           {score || 0}
         </ScoringChip>
       </Typography>
-      <Popover
-        id='mouse-over-popover'
-        className={classes.popover}
-        classes={{
-          paper: classes.paper,
-        }}
-        open={open}
-        anchorEl={anchorEl}
-        PaperProps={{
-          style: { minWidth: '150px' },
-        }}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'left',
-        }}
-        onClose={handlePopoverClose}
-        disableRestoreFocus
-      >
-        <div className={classes.summaryFlex}>
-          <Typography display='inline'>lines added: </Typography>
-          <Typography display='inline'>
-            {scoreSummary.add.toFixed(1) || 0}
-          </Typography>
-        </div>
-        <div className={classes.summaryFlex}>
-          <Typography display='inline'>comment: </Typography>
-          <Typography display='inline'>
-            {scoreSummary.comment.toFixed(1) || 0}
-          </Typography>
-        </div>
-        <div className={classes.summaryFlex}>
-          <Typography display='inline'>lines deleted: </Typography>
-          <Typography display='inline'>
-            {scoreSummary.delete.toFixed(1) || 0}
-          </Typography>
-        </div>
-        <div className={classes.summaryFlex}>
-          <Typography display='inline'>syntax: </Typography>
-          <Typography display='inline'>
-            {scoreSummary?.[Line.Type.syntaxChange]?.toFixed(1) || 0}
-          </Typography>
-        </div>
-      </Popover>
+      {!hasOverride && (
+        <Popover
+          id='mouse-over-popover'
+          className={classes.popover}
+          classes={{
+            paper: classes.paper,
+          }}
+          open={open}
+          anchorEl={anchorEl}
+          PaperProps={{
+            style: { minWidth: '150px' },
+          }}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'left',
+          }}
+          onClose={handlePopoverClose}
+          disableRestoreFocus
+        >
+          <div className={classes.summaryFlex}>
+            <Typography display='inline'>lines added: </Typography>
+            <Typography display='inline'>
+              {scoreSummary.add.toFixed(1) || 0}
+            </Typography>
+          </div>
+          <div className={classes.summaryFlex}>
+            <Typography display='inline'>comment: </Typography>
+            <Typography display='inline'>
+              {scoreSummary.comment.toFixed(1) || 0}
+            </Typography>
+          </div>
+          <div className={classes.summaryFlex}>
+            <Typography display='inline'>lines deleted: </Typography>
+            <Typography display='inline'>
+              {scoreSummary.delete.toFixed(1) || 0}
+            </Typography>
+          </div>
+          <div className={classes.summaryFlex}>
+            <Typography display='inline'>syntax: </Typography>
+            <Typography display='inline'>
+              {scoreSummary?.[Line.Type.syntaxChange]?.toFixed(1) || 0}
+            </Typography>
+          </div>
+        </Popover>
+      )}
     </div>
   );
 };
