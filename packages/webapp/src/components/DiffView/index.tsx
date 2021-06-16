@@ -155,7 +155,7 @@ const DiffView: React.FC<DiffViewProps> = ({
                 />
               </Grid>
               {hasOverride && (
-                <Grid item xs={2}>
+                <Grid item xs={3}>
                   <DiffFactWrapper
                     name='Original Score'
                     value={
