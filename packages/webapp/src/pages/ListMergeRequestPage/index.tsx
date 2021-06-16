@@ -63,7 +63,7 @@ const RegularTableHeaders: React.FC = () => {
   return (
     <Box pr={6} pl={2} py={1}>
       <Grid container>
-        <Grid item xs={6}>
+        <Grid item xs={5}>
           <Typography>Title</Typography>
         </Grid>
         <Grid item xs={2}>
@@ -75,7 +75,7 @@ const RegularTableHeaders: React.FC = () => {
         <Grid item xs={1}>
           <Typography>Score</Typography>
         </Grid>
-        <Grid item xs={1}>
+        <Grid item xs={2}>
           <Typography>Σ Commits</Typography>
         </Grid>
       </Grid>
@@ -155,7 +155,7 @@ const ListMergeRequestPage = () => {
       <DefaultPageLayout>
         <ScoreOverrideQueueProvider>
           <GridComponent container spacing={showSpiltView ? 3 : 0}>
-            <Grid item xs={showSpiltView ? 5 : 12}>
+            <Grid item xs={showSpiltView ? 5 : 5}>
               <Container>
                 <ScoreOverrideQueueInfo />
                 <Box my={2}>

@@ -30,7 +30,7 @@ interface CommitOrMergeRequestRendererProps {
 }
 
 function shortenTitle(title: string, shrink?: boolean) {
-  const maxLength = shrink ? 50 : 60;
+  const maxLength = shrink ? 50 : 50;
   if (title.length < maxLength) {
     return title;
   }
@@ -106,7 +106,7 @@ const CommitOrMergeRequestRenderer: React.FC<CommitOrMergeRequestRendererProps> 
         }}
       >
         <Grid container>
-          <Grid item xs={shrink ? 8 : 6}>
+          <Grid item xs={shrink ? 8 : 5}>
             <Grid container alignItems='center' spacing={2}>
               {hasOverride && (
                 <Grid item>
@@ -170,7 +170,7 @@ const CommitOrMergeRequestRenderer: React.FC<CommitOrMergeRequestRendererProps> 
                   </ScoringChip>
                 </Typography>
               </Grid>
-              <Grid item xs={1}>
+              <Grid item xs={2}>
                 <Typography align='right'>
                   <ScoringChip hasOverride={commitHasOverride}>
                     {mergeRequest ? commitScoreSum?.toFixed(1) : null}
