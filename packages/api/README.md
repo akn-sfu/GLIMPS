@@ -31,7 +31,7 @@ You are now authenticated and can use the API from Postman!
 
 Some requests will require you to have a Gitlab token setup to access the API. To do this, complete all the Postman
 setup instructions above. Then generate and copy a Gitlab token. In Postman, setup a POST request
-to `http://locahost:4000/token` and go into the **Body** tab.
+to `http://localhost:4000/token` and go into the **Body** tab.
 
 Select the **Raw** radio button and set the content type to JSON. Set the body request to:
 
