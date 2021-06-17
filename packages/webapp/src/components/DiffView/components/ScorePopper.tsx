@@ -7,7 +7,7 @@ import ScoringChip from '../../ScoringChip';
 
 interface ScorePopperProps {
   hasOverride?: boolean;
-  scoreCount: string;
+  score: string;
   scoreSummary?: Diff['summary'];
 }
 const useStyles = makeStyles((theme) => ({
@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
 
 const ScorePopover: React.FC<ScorePopperProps> = ({
   hasOverride,
-  scoreCount,
+  score,
   scoreSummary,
 }) => {
   const classes = useStyles();
@@ -40,7 +40,6 @@ const ScorePopover: React.FC<ScorePopperProps> = ({
   };
 
   const open = Boolean(anchorEl);
-
   return (
     <div>
       <Typography
@@ -50,56 +49,58 @@ const ScorePopover: React.FC<ScorePopperProps> = ({
         onMouseLeave={handlePopoverClose}
       >
         <ScoringChip size='small' hasOverride={hasOverride}>
-          {scoreCount || 0}
+          {score || 0}
         </ScoringChip>
       </Typography>
-      <Popover
-        id='mouse-over-popover'
-        className={classes.popover}
-        classes={{
-          paper: classes.paper,
-        }}
-        open={open}
-        anchorEl={anchorEl}
-        PaperProps={{
-          style: { minWidth: '150px' },
-        }}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'left',
-        }}
-        onClose={handlePopoverClose}
-        disableRestoreFocus
-      >
-        <div className={classes.summaryFlex}>
-          <Typography display='inline'>add: </Typography>
-          <Typography display='inline'>
-            {scoreSummary.add.toFixed(1) || 0}
-          </Typography>
-        </div>
-        <div className={classes.summaryFlex}>
-          <Typography display='inline'>comment: </Typography>
-          <Typography display='inline'>
-            {scoreSummary.comment.toFixed(1) || 0}
-          </Typography>
-        </div>
-        <div className={classes.summaryFlex}>
-          <Typography display='inline'>delete: </Typography>
-          <Typography display='inline'>
-            {scoreSummary.delete.toFixed(1) || 0}
-          </Typography>
-        </div>
-        <div className={classes.summaryFlex}>
-          <Typography display='inline'>syntax: </Typography>
-          <Typography display='inline'>
-            {scoreSummary?.[Line.Type.syntaxChange]?.toFixed(1) || 0}
-          </Typography>
-        </div>
-      </Popover>
+      {!hasOverride && (
+        <Popover
+          id='mouse-over-popover'
+          className={classes.popover}
+          classes={{
+            paper: classes.paper,
+          }}
+          open={open}
+          anchorEl={anchorEl}
+          PaperProps={{
+            style: { minWidth: '150px' },
+          }}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'left',
+          }}
+          onClose={handlePopoverClose}
+          disableRestoreFocus
+        >
+          <div className={classes.summaryFlex}>
+            <Typography display='inline'>lines added: </Typography>
+            <Typography display='inline'>
+              {scoreSummary.add.toFixed(1) || 0}
+            </Typography>
+          </div>
+          <div className={classes.summaryFlex}>
+            <Typography display='inline'>comment: </Typography>
+            <Typography display='inline'>
+              {scoreSummary.comment.toFixed(1) || 0}
+            </Typography>
+          </div>
+          <div className={classes.summaryFlex}>
+            <Typography display='inline'>lines deleted: </Typography>
+            <Typography display='inline'>
+              {scoreSummary.delete.toFixed(1) || 0}
+            </Typography>
+          </div>
+          <div className={classes.summaryFlex}>
+            <Typography display='inline'>syntax: </Typography>
+            <Typography display='inline'>
+              {scoreSummary?.[Line.Type.syntaxChange]?.toFixed(1) || 0}
+            </Typography>
+          </div>
+        </Popover>
+      )}
     </div>
   );
 };

@@ -36,9 +36,7 @@ const DiffFactWrapper: React.FC<{
           <strong>{name}:</strong>
         </Typography>
       </Grid>
-      <Grid item>
-        <Typography variant='body2'>{value}</Typography>
-      </Grid>
+      <Grid item>{value}</Grid>
     </Grid>
   );
 };
@@ -92,12 +90,10 @@ const DiffView: React.FC<DiffViewProps> = ({
     });
     onPopperClickAway();
   };
-
   const score = ScoreOverride.computeScore(
     extensions?.override,
     extensions?.score,
   );
-
   const useStyles = makeStyles(() => ({
     accordionStyle: {
       backgroundColor: '#f8f8f8',
@@ -107,7 +103,6 @@ const DiffView: React.FC<DiffViewProps> = ({
   const isExcluded = extensions?.override?.exclude;
   const hasOverride = ScoreOverride.hasOverride(extensions?.override);
   const fileNameTextDecoration = isExcluded ? 'line-through' : '';
-
   const classes = useStyles();
   return (
     <>
@@ -153,12 +148,26 @@ const DiffView: React.FC<DiffViewProps> = ({
                   value={
                     <ScorePopover
                       hasOverride={hasOverride}
-                      scoreCount={score.toFixed(1)}
+                      score={score.toFixed(1)}
                       scoreSummary={summary}
                     />
                   }
                 />
               </Grid>
+              {hasOverride && (
+                <Grid item xs={3}>
+                  <DiffFactWrapper
+                    name='Original Score'
+                    value={
+                      <ScorePopover
+                        hasOverride={false}
+                        score={extensions.score.toFixed(1)}
+                        scoreSummary={summary}
+                      />
+                    }
+                  />
+                </Grid>
+              )}
               <Grid item xs={2}>
                 <DiffFactWrapper
                   name='Weight'
