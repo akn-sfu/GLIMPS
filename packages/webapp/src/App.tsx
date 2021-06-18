@@ -19,7 +19,8 @@ const App = () => {
               <SnackbarProvider
                 maxSnack={3}
                 anchorOrigin={{
-                  vertical: 'bottom', horizontal: 'right',
+                  vertical: 'bottom',
+                  horizontal: 'right',
                 }}
               >
                 <Router />
