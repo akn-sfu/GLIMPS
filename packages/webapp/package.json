@@ -1,6 +1,6 @@
 {
   "name": "@ceres/webapp",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "private": true,
   "dependencies": {
     "@date-io/date-fns": "^2.10.8",
@@ -45,7 +45,6 @@
     "lint:fix": "npm run lint --fix",
     "format:safe": "npm run prettier && npm run lint:fix",
     "format": "npm run prettier && npm run lint"
-    
   },
   "eslintConfig": {
     "extends": [
@@ -66,7 +65,7 @@
     ]
   },
   "devDependencies": {
-    "@ceres/types": "0.0.0",
+    "@ceres/types": "^0.0.1",
     "@types/chart.js": "^2.9.30",
     "@types/jest": "^26.0.20",
     "@types/lodash": "^4.14.168",
