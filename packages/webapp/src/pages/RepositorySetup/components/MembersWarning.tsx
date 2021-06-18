@@ -1,6 +1,7 @@
 import { Commit } from '@ceres/types';
 import Alert from '@material-ui/lab/Alert';
 import React from 'react';
+import { Prompt } from 'react-router-dom';
 import { useRepositoryAuthors } from '../../../api/author';
 
 interface MembersWarningProps {
@@ -18,10 +19,16 @@ const MembersWarning: React.FC<MembersWarningProps> = ({ repositoryId }) => {
     return null;
   }
   return (
-    <Alert severity='warning'>
-      There are <strong>{orphanCount}</strong> commit authors that are not
-      linked to a repository member.
-    </Alert>
+    <div>
+      <Prompt
+        when={orphanCount > 0}
+        message={`There are ${orphanCount} commit authors that are not linked to a repository member. Click Ok if you want to proceed.`}
+      />
+      <Alert severity='warning'>
+        There are <strong>{orphanCount}</strong> commit authors that are not
+        linked to a repository member.
+      </Alert>
+    </div>
   );
 };
 
