@@ -5,7 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { useGetNotesByRepository } from '../../api/note';
 import NotePaper from './NotePaper';
 import { useRepositoryContext } from '../../contexts/RepositoryContext';
@@ -15,8 +15,12 @@ import { RepositoryMember } from '@ceres/types';
 import { useRepositoryMembers } from '../../api/repo_members';
 import DifferentiatingIcon from './DifferentiatingIcon';
 import { Typography } from '@material-ui/core';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
+import { MenuItem } from '@material-ui/core';
 
-const useStyles = makeStyles(() =>
+const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       display: 'flex',
@@ -46,6 +50,10 @@ const useStyles = makeStyles(() =>
       borderTopRightRadius: 10,
       borderTopLeftRadius: 10,
       fontWeight: 'bold',
+    },
+    formControl: {
+      margin: theme.spacing(1),
+      minWidth: 200,
     },
   }),
 );
@@ -103,7 +111,22 @@ const CommentList: React.FC = () => {
   return (
     <>
       <Container>
-        <DefaultPageTitleFormat>Comments</DefaultPageTitleFormat>
+        <DefaultPageTitleFormat>
+          Comments
+          <FormControl variant='outlined' className={classes.formControl}>
+            <InputLabel>Show results for:</InputLabel>
+            <Select
+              labelId='select-comments-label'
+              id='comments-label'
+              value='Students'
+              label='Show results for:'
+            >
+              <MenuItem value='All Students'>All Students</MenuItem>
+              <MenuItem value='Josh'>Josh</MenuItem>
+              <MenuItem value='Josh'>Josh</MenuItem>
+            </Select>
+          </FormControl>
+        </DefaultPageTitleFormat>
         <Box my={1} className={classes.root}>
           <Tabs value={tab} onChange={handleTabs} textColor='primary' centered>
             <Tab
