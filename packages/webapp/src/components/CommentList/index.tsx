@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import Container from '@material-ui/core/Container';
-import DefaultPageTitleFormat from '../../components/DefaultPageTitleFormat';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import Tabs from '@material-ui/core/Tabs';
@@ -19,6 +18,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import { MenuItem } from '@material-ui/core';
+import AlternatePageTitleFormat from '../AlternatePageTitleFormat';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -111,8 +111,10 @@ const CommentList: React.FC = () => {
   return (
     <>
       <Container>
-        <DefaultPageTitleFormat>
-          Comments
+        <AlternatePageTitleFormat>
+          <Typography variant='h1' color='primary'>
+            Comments
+          </Typography>
           <FormControl variant='outlined' className={classes.formControl}>
             <InputLabel>Show results for:</InputLabel>
             <Select
@@ -126,7 +128,7 @@ const CommentList: React.FC = () => {
               <MenuItem value='Josh'>Josh</MenuItem>
             </Select>
           </FormControl>
-        </DefaultPageTitleFormat>
+        </AlternatePageTitleFormat>
         <Box my={1} className={classes.root}>
           <Tabs value={tab} onChange={handleTabs} textColor='primary' centered>
             <Tab
