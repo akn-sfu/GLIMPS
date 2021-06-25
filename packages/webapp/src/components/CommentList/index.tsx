@@ -4,9 +4,9 @@ import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { useGetNotesByRepository } from '../../api/note';
-// import NotePaper from './NotePaper';
+import NotePaper from './NotePaper';
 import { useRepositoryContext } from '../../contexts/RepositoryContext';
 import { useFilterContext } from '../../contexts/FilterContext';
 import { ApiResource } from '../../api/base';
@@ -14,14 +14,15 @@ import { RepositoryMember } from '@ceres/types';
 import { useRepositoryMembers } from '../../api/repo_members';
 import DifferentiatingIcon from './DifferentiatingIcon';
 import { Typography } from '@material-ui/core';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-import InputLabel from '@material-ui/core/InputLabel';
-import { MenuItem } from '@material-ui/core';
+// import FormControl from '@material-ui/core/FormControl';
+// import Select from '@material-ui/core/Select';
+// import InputLabel from '@material-ui/core/InputLabel';
+// import { MenuItem } from '@material-ui/core';
 import AlternatePageTitleFormat from '../AlternatePageTitleFormat';
-import { useRepositoryAuthors } from '../../api/author';
+import MemberDropdown from '../MemberDropdown';
+// import { useRepositoryAuthors } from '../../api/author';
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(() =>
   createStyles({
     root: {
       display: 'flex',
@@ -52,10 +53,6 @@ const useStyles = makeStyles((theme: Theme) =>
       borderTopLeftRadius: 10,
       fontWeight: 'bold',
     },
-    formControl: {
-      margin: theme.spacing(1),
-      minWidth: 200,
-    },
   }),
 );
 
@@ -81,7 +78,7 @@ const CommentList: React.FC = () => {
   const { startDate, endDate, author } = useFilterContext();
   const { repositoryId } = useRepositoryContext();
   const { data: members } = useRepositoryMembers(repositoryId);
-  const { data: authors } = useRepositoryAuthors(repositoryId);
+  // const { data: authors } = useRepositoryAuthors(repositoryId);
   const authorIds = findRepoMemberId(author, members);
   const { data: allNotes } = useGetNotesByRepository(
     {
@@ -91,7 +88,7 @@ const CommentList: React.FC = () => {
       author_id: authorIds,
     },
     0,
-    9000,
+    25,
   );
   const mergeRequestNotes = allNotes?.results.filter(
     (comment) => comment.noteable_type == 'MergeRequest',
@@ -109,11 +106,11 @@ const CommentList: React.FC = () => {
     setTab(newTab);
   };
 
-  const [curAuthor, setCurAuthor] = useState(undefined);
+  // const [curAuthor, setCurAuthor] = useState(undefined);
 
-  const handleAuthorSelect = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setCurAuthor(event.target.value as string);
-  };
+  // const handleAuthorSelect = (event: React.ChangeEvent<{ value: unknown }>) => {
+  //   setCurAuthor(event.target.value as string);
+  // };
 
   return (
     <>
@@ -122,24 +119,7 @@ const CommentList: React.FC = () => {
           <Typography variant='h1' color='primary'>
             Comments
           </Typography>
-          <FormControl variant='outlined' className={classes.formControl}>
-            <InputLabel>Show results for:</InputLabel>
-            <Select
-              labelId='select-comments-label'
-              id='comments-label'
-              label='Show results for:'
-              value={curAuthor}
-              onChange={handleAuthorSelect}
-            >
-              {authors?.map((author) => {
-                return (
-                  <MenuItem key={author.meta.id} value={author.author_email}>
-                    {author.author_name}
-                  </MenuItem>
-                );
-              })}
-            </Select>
-          </FormControl>
+          <MemberDropdown repositoryId={repositoryId} />
         </AlternatePageTitleFormat>
         <Box my={1} className={classes.root}>
           <Tabs value={tab} onChange={handleTabs} textColor='primary' centered>
@@ -234,8 +214,7 @@ const CommentList: React.FC = () => {
         >
           {notes?.map((note, index) => {
             index == 0 && console.log(note);
-            return <></>;
-            // return <NotePaper key={note.meta.id} noteData={note} />;
+            return <NotePaper key={note.meta.id} noteData={note} />;
           })}
         </Grid>
       </Container>
