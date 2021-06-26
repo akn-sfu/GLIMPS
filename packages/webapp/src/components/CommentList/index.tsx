@@ -5,7 +5,7 @@ import Box from '@material-ui/core/Box';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
-import { useGetNotesByRepository } from '../../api/note';
+import { useGetNotesByRepository, useGetTotalNotes } from '../../api/note';
 import NotePaper from './NotePaper';
 import { useRepositoryContext } from '../../contexts/RepositoryContext';
 import { useFilterContext } from '../../contexts/FilterContext';
@@ -14,13 +14,9 @@ import { RepositoryMember } from '@ceres/types';
 import { useRepositoryMembers } from '../../api/repo_members';
 import DifferentiatingIcon from './DifferentiatingIcon';
 import { Typography } from '@material-ui/core';
-// import FormControl from '@material-ui/core/FormControl';
-// import Select from '@material-ui/core/Select';
-// import InputLabel from '@material-ui/core/InputLabel';
-// import { MenuItem } from '@material-ui/core';
 import AlternatePageTitleFormat from '../AlternatePageTitleFormat';
 import MemberDropdown from '../MemberDropdown';
-// import { useRepositoryAuthors } from '../../api/author';
+import { Pagination } from '@material-ui/lab';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -53,6 +49,12 @@ const useStyles = makeStyles(() =>
       borderTopLeftRadius: 10,
       fontWeight: 'bold',
     },
+    pagination: {
+      margin: 'auto',
+      padding: '30px',
+      display: 'flex',
+      justifyContent: 'center',
+    },
   }),
 );
 
@@ -74,11 +76,11 @@ function findRepoMemberId(
 
 const CommentList: React.FC = () => {
   const classes = useStyles();
-
+  const itemsPerPage = 20;
+  const [page, setPage] = useState(0);
   const { startDate, endDate, author } = useFilterContext();
   const { repositoryId } = useRepositoryContext();
   const { data: members } = useRepositoryMembers(repositoryId);
-  // const { data: authors } = useRepositoryAuthors(repositoryId);
   const authorIds = findRepoMemberId(author, members);
   const { data: allNotes } = useGetNotesByRepository(
     {
@@ -87,9 +89,17 @@ const CommentList: React.FC = () => {
       created_end_date: endDate,
       author_id: authorIds,
     },
-    0,
-    25,
+    page,
+    itemsPerPage,
   );
+
+  const { data: totalNotes } = useGetTotalNotes({
+    repository_id: repositoryId,
+    created_start_date: startDate,
+    created_end_date: endDate,
+    author_id: authorIds,
+  });
+
   const mergeRequestNotes = allNotes?.results.filter(
     (comment) => comment.noteable_type == 'MergeRequest',
   );
@@ -105,12 +115,6 @@ const CommentList: React.FC = () => {
   const handleTabs = (event: React.ChangeEvent<unknown>, newTab: any) => {
     setTab(newTab);
   };
-
-  // const [curAuthor, setCurAuthor] = useState(undefined);
-
-  // const handleAuthorSelect = (event: React.ChangeEvent<{ value: unknown }>) => {
-  //   setCurAuthor(event.target.value as string);
-  // };
 
   return (
     <>
@@ -212,11 +216,21 @@ const CommentList: React.FC = () => {
           alignItems={'stretch'}
           spacing={1}
         >
-          {notes?.map((note, index) => {
-            index == 0 && console.log(note);
+          {notes?.map((note) => {
             return <NotePaper key={note.meta.id} noteData={note} />;
           })}
         </Grid>
+        <Pagination
+          className={classes.pagination}
+          page={page + 1}
+          count={Math.ceil(totalNotes / itemsPerPage)}
+          onChange={(e, page) => {
+            setPage(page - 1);
+            window.scrollTo(0, 0);
+          }}
+          color='primary'
+          size='large'
+        />
       </Container>
     </>
   );

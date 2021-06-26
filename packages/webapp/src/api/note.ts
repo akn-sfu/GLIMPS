@@ -33,3 +33,7 @@ export function useGetNotesByRepository(
 export function useGetWordCount(params: NoteSearchParams) {
   return useApiQuery<Note.DailyCount[]>('/note/count', params);
 }
+
+export function useGetTotalNotes(params: NoteSearchParams) {
+  return useApiQuery<number>('/note/total', params);
+}
