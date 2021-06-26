@@ -91,6 +91,13 @@ export class NoteService extends BaseService<Note, NoteEntity, NoteQueryDto> {
     return query.orderBy("note.resource #>> '{created_at}'", 'DESC');
   }
 
+  async getTotalCounts(filters: NoteQueryDto): Promise<number>{
+    let query = this.serviceRepository.createQueryBuilder('note');
+    query = this.buildFilters(query, filters);
+    return query.getCount();
+  }
+
+
   async buildDailyCounts(filters: NoteQueryDto): Promise<Note.DailyCount[]> {
     let query = this.serviceRepository.createQueryBuilder('note');
     query = this.buildFilters(query, filters);
