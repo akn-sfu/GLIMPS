@@ -17,6 +17,7 @@ import { isSameDay } from 'date-fns';
 import { useGetWordCount } from '../../api/note';
 import { useRepositoryMembers } from '../../api/repo_members';
 import { ApiResource } from '../../api/base';
+import MemberDropdown from '../MemberDropdown';
 
 function combineData(
   startDate: string,
@@ -87,10 +88,11 @@ function findRepoMemberId(
 }
 
 const DynamicGraph: React.FC = () => {
-  const { startDate, endDate, emails, author } = useFilterContext();
+  const { startDate, endDate, author } = useFilterContext();
   const { repositoryId } = useRepositoryContext();
   const { data: members } = useRepositoryMembers(repositoryId);
   const authorIds = findRepoMemberId(author, members);
+  const [emails, setEmails] = useState<string[]>([]);
   const { data: commitCounts } = useGetCountCommits({
     repository: repositoryId,
     author_email: emails,
@@ -137,6 +139,20 @@ const DynamicGraph: React.FC = () => {
     <>
       <Container>
         <DefaultPageTitleFormat>Contribution Graph</DefaultPageTitleFormat>
+        <Container maxWidth='md'>
+          <Grid container alignItems='flex-end' spacing={1}>
+            <Grid item xs={4}>
+              <Box mb={1}>
+                <MemberDropdown
+                  repositoryId={repositoryId}
+                  onChange={(newEmails) => {
+                    setEmails(newEmails);
+                  }}
+                />
+              </Box>
+            </Grid>
+          </Grid>
+        </Container>
         <Box my={2}>
           <Tabs
             value={graphTab}

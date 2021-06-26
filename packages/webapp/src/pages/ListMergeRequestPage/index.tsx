@@ -41,8 +41,6 @@ const IndependentScrollGrid = styled(Grid)`
   }
 `;
 
-let FilterStudents: JSX.IntrinsicAttributes;
-
 const CompactTableHeaders: React.FC = () => {
   return (
     <Box pr={6} pl={2} py={1}>
@@ -94,7 +92,8 @@ const ListMergeRequestPage = () => {
   const [activeCommit, setActiveCommit] = useState<ApiResource<Commit>>();
   const { ref: loadMoreRef, inView: loadMoreInView } = useInView();
   const {
-    data: mergeRequests, fetchNextPage,
+    data: mergeRequests,
+    fetchNextPage,
     hasNextPage,
   } = useInfiniteMergeRequest({
     repository: id,
