@@ -21,14 +21,10 @@ function findEmailsForMember(
 
 interface MemberDropdownProps {
   repositoryId: string;
-  onChange?: (emails: string[]) => void;
 }
 
-const MemberDropdown: React.FC<MemberDropdownProps> = ({
-  repositoryId,
-  onChange,
-}) => {
-  const { author, setAuthor } = useFilterContext();
+const MemberDropdown: React.FC<MemberDropdownProps> = ({ repositoryId }) => {
+  const { author, setAuthor, setEmail } = useFilterContext();
   const [value, setValue] = useState(author);
 
   const { data: members } = useRepositoryMembers(repositoryId);
@@ -38,18 +34,18 @@ const MemberDropdown: React.FC<MemberDropdownProps> = ({
     setAuthor(author);
   };
 
-  // const handleEmailChange = (emails) => {
-  //   setEmail(emails);
-  // };
+  const handleEmailChange = (emails) => {
+    setEmail(emails);
+  };
 
   useEffect(() => {
     if (value !== 'all') {
       const newEmails = findEmailsForMember(value, authors);
       handleChangeAuthor(value);
-      onChange(newEmails.length > 0 ? newEmails : ['']);
+      handleEmailChange(newEmails);
     } else {
       handleChangeAuthor(value);
-      onChange([]);
+      handleEmailChange([]);
     }
   }, [value]);
 
