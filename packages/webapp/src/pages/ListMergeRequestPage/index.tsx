@@ -20,6 +20,7 @@ import { ScoreOverrideQueueProvider } from './contexts/ScoreOverrideQueue';
 import ScoreOverrideQueueInfo from './components/ScoreOverrideQueueInfo';
 import { useInfiniteCommit } from '../../api/commit';
 import { DateTime } from 'luxon';
+import MemberDropdown from '../../components/MemberDropdown';
 
 const IndependentScrollGrid = styled(Grid)`
   height: 100vh;
@@ -163,6 +164,17 @@ const ListMergeRequestPage = () => {
                     Merge Requests
                   </DefaultPageTitleFormat>
                 </Box>
+                <Grid item>
+                  <Container maxWidth='md'>
+                    <Grid container justify='flex-end' spacing={1}>
+                      <Grid item xs={4}>
+                        <Box mb={1}>
+                          <MemberDropdown repositoryId={id} />
+                        </Box>
+                      </Grid>
+                    </Grid>
+                  </Container>
+                </Grid>
                 {!showSpiltView ? (
                   <RegularTableHeaders />
                 ) : (
