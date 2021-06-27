@@ -40,14 +40,21 @@ const StudentDropdown: React.FC<StudentDropdownProps> = ({
   }, [value]);
 
   return (
-    <FormControl variant='filled'>
-      <InputLabel>Show results for:</InputLabel>
+    <FormControl variant='outlined'>
+      <InputLabel htmlFor='outlined-age-native-simple'>
+        Show results for:
+      </InputLabel>
       <Select
         style={{ minWidth: '15rem' }}
         value={value || 'None'}
         onChange={(e) => {
           e.preventDefault();
           setValue(e.target.value as string);
+        }}
+        label='show results for'
+        inputProps={{
+          name: 'Show results for:',
+          id: 'outlined-age-native-simple',
         }}
       >
         <MenuItem value='all'>All students</MenuItem>
