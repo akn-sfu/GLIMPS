@@ -20,6 +20,7 @@ import { ScoreOverrideQueueProvider } from './contexts/ScoreOverrideQueue';
 import ScoreOverrideQueueInfo from './components/ScoreOverrideQueueInfo';
 import { useInfiniteCommit } from '../../api/commit';
 import { DateTime } from 'luxon';
+import StudentDropdown from '../../components/StudentDropdown';
 
 const IndependentScrollGrid = styled(Grid)`
   height: 100vh;
@@ -85,7 +86,8 @@ const RegularTableHeaders: React.FC = () => {
 
 const ListMergeRequestPage = () => {
   const { id } = useParams<{ id: string }>();
-  const { startDate, endDate, emails } = useFilterContext();
+  const { startDate, endDate } = useFilterContext();
+  const [emails, setEmails] = useState<string[]>([]);
   const [activeMergeRequest, setActiveMergeRequest] = useState<
     ApiResource<MergeRequest>
   >();
@@ -163,6 +165,22 @@ const ListMergeRequestPage = () => {
                     Merge Requests
                   </DefaultPageTitleFormat>
                 </Box>
+                <Grid item>
+                  <Container maxWidth='md'>
+                    <Grid container justify='flex-end' spacing={1}>
+                      <Grid item xs={4}>
+                        <Box mb={1}>
+                          <StudentDropdown
+                            repositoryId={id}
+                            onChange={(newEmails) => {
+                              setEmails(newEmails);
+                            }}
+                          />
+                        </Box>
+                      </Grid>
+                    </Grid>
+                  </Container>
+                </Grid>
                 {!showSpiltView ? (
                   <RegularTableHeaders />
                 ) : (
