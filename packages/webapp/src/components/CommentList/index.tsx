@@ -243,17 +243,19 @@ const CommentList: React.FC = () => {
             return <NotePaper key={note.meta.id} noteData={note} />;
           })}
         </Grid>
-        <Pagination
-          className={classes.pagination}
-          page={page + 1}
-          count={Math.ceil(totalNotes / itemsPerPage)}
-          onChange={(e, page) => {
-            setPage(page - 1);
-            window.scrollTo(0, 0);
-          }}
-          color='primary'
-          size='large'
-        />
+        {Math.ceil(totalNotes / itemsPerPage) > 0 && (
+          <Pagination
+            className={classes.pagination}
+            page={page + 1}
+            count={Math.ceil(totalNotes / itemsPerPage)}
+            onChange={(e, page) => {
+              setPage(page - 1);
+              window.scrollTo(0, 0);
+            }}
+            color='primary'
+            size='large'
+          />
+        )}
       </Container>
     </>
   );
