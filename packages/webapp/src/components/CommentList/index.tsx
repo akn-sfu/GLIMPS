@@ -18,6 +18,7 @@ import AlternatePageTitleFormat from '../AlternatePageTitleFormat';
 import { Pagination } from '@material-ui/lab';
 import MemberDropdown from '../MemberDropdown';
 import ItemPerPageDropdown from './ItemPerPageDropdown';
+import { Note } from '@ceres/types';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -78,6 +79,7 @@ function findRepoMemberId(
 const CommentList: React.FC = () => {
   const classes = useStyles();
   const [itemsPerPage, setItemPerPage] = useState(20);
+  const [noteType, setNoteType] = useState(Note.Type.mergeRequestComment);
   const [page, setPage] = useState(0);
   const { startDate, endDate, author } = useFilterContext();
   const { repositoryId } = useRepositoryContext();
@@ -89,6 +91,7 @@ const CommentList: React.FC = () => {
       created_start_date: startDate,
       created_end_date: endDate,
       author_id: authorIds,
+      type: noteType,
     },
     page,
     itemsPerPage,
@@ -99,6 +102,7 @@ const CommentList: React.FC = () => {
     created_start_date: startDate,
     created_end_date: endDate,
     author_id: authorIds,
+    type: noteType,
   });
 
   const mergeRequestNotes = allNotes?.results.filter(
@@ -114,6 +118,11 @@ const CommentList: React.FC = () => {
     tab === TabOption.codeReview ? mergeRequestNotes || [] : issueNotes || [];
 
   const handleTabs = (event: React.ChangeEvent<unknown>, newTab: any) => {
+    const type =
+      newTab == 'issue notes'
+        ? Note.Type.issueComment
+        : Note.Type.mergeRequestComment;
+    setNoteType(type);
     setTab(newTab);
   };
 
@@ -131,27 +140,35 @@ const CommentList: React.FC = () => {
           <MemberDropdown repositoryId={repositoryId} />
         </AlternatePageTitleFormat>
         <Box my={1} className={classes.root}>
-          <Tabs value={tab} onChange={handleTabs} textColor='primary' centered>
-            <Tab
-              value={TabOption.codeReview}
-              label='Code Reviews'
-              className={
-                tab === TabOption.codeReview
-                  ? classes.active_code_review_tab
-                  : classes.inactive_code_review_tab
-              }
-            />
-            <Tab
-              value={TabOption.issueNotes}
-              label='Issue Notes'
-              className={
-                tab === TabOption.issueNotes
-                  ? classes.active_issue_note_tab
-                  : classes.inactive_issue_note_tab
-              }
-            />
-          </Tabs>
-          <ItemPerPageDropdown updateItemsPerPage={handleItemChange} />
+          <Grid container justify='space-between'>
+            <Tabs
+              value={tab}
+              onChange={handleTabs}
+              textColor='primary'
+              centered
+            >
+              <Tab
+                value={TabOption.codeReview}
+                label='Code Reviews'
+                className={
+                  tab === TabOption.codeReview
+                    ? classes.active_code_review_tab
+                    : classes.inactive_code_review_tab
+                }
+              />
+              <Tab
+                value={TabOption.issueNotes}
+                label='Issue Notes'
+                className={
+                  tab === TabOption.issueNotes
+                    ? classes.active_issue_note_tab
+                    : classes.inactive_issue_note_tab
+                }
+              />
+            </Tabs>
+            <ItemPerPageDropdown updateItemsPerPage={handleItemChange} />
+          </Grid>
+
           <Grid
             container
             direction={'row'}
