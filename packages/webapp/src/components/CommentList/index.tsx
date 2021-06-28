@@ -15,8 +15,8 @@ import { useRepositoryMembers } from '../../api/repo_members';
 import DifferentiatingIcon from './DifferentiatingIcon';
 import { Typography } from '@material-ui/core';
 import AlternatePageTitleFormat from '../AlternatePageTitleFormat';
-import MemberDropdown from '../MemberDropdown';
 import { Pagination } from '@material-ui/lab';
+import MemberDropdown from '../MemberDropdown';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -80,6 +80,7 @@ const CommentList: React.FC = () => {
   const [page, setPage] = useState(0);
   const { startDate, endDate, author } = useFilterContext();
   const { repositoryId } = useRepositoryContext();
+  // const [emails, setEmails] = useState<string[]>([]);
   const { data: members } = useRepositoryMembers(repositoryId);
   const authorIds = findRepoMemberId(author, members);
   const { data: allNotes } = useGetNotesByRepository(
