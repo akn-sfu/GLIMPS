@@ -17,6 +17,7 @@ import { Typography } from '@material-ui/core';
 import AlternatePageTitleFormat from '../AlternatePageTitleFormat';
 import { Pagination } from '@material-ui/lab';
 import MemberDropdown from '../MemberDropdown';
+import ItemPerPageDropdown from './ItemPerPageDropdown';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -76,11 +77,10 @@ function findRepoMemberId(
 
 const CommentList: React.FC = () => {
   const classes = useStyles();
-  const itemsPerPage = 20;
+  const [itemsPerPage, setItemPerPage] = useState(20);
   const [page, setPage] = useState(0);
   const { startDate, endDate, author } = useFilterContext();
   const { repositoryId } = useRepositoryContext();
-  // const [emails, setEmails] = useState<string[]>([]);
   const { data: members } = useRepositoryMembers(repositoryId);
   const authorIds = findRepoMemberId(author, members);
   const { data: allNotes } = useGetNotesByRepository(
@@ -117,6 +117,10 @@ const CommentList: React.FC = () => {
     setTab(newTab);
   };
 
+  const handleItemChange = (value: number) => {
+    setItemPerPage(value);
+  };
+
   return (
     <>
       <Container>
@@ -147,6 +151,7 @@ const CommentList: React.FC = () => {
               }
             />
           </Tabs>
+          <ItemPerPageDropdown updateItemsPerPage={handleItemChange} />
           <Grid
             container
             direction={'row'}
