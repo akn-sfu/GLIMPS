@@ -1,9 +1,10 @@
+// import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { useSnackbar } from 'notistack';
-import React from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Prompt, useHistory, useParams } from 'react-router-dom';
 import {
   AddCollaboratorPayload,
   RemoveCollaboratorPayload,
@@ -41,6 +42,7 @@ const MainContainer = styled.div`
 const RepoSetupPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { push } = useHistory();
+  const [rubricCompleted, setRubricCompleted] = useState(true);
   const {
     mutate: updateScoring,
     isLoading: updateScoreLoading,
@@ -59,11 +61,11 @@ const RepoSetupPage: React.FC = () => {
         collaborator.id === user?.id &&
         collaborator.accessLevel === Repository.AccessLevel.editor,
     );
-
   const handleUpdateScore = (
     scoringConfig: ApiResource<ScoringConfig>,
     overrides: GlobWeight[],
   ) => {
+    setRubricCompleted(false);
     updateScoring(
       {
         repositoryId: id,
@@ -79,7 +81,6 @@ const RepoSetupPage: React.FC = () => {
       },
     );
   };
-
   const handleAddCollaborator = (payload: AddCollaboratorPayload) => {
     addCollaborator(payload, {
       onSuccess: invalidate,
@@ -106,8 +107,16 @@ const RepoSetupPage: React.FC = () => {
     );
   };
 
+  useEffect(() => {
+    setRubricCompleted(data?.extensions?.scoringConfig?.config ? true : false);
+  }, [data]);
+
   return (
     <DefaultPageLayout>
+      <Prompt
+        when={!rubricCompleted}
+        message='Scoring rubric has not been selected. Click Ok if you want to proceed.'
+      />
       <Container>
         <ScrollToTop />
         <Grid container justify='space-between' alignItems='center'>
