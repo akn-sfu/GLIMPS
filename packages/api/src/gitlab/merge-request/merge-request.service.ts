@@ -100,7 +100,8 @@ export class MergeRequestService extends BaseService<
   ): Promise<MergeRequest.DailyCount[]> {
     let query = this.serviceRepository.createQueryBuilder('merge_request');
     query = this.buildFilters(query, filters);
-    query.select("DATE(merge_request.resource #>>'{merged_at}')", 'date');
+    query.select("DATE((merge_request.resource #>>'{merged_at}')::timestamptz AT time zone" + " '" + filters.timezone + "' " +
+     "AT time zone 'utc')", 'date');
     query.addSelect('count(*)::integer', 'count');
     query.addSelect(
       `sum(

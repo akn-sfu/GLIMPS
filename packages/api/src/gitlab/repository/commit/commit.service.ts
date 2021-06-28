@@ -96,7 +96,8 @@ export class CommitService extends BaseService<
   ): Promise<Commit.DailyCount[]> {
     let query = this.serviceRepository.createQueryBuilder('commit');
     query = this.buildFilters(query, filters);
-    query.select("DATE(commit.resource #>>'{authored_date}')", 'date');
+    query.select("DATE((commit.resource #>>'{authored_date}')::timestamptz AT time zone" + " '" + filters.timezone + "' " +
+     "AT time zone 'utc')", 'date');
     query.addSelect('count(*)::integer', 'count');
     query.addSelect(
       `sum(

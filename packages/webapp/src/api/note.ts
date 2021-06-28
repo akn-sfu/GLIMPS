@@ -7,6 +7,7 @@ interface NoteSearchParams {
   created_start_date?: string;
   created_end_date?: string;
   type?: Note.Type;
+  timezone?: string;
 }
 
 export function useGetMergeRequestNotes(mergeRequestId: string) {

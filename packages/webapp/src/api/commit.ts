@@ -19,6 +19,7 @@ interface CommitSearchParams {
   start_date?: string;
   end_date?: string;
   sort?: string;
+  timezone?: string;
   not_associated_with_any_mr?: boolean;
 }
 

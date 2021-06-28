@@ -31,4 +31,8 @@ export class CommitQueryDto extends QueryDto {
   @IsOptional()
   @IsBoolean()
   not_associated_with_any_mr?: boolean;
+
+  @IsOptional()
+  @IsString()
+  timezone?: string;
 }
