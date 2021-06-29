@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import Container from '@material-ui/core/Container';
-import DefaultPageTitleFormat from '../../components/DefaultPageTitleFormat';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
-import { useGetNotesByRepository } from '../../api/note';
+import { useGetNotesByRepository, useGetTotalNotes } from '../../api/note';
 import NotePaper from './NotePaper';
 import { useRepositoryContext } from '../../contexts/RepositoryContext';
 import { useFilterContext } from '../../contexts/FilterContext';
@@ -15,6 +14,11 @@ import { RepositoryMember } from '@ceres/types';
 import { useRepositoryMembers } from '../../api/repo_members';
 import DifferentiatingIcon from './DifferentiatingIcon';
 import { Typography } from '@material-ui/core';
+import AlternatePageTitleFormat from '../AlternatePageTitleFormat';
+import { Pagination } from '@material-ui/lab';
+import MemberDropdown from '../MemberDropdown';
+import ItemPerPageDropdown from './ItemPerPageDropdown';
+import { Note } from '@ceres/types';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -47,6 +51,12 @@ const useStyles = makeStyles(() =>
       borderTopLeftRadius: 10,
       fontWeight: 'bold',
     },
+    pagination: {
+      margin: 'auto',
+      padding: '30px',
+      display: 'flex',
+      justifyContent: 'center',
+    },
   }),
 );
 
@@ -68,7 +78,9 @@ function findRepoMemberId(
 
 const CommentList: React.FC = () => {
   const classes = useStyles();
-
+  const [itemsPerPage, setItemPerPage] = useState(20);
+  const [noteType, setNoteType] = useState(Note.Type.mergeRequestComment);
+  const [page, setPage] = useState(0);
   const { startDate, endDate, author } = useFilterContext();
   const { repositoryId } = useRepositoryContext();
   const { data: members } = useRepositoryMembers(repositoryId);
@@ -79,10 +91,19 @@ const CommentList: React.FC = () => {
       created_start_date: startDate,
       created_end_date: endDate,
       author_id: authorIds,
+      type: noteType,
     },
-    0,
-    9000,
+    page,
+    itemsPerPage,
   );
+
+  const { data: totalNotes } = useGetTotalNotes({
+    repository_id: repositoryId,
+    created_start_date: startDate,
+    created_end_date: endDate,
+    author_id: authorIds,
+    type: noteType,
+  });
 
   const mergeRequestNotes = allNotes?.results.filter(
     (comment) => comment.noteable_type == 'MergeRequest',
@@ -97,34 +118,57 @@ const CommentList: React.FC = () => {
     tab === TabOption.codeReview ? mergeRequestNotes || [] : issueNotes || [];
 
   const handleTabs = (event: React.ChangeEvent<unknown>, newTab: any) => {
+    const type =
+      newTab == 'issue notes'
+        ? Note.Type.issueComment
+        : Note.Type.mergeRequestComment;
+    setNoteType(type);
     setTab(newTab);
+  };
+
+  const handleItemChange = (value: number) => {
+    setItemPerPage(value);
   };
 
   return (
     <>
       <Container>
-        <DefaultPageTitleFormat>Comments</DefaultPageTitleFormat>
+        <AlternatePageTitleFormat>
+          <Typography variant='h1' color='primary'>
+            Comments
+          </Typography>
+          <MemberDropdown repositoryId={repositoryId} />
+        </AlternatePageTitleFormat>
         <Box my={1} className={classes.root}>
-          <Tabs value={tab} onChange={handleTabs} textColor='primary' centered>
-            <Tab
-              value={TabOption.codeReview}
-              label='Code Reviews'
-              className={
-                tab === TabOption.codeReview
-                  ? classes.active_code_review_tab
-                  : classes.inactive_code_review_tab
-              }
-            />
-            <Tab
-              value={TabOption.issueNotes}
-              label='Issue Notes'
-              className={
-                tab === TabOption.issueNotes
-                  ? classes.active_issue_note_tab
-                  : classes.inactive_issue_note_tab
-              }
-            />
-          </Tabs>
+          <Grid container justify='space-between'>
+            <Tabs
+              value={tab}
+              onChange={handleTabs}
+              textColor='primary'
+              centered
+            >
+              <Tab
+                value={TabOption.codeReview}
+                label='Code Reviews'
+                className={
+                  tab === TabOption.codeReview
+                    ? classes.active_code_review_tab
+                    : classes.inactive_code_review_tab
+                }
+              />
+              <Tab
+                value={TabOption.issueNotes}
+                label='Issue Notes'
+                className={
+                  tab === TabOption.issueNotes
+                    ? classes.active_issue_note_tab
+                    : classes.inactive_issue_note_tab
+                }
+              />
+            </Tabs>
+            <ItemPerPageDropdown updateItemsPerPage={handleItemChange} />
+          </Grid>
+
           <Grid
             container
             direction={'row'}
@@ -199,6 +243,19 @@ const CommentList: React.FC = () => {
             return <NotePaper key={note.meta.id} noteData={note} />;
           })}
         </Grid>
+        {Math.ceil(totalNotes / itemsPerPage) > 0 && (
+          <Pagination
+            className={classes.pagination}
+            page={page + 1}
+            count={Math.ceil(totalNotes / itemsPerPage)}
+            onChange={(e, page) => {
+              setPage(page - 1);
+              window.scrollTo(0, 0);
+            }}
+            color='primary'
+            size='large'
+          />
+        )}
       </Container>
     </>
   );

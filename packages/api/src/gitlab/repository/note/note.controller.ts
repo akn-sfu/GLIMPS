@@ -11,6 +11,7 @@ import { IdParam } from '../../../common/id-param';
 import { MergeRequestService } from '../../merge-request/merge-request.service';
 import { paginatedToResponse } from '../../../common/pagination';
 import { NoteQueryDto } from './note-query.dto';
+import { query } from 'express';
 
 @Controller('note')
 export class NoteController {
@@ -28,6 +29,11 @@ export class NoteController {
       );
     }
     return paginatedToResponse(this.noteService.search(query));
+  }
+
+  @Get("total")
+  totalNotes(@Query() query: NoteQueryDto){
+    return this.noteService.getTotalCounts(query);
   }
 
   @Get('count')
