@@ -20,4 +20,8 @@ export class MergeRequestQueryDto extends QueryDto {
   @IsOptional()
   @IsUUID()
   note_id?: string;
+
+  @IsOptional()
+  @IsString()
+  timezone?: string;
 }

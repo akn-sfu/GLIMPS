@@ -13,6 +13,7 @@ interface MergeRequestSearchParams {
   merged_start_date?: string;
   merged_end_date?: string;
   note_id?: string;
+  timezone?: string;
 }
 
 export function useGetCountMergeRequests(params: MergeRequestSearchParams) {
