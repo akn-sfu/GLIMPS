@@ -150,7 +150,7 @@ const ListMergeRequestPage = () => {
     return a - b;
   });
 
-  const showSpiltView = activeMergeRequest || activeCommit;
+  const showSpiltView = activeCommit;
   const GridComponent = showSpiltView ? IndependentScrollGrid : Grid;
   return (
     <>
