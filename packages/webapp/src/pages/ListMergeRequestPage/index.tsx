@@ -190,50 +190,31 @@ const ListMergeRequestPage = () => {
                   const active =
                     commitOrMergeRequest.meta.id ===
                     (activeMergeRequest || activeCommit)?.meta.id;
-                  if (
-                    commitOrMergeRequest.meta.resourceType == 'MergeRequest'
-                  ) {
-                    return (
-                      <CommitOrMergeRequestRenderer
-                        key={commitOrMergeRequest.meta.id}
-                        mergeRequest={commitOrMergeRequest}
-                        active={active}
-                        shrink={!!showSpiltView}
-                        onClickSummary={() => {
-                          setActiveCommit(undefined);
-                          setActiveMergeRequest(
-                            active && !activeCommit
-                              ? undefined
-                              : commitOrMergeRequest,
-                          );
-                        }}
-                      >
-                        {active && (
-                          <CommitList
-                            mergeRequest={commitOrMergeRequest}
-                            activeCommit={activeCommit}
-                            setActiveCommit={setActiveCommit}
-                            authorEmails={emails}
-                          />
-                        )}
-                      </CommitOrMergeRequestRenderer>
-                    );
-                  } else {
-                    return (
-                      <CommitOrMergeRequestRenderer
-                        key={commitOrMergeRequest.meta.id}
-                        commit={commitOrMergeRequest}
-                        active={active}
-                        shrink={!!activeMergeRequest}
-                        onClickSummary={() => {
-                          setActiveCommit(
-                            active ? undefined : commitOrMergeRequest,
-                          );
-                          setActiveMergeRequest(undefined);
-                        }}
-                      />
-                    );
-                  }
+                  return (
+                    <CommitOrMergeRequestRenderer
+                      key={commitOrMergeRequest.meta.id}
+                      mergeRequest={commitOrMergeRequest}
+                      active={active}
+                      shrink={!!showSpiltView}
+                      onClickSummary={() => {
+                        setActiveCommit(undefined);
+                        setActiveMergeRequest(
+                          active && !activeCommit
+                            ? undefined
+                            : commitOrMergeRequest,
+                        );
+                      }}
+                    >
+                      {active && (
+                        <CommitList
+                          mergeRequest={commitOrMergeRequest}
+                          activeCommit={activeCommit}
+                          setActiveCommit={setActiveCommit}
+                          authorEmails={emails}
+                        />
+                      )}
+                    </CommitOrMergeRequestRenderer>
+                  );
                 })}
                 {hasNextPage && hasNextPageCommit && (
                   <LoadMore
