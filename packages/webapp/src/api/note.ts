@@ -7,6 +7,7 @@ interface NoteSearchParams {
   created_start_date?: string;
   created_end_date?: string;
   type?: Note.Type;
+  timezone?: string;
 }
 
 export function useGetMergeRequestNotes(mergeRequestId: string) {
@@ -32,4 +33,8 @@ export function useGetNotesByRepository(
 
 export function useGetWordCount(params: NoteSearchParams) {
   return useApiQuery<Note.DailyCount[]>('/note/count', params);
+}
+
+export function useGetTotalNotes(params: NoteSearchParams) {
+  return useApiQuery<number>('/note/total', params);
 }

@@ -1,4 +1,5 @@
 import { Commit } from '@ceres/types';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -8,6 +9,15 @@ import { useRepositoryAuthors } from '../../api/author';
 import { ApiResource } from '../../api/base';
 import { useRepositoryMembers } from '../../api/repo_members';
 import { useFilterContext } from '../../contexts/FilterContext';
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    formControl: {
+      margin: theme.spacing(1),
+      minWidth: 200,
+    },
+  }),
+);
 
 function findEmailsForMember(
   memberId: string,
@@ -24,6 +34,8 @@ interface MemberDropdownProps {
 }
 
 const MemberDropdown: React.FC<MemberDropdownProps> = ({ repositoryId }) => {
+  const classes = useStyles();
+
   const { author, setAuthor, setEmail } = useFilterContext();
   const [value, setValue] = useState(author);
 
@@ -50,7 +62,7 @@ const MemberDropdown: React.FC<MemberDropdownProps> = ({ repositoryId }) => {
   }, [value]);
 
   return (
-    <FormControl variant='filled' fullWidth>
+    <FormControl className={classes.formControl} variant='filled'>
       <InputLabel>Show results for:</InputLabel>
       <Select
         value={value || 'None'}

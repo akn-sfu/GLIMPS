@@ -91,10 +91,18 @@ export class NoteService extends BaseService<Note, NoteEntity, NoteQueryDto> {
     return query.orderBy("note.resource #>> '{created_at}'", 'DESC');
   }
 
+  async getTotalCounts(filters: NoteQueryDto): Promise<number>{
+    let query = this.serviceRepository.createQueryBuilder('note');
+    query = this.buildFilters(query, filters);
+    return query.getCount();
+  }
+
+
   async buildDailyCounts(filters: NoteQueryDto): Promise<Note.DailyCount[]> {
     let query = this.serviceRepository.createQueryBuilder('note');
     query = this.buildFilters(query, filters);
-    query.select("DATE(note.resource #>> '{created_at}')", 'date');
+    query.select("DATE((note.resource #>>'{created_at}')::timestamptz AT time zone" + " '" + filters.timezone + "' " +
+     "AT time zone 'utc')", 'date');
     query.addSelect('count(*)::integer', 'count');
     query.addSelect(
       "sum((note.resource #>> '{extensions,wordCount}')::float)",

@@ -88,6 +88,7 @@ function findRepoMemberId(
 }
 
 const DynamicGraph: React.FC = () => {
+  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const { startDate, endDate, author } = useFilterContext();
   const { repositoryId } = useRepositoryContext();
   const { data: members } = useRepositoryMembers(repositoryId);
@@ -98,6 +99,7 @@ const DynamicGraph: React.FC = () => {
     author_email: emails,
     start_date: startDate,
     end_date: endDate,
+    timezone: timezone,
     sort: '+authored_date',
   });
   const { data: mergeRequestCounts } = useGetCountMergeRequests({
@@ -105,6 +107,7 @@ const DynamicGraph: React.FC = () => {
     author_email: emails,
     merged_start_date: startDate,
     merged_end_date: endDate,
+    timezone: timezone,
   });
   const { data: issueWordCounts } = useGetWordCount({
     repository_id: repositoryId,
@@ -112,6 +115,7 @@ const DynamicGraph: React.FC = () => {
     created_end_date: endDate,
     author_id: authorIds,
     type: Note.Type.issueComment,
+    timezone: timezone,
   });
   const { data: mergeRequestWordCounts } = useGetWordCount({
     repository_id: repositoryId,
@@ -119,6 +123,7 @@ const DynamicGraph: React.FC = () => {
     created_end_date: endDate,
     author_id: authorIds,
     type: Note.Type.mergeRequestComment,
+    timezone: timezone,
   });
 
   const [graphTab, setGraphTab] = useState(GraphTab.code);
