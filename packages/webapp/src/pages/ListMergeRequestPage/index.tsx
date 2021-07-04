@@ -151,6 +151,8 @@ const ListMergeRequestPage = () => {
   });
 
   const showSpiltView = activeMergeRequest || activeCommit;
+  // const GridComponent = showSpiltView ? IndependentScrollGrid : Grid;
+  //TODO: delete split view and grid. this function works for selecting student now
   const GridComponent = IndependentScrollGrid;
   return (
     <>
