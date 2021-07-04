@@ -150,8 +150,8 @@ const ListMergeRequestPage = () => {
     return a - b;
   });
 
-  const showSpiltView = activeCommit;
-  const GridComponent = showSpiltView ? IndependentScrollGrid : Grid;
+  const showSpiltView = activeMergeRequest || activeCommit;
+  const GridComponent = IndependentScrollGrid;
   return (
     <>
       <DefaultPageLayout>
@@ -190,31 +190,50 @@ const ListMergeRequestPage = () => {
                   const active =
                     commitOrMergeRequest.meta.id ===
                     (activeMergeRequest || activeCommit)?.meta.id;
-                  return (
-                    <CommitOrMergeRequestRenderer
-                      key={commitOrMergeRequest.meta.id}
-                      mergeRequest={commitOrMergeRequest}
-                      active={active}
-                      shrink={!!showSpiltView}
-                      onClickSummary={() => {
-                        setActiveCommit(undefined);
-                        setActiveMergeRequest(
-                          active && !activeCommit
-                            ? undefined
-                            : commitOrMergeRequest,
-                        );
-                      }}
-                    >
-                      {active && (
-                        <CommitList
-                          mergeRequest={commitOrMergeRequest}
-                          activeCommit={activeCommit}
-                          setActiveCommit={setActiveCommit}
-                          authorEmails={emails}
-                        />
-                      )}
-                    </CommitOrMergeRequestRenderer>
-                  );
+                  if (
+                    commitOrMergeRequest.meta.resourceType == 'MergeRequest'
+                  ) {
+                    return (
+                      <CommitOrMergeRequestRenderer
+                        key={commitOrMergeRequest.meta.id}
+                        mergeRequest={commitOrMergeRequest}
+                        active={active}
+                        shrink={!!showSpiltView}
+                        onClickSummary={() => {
+                          setActiveCommit(undefined);
+                          setActiveMergeRequest(
+                            active && !activeCommit
+                              ? undefined
+                              : commitOrMergeRequest,
+                          );
+                        }}
+                      >
+                        {active && (
+                          <CommitList
+                            mergeRequest={commitOrMergeRequest}
+                            activeCommit={activeCommit}
+                            setActiveCommit={setActiveCommit}
+                            authorEmails={emails}
+                          />
+                        )}
+                      </CommitOrMergeRequestRenderer>
+                    );
+                  } else {
+                    return (
+                      <CommitOrMergeRequestRenderer
+                        key={commitOrMergeRequest.meta.id}
+                        commit={commitOrMergeRequest}
+                        active={active}
+                        shrink={!!activeMergeRequest}
+                        onClickSummary={() => {
+                          setActiveCommit(
+                            active ? undefined : commitOrMergeRequest,
+                          );
+                          setActiveMergeRequest(undefined);
+                        }}
+                      />
+                    );
+                  }
                 })}
                 {hasNextPage && hasNextPageCommit && (
                   <LoadMore
