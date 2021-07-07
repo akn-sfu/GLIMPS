@@ -151,15 +151,13 @@ const ListMergeRequestPage = () => {
   });
 
   const showSpiltView = activeMergeRequest || activeCommit;
-  // const GridComponent = showSpiltView ? IndependentScrollGrid : Grid;
-  //TODO: delete split view and grid. this function works for selecting student now
-  const GridComponent = IndependentScrollGrid;
+
   return (
     <>
       <DefaultPageLayout>
         <ScoreOverrideQueueProvider>
-          <GridComponent container spacing={showSpiltView ? 3 : 0}>
-            <Grid item xs={showSpiltView ? 5 : 5}>
+          <IndependentScrollGrid container spacing={3}>
+            <Grid item xs={5}>
               <Container>
                 <ScoreOverrideQueueInfo />
                 <Box my={2}>
@@ -256,7 +254,7 @@ const ListMergeRequestPage = () => {
                 />
               </Grid>
             )}
-          </GridComponent>
+          </IndependentScrollGrid>
         </ScoreOverrideQueueProvider>
       </DefaultPageLayout>
     </>
