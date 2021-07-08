@@ -123,6 +123,7 @@ const RepositoryList: React.FC = () => {
             >
               Fetch
             </Button>
+
             {isFetchingRepositories && (
               <Box position='absolute' top='.25rem' left='1.5rem'>
                 <CircularProgress color='secondary' />

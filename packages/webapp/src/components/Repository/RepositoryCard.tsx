@@ -141,6 +141,22 @@ const RepositoryCard: React.FC<RepositoryCardProps> = ({
             <Box position='absolute' top='3.5rem' left='50%'>
               <CircularProgress size={25} />
             </Box>
+            <Grid
+              container
+              direction='row'
+              justify='flex-end'
+              alignItems='center'
+            >
+              <Box position='absolute' top='2.75rem' right='5%'>
+                <Button
+                  variant='contained'
+                  color='secondary'
+                  onClick={() => console.log('cancel')}
+                >
+                  Cancel
+                </Button>
+              </Box>
+            </Grid>
           </Box>
         </Box>
       )}
