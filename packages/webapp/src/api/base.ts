@@ -1,4 +1,4 @@
-import { Method } from 'axios';
+import { CancelToken, Method } from 'axios';
 import {
   useInfiniteQuery,
   useMutation,
@@ -90,12 +90,18 @@ export function useApiMutation<T, B>(route: string, method: Method) {
   });
 }
 
-export function useApiMutationCancellable<T, B>(route: string, method: Method) {
+export function useApiMutationCancellable<T, B>(
+  route: string,
+  method: Method,
+  token: CancelToken,
+) {
   return useMutation<T, any, B>(route, async (body?) => {
+    console.log(token);
     const result = await axios.request<T>({
       method,
       url: route,
       data: body,
+      cancelToken: token,
     });
     return result.data;
   });

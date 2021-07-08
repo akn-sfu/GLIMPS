@@ -18,6 +18,7 @@ interface RepositoryCardProps {
   isShared: boolean;
   isSyncing: boolean;
   syncRepository: (id: string) => void;
+  onCancelSync: () => void;
 }
 
 const SyncButton = (props: { syncing: boolean; onClick: () => void }) => (
@@ -53,6 +54,7 @@ const RepositoryCard: React.FC<RepositoryCardProps> = ({
   isShared,
   isSyncing,
   syncRepository,
+  onCancelSync,
 }) => {
   const { setRepositoryId } = useRepositoryContext();
   const hasBeenSynced = !!repository?.extensions?.lastSync;
@@ -151,7 +153,7 @@ const RepositoryCard: React.FC<RepositoryCardProps> = ({
                 <Button
                   variant='contained'
                   color='primary'
-                  onClick={() => console.log('cancel')}
+                  onClick={() => onCancelSync()}
                 >
                   Cancel
                 </Button>

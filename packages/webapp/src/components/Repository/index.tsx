@@ -72,8 +72,7 @@ const RepositoryList: React.FC = () => {
 
   const CancelToken = axios.CancelToken;
   const source = CancelToken.source();
-  console.log(source.token);
-  const { sync } = useSyncRepository();
+  const { sync } = useSyncRepository(source.token);
   const { fetch } = useFetchRepositories();
   const isFetchingRepositories = pendingFetches?.total > 0;
   const isSyncingRepositories = operationsData?.total > 0;
@@ -109,7 +108,6 @@ const RepositoryList: React.FC = () => {
     data?.results.length == 0 ? (
       <Typography>No repositories found.</Typography>
     ) : null;
-
   return (
     <Container>
       <Grid container justify='space-between' alignItems='center'>
@@ -193,6 +191,7 @@ const RepositoryList: React.FC = () => {
               isShared={user?.id !== repo?.extensions?.owner?.id}
               isSyncing={isSyncing}
               syncRepository={syncRepository}
+              onCancelSync={() => source.cancel()}
               key={repo.meta.id}
             />
           );

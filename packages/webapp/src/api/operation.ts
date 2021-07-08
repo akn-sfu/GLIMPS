@@ -1,4 +1,5 @@
 import { Operation } from '@ceres/types';
+import { CancelToken } from 'axios';
 import { MutateOptions } from 'react-query';
 import {
   useApiMutation,
@@ -10,8 +11,8 @@ interface OperationInput {
   type: Operation.Type;
 }
 
-export function useSyncRepository() {
-  const mutation = useCreateOperation();
+export function useSyncRepository(token: CancelToken) {
+  const mutation = useCreateOperationCancellable(token);
   const sync = (
     id: string,
     options?: MutateOptions<Operation, any, OperationInput>,
@@ -52,6 +53,8 @@ export function useCreateOperation<T extends OperationInput>() {
   return useApiMutation<Operation, T>('/operation', 'POST');
 }
 
-export function useCreateOperationCancellabel<T extends OperationInput>() {
-  return useApiMutationCancellable<Operation, T>('/operation', 'POST');
+export function useCreateOperationCancellable<T extends OperationInput>(
+  token: CancelToken,
+) {
+  return useApiMutationCancellable<Operation, T>('/operation', 'POST', token);
 }
