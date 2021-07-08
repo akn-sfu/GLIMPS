@@ -1,6 +1,10 @@
 import { Operation } from '@ceres/types';
 import { MutateOptions } from 'react-query';
-import { useApiMutation, usePaginatedQuery } from './base';
+import {
+  useApiMutation,
+  useApiMutationCancellable,
+  usePaginatedQuery,
+} from './base';
 
 interface OperationInput {
   type: Operation.Type;
@@ -46,4 +50,8 @@ export function useGetOperations(
 
 export function useCreateOperation<T extends OperationInput>() {
   return useApiMutation<Operation, T>('/operation', 'POST');
+}
+
+export function useCreateOperationCancellabel<T extends OperationInput>() {
+  return useApiMutationCancellable<Operation, T>('/operation', 'POST');
 }

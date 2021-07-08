@@ -25,6 +25,7 @@ import {
 import { TextField } from '@material-ui/core';
 import Tab from '@material-ui/core/Tab/Tab';
 import { useInterval } from '../../util/useInterval';
+import axios from 'axios';
 function hasPendingSync(operations: Operation[], id: string) {
   return (
     operations.filter((operation) => operation.input.repository_id === id)
@@ -69,6 +70,9 @@ const RepositoryList: React.FC = () => {
     type: [Operation.Type.FETCH_REPOSITORIES],
   });
 
+  const CancelToken = axios.CancelToken;
+  const source = CancelToken.source();
+  console.log(source.token);
   const { sync } = useSyncRepository();
   const { fetch } = useFetchRepositories();
   const isFetchingRepositories = pendingFetches?.total > 0;

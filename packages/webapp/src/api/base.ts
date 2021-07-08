@@ -90,6 +90,17 @@ export function useApiMutation<T, B>(route: string, method: Method) {
   });
 }
 
+export function useApiMutationCancellable<T, B>(route: string, method: Method) {
+  return useMutation<T, any, B>(route, async (body?) => {
+    const result = await axios.request<T>({
+      method,
+      url: route,
+      data: body,
+    });
+    return result.data;
+  });
+}
+
 export type ApiResource<T> = T & {
   meta: {
     createdAt: string;

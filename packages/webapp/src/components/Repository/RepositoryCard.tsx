@@ -150,7 +150,7 @@ const RepositoryCard: React.FC<RepositoryCardProps> = ({
               <Box position='absolute' top='2.75rem' right='5%'>
                 <Button
                   variant='contained'
-                  color='secondary'
+                  color='primary'
                   onClick={() => console.log('cancel')}
                 >
                   Cancel
