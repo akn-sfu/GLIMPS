@@ -19,6 +19,18 @@ import { useRepositoryMembers } from '../../api/repo_members';
 import { ApiResource } from '../../api/base';
 import StudentDropdown from '../../components/StudentDropdown';
 import AssignmentTwoToneIcon from '@material-ui/icons/AssignmentTwoTone';
+import Button from '@material-ui/core/Button';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      '& > *': {
+        margin: theme.spacing(1),
+      },
+    },
+  }),
+);
 
 function combineData(
   startDate: string,
@@ -89,6 +101,7 @@ function findRepoMemberId(
 }
 
 const DynamicGraph: React.FC = () => {
+  const classes = useStyles();
   const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const { startDate, endDate, author } = useFilterContext();
   const { repositoryId } = useRepositoryContext();
@@ -144,7 +157,22 @@ const DynamicGraph: React.FC = () => {
   return (
     <>
       <Container>
-        <DefaultPageTitleFormat>Contribution Graph</DefaultPageTitleFormat>
+        <Grid container justify='space-between' alignItems='center'>
+          <Grid item>
+            <DefaultPageTitleFormat>Contribution Graph</DefaultPageTitleFormat>
+          </Grid>
+          <Grid item>
+            <Box position='relative' className={classes.root}>
+              <Button
+                variant='outlined'
+                color='primary'
+                startIcon={<AssignmentTwoToneIcon />}
+              >
+                Copy
+              </Button>
+            </Box>
+          </Grid>
+        </Grid>
         <Container maxWidth='md'>
           <Grid container justify='flex-end' alignItems='flex-end' spacing={1}>
             <Grid item>
@@ -154,14 +182,6 @@ const DynamicGraph: React.FC = () => {
                   onChange={(newEmails) => {
                     setEmails(newEmails);
                   }}
-                />
-              </Box>
-            </Grid>
-            <Grid item>
-              <Box mb={1}>
-                <AssignmentTwoToneIcon
-                  style={{ fontSize: 40 }}
-                  color='action'
                 />
               </Box>
             </Grid>
