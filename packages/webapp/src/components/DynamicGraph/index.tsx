@@ -18,6 +18,7 @@ import { useGetWordCount } from '../../api/note';
 import { useRepositoryMembers } from '../../api/repo_members';
 import { ApiResource } from '../../api/base';
 import StudentDropdown from '../../components/StudentDropdown';
+import AssignmentTwoToneIcon from '@material-ui/icons/AssignmentTwoTone';
 
 function combineData(
   startDate: string,
@@ -145,14 +146,22 @@ const DynamicGraph: React.FC = () => {
       <Container>
         <DefaultPageTitleFormat>Contribution Graph</DefaultPageTitleFormat>
         <Container maxWidth='md'>
-          <Grid container justify='flex-end' spacing={1}>
-            <Grid item xs={4}>
+          <Grid container justify='flex-end' alignItems='flex-end' spacing={1}>
+            <Grid item>
               <Box mb={1}>
                 <StudentDropdown
                   repositoryId={repositoryId}
                   onChange={(newEmails) => {
                     setEmails(newEmails);
                   }}
+                />
+              </Box>
+            </Grid>
+            <Grid item>
+              <Box mb={1}>
+                <AssignmentTwoToneIcon
+                  style={{ fontSize: 40 }}
+                  color='action'
                 />
               </Box>
             </Grid>

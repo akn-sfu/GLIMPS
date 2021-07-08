@@ -104,16 +104,16 @@ const DynamicBarChart: React.FC<BarChartProps> = ({ graphData, graphTab }) => {
           />
           <Legend layout='vertical' align='right' verticalAlign='top' />
           <Bar
-            dataKey='mergeRequestWordCount'
-            name='Merge Request'
-            stackId='a'
-            fill='#e37500'
-          />
-          <Bar
             dataKey='issueWordCount'
             name='Issue'
             stackId='a'
             fill='#0A4D63'
+          />
+          <Bar
+            dataKey='mergeRequestWordCount'
+            name='Merge Request'
+            stackId='a'
+            fill='#e37500'
           />
         </BarChart>
       </ResponsiveContainer>
