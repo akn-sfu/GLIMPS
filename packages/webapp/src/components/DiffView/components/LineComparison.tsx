@@ -50,13 +50,9 @@ const LineRenderer: React.FC<{
           wordWrap: 'break-word',
         }}
       >
-        <code
-          style={{ fontSize: 'small' }}
-          ref={codeblock}
-          className='highlight-javascript'
-        >
+        <div className='code' style={{ fontSize: 'small' }} ref={codeblock}>
           {content}
-        </code>
+        </div>
       </pre>
     </Box>
   );
