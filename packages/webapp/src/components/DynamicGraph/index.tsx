@@ -18,7 +18,7 @@ import { useGetWordCount } from '../../api/note';
 import { useRepositoryMembers } from '../../api/repo_members';
 import { ApiResource } from '../../api/base';
 import StudentDropdown from '../../components/StudentDropdown';
-import AssignmentTwoToneIcon from '@material-ui/icons/AssignmentTwoTone';
+import AssignmentOutlinedIcon from '@material-ui/icons/AssignmentOutlined';
 import Button from '@material-ui/core/Button';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
@@ -164,12 +164,10 @@ const DynamicGraph: React.FC = () => {
           <Grid item>
             <Box position='relative' className={classes.root}>
               <Button
-                variant='outlined'
+                variant='contained'
                 color='primary'
-                startIcon={<AssignmentTwoToneIcon />}
-              >
-                Copy
-              </Button>
+                startIcon={<AssignmentOutlinedIcon />}
+              />
             </Box>
           </Grid>
         </Grid>
@@ -182,6 +180,18 @@ const DynamicGraph: React.FC = () => {
                   onChange={(newEmails) => {
                     setEmails(newEmails);
                   }}
+                />
+              </Box>
+            </Grid>
+            <Grid item>
+              <Box className={classes.root}>
+                <Button
+                  variant='contained'
+                  color='primary'
+                  size='large'
+                  startIcon={
+                    <AssignmentOutlinedIcon style={{ fontSize: 30 }} />
+                  }
                 />
               </Box>
             </Grid>
