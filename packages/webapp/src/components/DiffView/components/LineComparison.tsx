@@ -2,8 +2,9 @@ import { Line, LINE_SCORING } from '@ceres/types';
 import Box from '@material-ui/core/Box';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
+import highlight from 'highlight.js';
 
 const LINE_COLOR_MAP = {
   [Line.Type.add]: 'green',
@@ -26,7 +27,14 @@ const LineRenderer: React.FC<{
   color?: string;
   lineNumber?: number;
   content?: string;
-}> = ({ color, lineNumber, content }) => {
+}> = ({ lineNumber, content }) => {
+  const codeblock = useRef(null);
+  useEffect(() => {
+    if (codeblock.current !== null) {
+      highlight.highlightElement(codeblock.current);
+    }
+  }, [codeblock]);
+
   if (!content) {
     return <Box />;
   }
@@ -37,13 +45,18 @@ const LineRenderer: React.FC<{
       </Box>
       <pre
         style={{
-          color,
           margin: '0',
           whiteSpace: 'pre-wrap',
           wordWrap: 'break-word',
         }}
       >
-        {content}
+        <code
+          style={{ fontSize: 'small' }}
+          ref={codeblock}
+          className='highlight-javascript'
+        >
+          {content}
+        </code>
       </pre>
     </Box>
   );
