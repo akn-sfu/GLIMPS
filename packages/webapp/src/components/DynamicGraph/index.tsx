@@ -162,7 +162,7 @@ const DynamicGraph: React.FC = () => {
           </Grid>
           <Grid item>
             <Box position='relative' className={classes.root}>
-              <Button variant='contained' color='primary' size='large'>
+              <Button variant='contained' color='primary' size='medium'>
                 COPY
               </Button>
             </Box>
