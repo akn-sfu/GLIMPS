@@ -15,9 +15,10 @@ import ScorePopover from './components/ScorePopper';
 import EditIcon from '@material-ui/icons/Edit';
 import ScoreOverrideForm from '../../pages/ListMergeRequestPage/components/ScoreOverrideForm';
 import { useScoreOverrideQueue } from '../../pages/ListMergeRequestPage/contexts/ScoreOverrideQueue';
-import LineComparison from './components/LineComparison';
+// import LineComparison from './components/LineComparison';
 import { makeStyles } from '@material-ui/core/styles';
 import OverridePopper from '../OverridePopper';
+import DiffTable from './components/DiffTable';
 
 const StyledAccordionSummary = styled(AccordionSummary)`
   &.MuiAccordionSummary-root.Mui-focused {
@@ -182,13 +183,14 @@ const DiffView: React.FC<DiffViewProps> = ({
         </StyledAccordionSummary>
         <AccordionDetails>
           <Root>
-            {lines?.map((line, index) => (
+            <DiffTable lines={lines} weight={extensions?.weight || 0} />
+            {/* {lines?.map((line, index) => (
               <LineComparison
                 key={index}
                 line={line}
                 weight={extensions?.weight || 0}
               />
-            ))}
+            ))} */}
           </Root>
         </AccordionDetails>
       </Accordion>

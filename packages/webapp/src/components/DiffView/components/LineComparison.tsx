@@ -38,6 +38,7 @@ const LineRenderer: React.FC<{
   if (!content) {
     return <Box />;
   }
+  console.log(content);
   return (
     <Box display='flex' alignItems='center'>
       <Box component={Typography} width='2rem'>
@@ -46,7 +47,7 @@ const LineRenderer: React.FC<{
       <pre
         style={{
           margin: '0',
-          whiteSpace: 'pre-wrap',
+          whiteSpace: 'pre-line',
           wordWrap: 'break-word',
         }}
       >
