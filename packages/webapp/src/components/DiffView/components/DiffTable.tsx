@@ -40,7 +40,8 @@ const getColors = (line: { left: string; right: string; type: string }) => {
     line.type === Line.Type.spaceChange ||
     line.type === Line.Type.syntaxChange ||
     line.type === Line.Type.syntaxLine ||
-    line.type === Line.Type.comment
+    line.type === Line.Type.comment ||
+    line.type === Line.Type.blank
   ) {
     lineColor.left = LINE_COLOR_MAP[Line.Type.syntaxChange];
     lineColor.right = LINE_COLOR_MAP[Line.Type.syntaxChange];
@@ -90,6 +91,7 @@ const DiffTable = ({ lines, weight }) => {
                     </TableCell>
                     <TableCell
                       style={{
+                        minWidth: 250,
                         backgroundColor: Color(color.left).alpha(0.6),
                       }}
                       className={classes.tableCell}
@@ -101,7 +103,10 @@ const DiffTable = ({ lines, weight }) => {
                 ) : (
                   <>
                     <TableCell className={classes.empty} />
-                    <TableCell className={classes.empty} />
+                    <TableCell
+                      style={{ minWidth: 250 }}
+                      className={classes.empty}
+                    />
                   </>
                 )}
                 {line.right ? (
@@ -117,6 +122,7 @@ const DiffTable = ({ lines, weight }) => {
                     </TableCell>
                     <TableCell
                       style={{
+                        minWidth: 250,
                         backgroundColor: Color(color.right).alpha(0.6),
                       }}
                       className={classes.tableCell}
