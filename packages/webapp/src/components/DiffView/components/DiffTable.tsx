@@ -19,13 +19,13 @@ const LINE_COLOR_MAP = {
   [Line.Type.spaceChange]: '#c3ddff',
   [Line.Type.comment]: '#e8d9fe',
   [Line.Type.syntaxLine]: '#c3ddff',
-  [Line.Type.blank]: '#c3ddff',
+  [Line.Type.blank]: '#fff',
 };
 
 const getColors = (line: { left: string; right: string; type: string }) => {
   const lineColor = {
-    left: LINE_COLOR_MAP[Line.Type.noChange],
-    right: LINE_COLOR_MAP[Line.Type.noChange],
+    left: LINE_COLOR_MAP[Line.Type.blank],
+    right: LINE_COLOR_MAP[Line.Type.blank],
   };
   if (line.type === Line.Type.add) {
     lineColor.left = line.left
@@ -38,7 +38,8 @@ const getColors = (line: { left: string; right: string; type: string }) => {
   } else if (
     line.type === Line.Type.spaceChange ||
     line.type === Line.Type.syntaxChange ||
-    line.type === Line.Type.syntaxLine
+    line.type === Line.Type.syntaxLine ||
+    line.type === Line.Type.comment
   ) {
     lineColor.left = LINE_COLOR_MAP[Line.Type.syntaxChange];
     lineColor.right = LINE_COLOR_MAP[Line.Type.syntaxChange];
@@ -55,10 +56,10 @@ const DiffTable = ({ lines, weight }) => {
       <Table className={classes.table} aria-label='diff view table'>
         <TableBody>
           {lines.map((line, index) => {
-            const color = getColors(line);
             console.log(line);
+            const color = getColors(line);
             return (
-              <TableRow key={index}>
+              <TableRow key={index} style={{ width: '100%' }}>
                 {line.left ? (
                   <>
                     <TableCell
@@ -89,6 +90,7 @@ const DiffTable = ({ lines, weight }) => {
                     <TableCell
                       className={classes.number}
                       style={{
+                        borderLeft: '1px solid #ddd',
                         backgroundColor: color.right,
                       }}
                     >
@@ -107,7 +109,10 @@ const DiffTable = ({ lines, weight }) => {
                   </>
                 ) : (
                   <>
-                    <TableCell className={classes.empty} />
+                    <TableCell
+                      className={classes.empty}
+                      style={{ borderLeft: '1px solid #ddd' }}
+                    />
                     <TableCell className={classes.empty} />
                   </>
                 )}
@@ -126,21 +131,23 @@ const useStyles = makeStyles({
   },
   tableCell: {
     borderBottom: 'none',
-    textOverflow: '',
     paddingTop: 4,
     paddingBottom: 4,
   },
   pre: {
     margin: 0,
+    wordWrap: 'break-word',
+    whiteSpace: 'pre-wrap',
   },
   number: {
-    backgroundColor: '#f5f5f5',
+    color: '#888',
     borderBottom: 'none',
     paddingTop: 4,
     paddingBottom: 4,
+    fontFamily: 'monospace',
   },
   empty: {
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#fff',
     borderBottom: 'none',
     paddingTop: 4,
     paddingBottom: 4,
