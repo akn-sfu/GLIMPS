@@ -22,6 +22,30 @@ const LINE_COLOR_MAP = {
   [Line.Type.blank]: '#c3ddff',
 };
 
+const getColors = (line: { left: string; right: string; type: string }) => {
+  const lineColor = {
+    left: LINE_COLOR_MAP[Line.Type.noChange],
+    right: LINE_COLOR_MAP[Line.Type.noChange],
+  };
+  if (line.type === Line.Type.add) {
+    lineColor.left = line.left
+      ? LINE_COLOR_MAP[Line.Type.delete]
+      : LINE_COLOR_MAP[Line.Type.blank];
+    lineColor.right = LINE_COLOR_MAP[Line.Type.add];
+  } else if (line.type === Line.Type.delete) {
+    lineColor.left = LINE_COLOR_MAP[Line.Type.delete];
+    lineColor.right = LINE_COLOR_MAP[Line.Type.blank];
+  } else if (
+    line.type === Line.Type.spaceChange ||
+    line.type === Line.Type.syntaxChange ||
+    line.type === Line.Type.syntaxLine
+  ) {
+    lineColor.left = LINE_COLOR_MAP[Line.Type.syntaxChange];
+    lineColor.right = LINE_COLOR_MAP[Line.Type.syntaxChange];
+  }
+  return lineColor;
+};
+
 const DiffTable = ({ lines, weight }) => {
   const classes = useStyles();
   console.log(weight);
@@ -31,13 +55,15 @@ const DiffTable = ({ lines, weight }) => {
       <Table className={classes.table} aria-label='diff view table'>
         <TableBody>
           {lines.map((line, index) => {
+            const color = getColors(line);
+            console.log(line);
             return (
               <TableRow key={index}>
                 {line.left ? (
                   <>
                     <TableCell
                       style={{
-                        backgroundColor: LINE_COLOR_MAP[line.type],
+                        backgroundColor: color.left,
                       }}
                       className={classes.number}
                     >
@@ -45,9 +71,7 @@ const DiffTable = ({ lines, weight }) => {
                     </TableCell>
                     <TableCell
                       style={{
-                        backgroundColor: Color(LINE_COLOR_MAP[line.type]).alpha(
-                          0.7,
-                        ),
+                        backgroundColor: Color(color.left).alpha(0.6),
                       }}
                       className={classes.tableCell}
                     >
@@ -62,10 +86,20 @@ const DiffTable = ({ lines, weight }) => {
                 )}
                 {line.right ? (
                   <>
-                    <TableCell className={classes.number}>
+                    <TableCell
+                      className={classes.number}
+                      style={{
+                        backgroundColor: color.right,
+                      }}
+                    >
                       {line.right.lineNumber}
                     </TableCell>
-                    <TableCell className={classes.tableCell}>
+                    <TableCell
+                      style={{
+                        backgroundColor: Color(color.right).alpha(0.6),
+                      }}
+                      className={classes.tableCell}
+                    >
                       <pre className={classes.pre}>
                         {line.right.lineContent}
                       </pre>
@@ -92,6 +126,7 @@ const useStyles = makeStyles({
   },
   tableCell: {
     borderBottom: 'none',
+    textOverflow: '',
     paddingTop: 4,
     paddingBottom: 4,
   },
