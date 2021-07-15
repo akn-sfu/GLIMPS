@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { createRef, useEffect } from 'react';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -8,8 +8,9 @@ import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import { Line } from '@ceres/types';
 import Color from 'color';
+import { useState } from 'react';
 
-// import highlight from 'highlight.js';
+import highlight from 'highlight.js';
 
 const LINE_COLOR_MAP = {
   [Line.Type.add]: '#ccffd8',
@@ -51,12 +52,29 @@ const DiffTable = ({ lines, weight }) => {
   const classes = useStyles();
   console.log(weight);
 
+  const [refs, setRefs] = useState([]);
+
+  useEffect(() => {
+    const arrRefs = [];
+    lines.forEach(() => {
+      arrRefs.push(createRef());
+    });
+    setRefs(arrRefs);
+  }, [lines]);
+
+  useEffect(() => {
+    refs.forEach((ref) => {
+      if (ref.current) {
+        highlight.highlightElement(ref.current);
+      }
+    });
+  }, [refs]);
+
   return (
     <TableContainer component={Paper}>
       <Table className={classes.table} aria-label='diff view table'>
         <TableBody>
           {lines.map((line, index) => {
-            console.log(line);
             const color = getColors(line);
             return (
               <TableRow key={index} style={{ width: '100%' }}>
@@ -75,6 +93,7 @@ const DiffTable = ({ lines, weight }) => {
                         backgroundColor: Color(color.left).alpha(0.6),
                       }}
                       className={classes.tableCell}
+                      ref={refs[index]}
                     >
                       <pre className={classes.pre}>{line.left.lineContent}</pre>
                     </TableCell>
@@ -102,7 +121,10 @@ const DiffTable = ({ lines, weight }) => {
                       }}
                       className={classes.tableCell}
                     >
-                      <pre className={classes.pre}>
+                      <pre
+                        ref={refs[lines.length - index]}
+                        className={classes.pre}
+                      >
                         {line.right.lineContent}
                       </pre>
                     </TableCell>
