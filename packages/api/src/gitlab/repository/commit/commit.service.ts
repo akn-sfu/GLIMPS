@@ -268,4 +268,10 @@ export class CommitService extends BaseService<
       }),
     );
   }
+
+  async deleteCommitEntity(
+    commit: CommitEntity
+  ){
+    return this.delete(commit);
+  }
 }

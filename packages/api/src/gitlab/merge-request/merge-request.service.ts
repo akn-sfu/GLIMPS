@@ -393,4 +393,10 @@ export class MergeRequestService extends BaseService<
       }),
     );
   }
+
+  async deleteMergeRequestEntity(
+    merge_request: MergeRequestEntity
+  ){
+    return this.delete(merge_request);
+  }
 }
