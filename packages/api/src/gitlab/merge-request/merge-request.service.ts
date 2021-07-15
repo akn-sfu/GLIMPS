@@ -306,7 +306,7 @@ export class MergeRequestService extends BaseService<
       page: page,
       per_page: pageSize,
       state: 'merged',
-      target_branch: 'master',
+      target_branch: repo.resource.default_branch,
     };
     return this.fetchWithRetries(token, url, params);
   }

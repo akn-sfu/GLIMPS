@@ -61,17 +61,29 @@ export class SyncRepositoryExecutor extends BaseExecutor<Stage> {
   private async init() {
     const payload = this.operation.resource
       .input as Operation.SyncRepositoryPayload;
+
     const repository = await this.repositoryService.findOne(
       payload.repository_id,
     );
+    
     const { token } = await this.tokenService.findOneByUserId(
       this.operation.user.id,
     );
+    
     this.repository = repository;
     this.token = token;
     this.members = await this.repositoryMemberService.findAllForRepository(
       repository,
     );
+
+    const actualDefaultBranch = await this.repositoryService.getDefaultBranch(
+      repository.resource.id,
+      token
+    );
+
+    if (repository.resource.default_branch != actualDefaultBranch){
+        //update resource and delete all branch related entries
+    }
     await this.updateLastSync();
   }
 

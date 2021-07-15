@@ -189,4 +189,20 @@ export class RepositoryService extends BaseService<
     );
     return axiosResponse.data;
   }
+
+  async getDefaultBranch(
+    project_id: number,
+    token: string,
+  ): Promise<string> {
+    const url = `/projects/${project_id}`;
+    const params = { membership: true };
+    const axiosResponse = await this.fetchWithRetries<string>(
+      token,
+      url,
+      params,
+    );
+
+    const json = JSON.parse(JSON.stringify(axiosResponse.data));
+    return json.default_branch
+  }
 }
