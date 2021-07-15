@@ -205,4 +205,14 @@ export class RepositoryService extends BaseService<
     const json = JSON.parse(JSON.stringify(axiosResponse.data));
     return json.default_branch
   }
+
+  async updateDefaultBranch(
+    defaultBranchName: string,
+    repository: RepositoryEntity,
+  ) {
+    repository.resource = Extensions.updateResource(repository.resource, {
+      default_branch: defaultBranchName,
+    });
+    return this.update(repository);
+  }
 }
