@@ -88,7 +88,7 @@ export class SyncRepositoryExecutor extends BaseExecutor<Stage> {
           this.repository,
         )
       } catch(err){
-        console.log(err);
+        console.error(err);
       }
         //delete all branch related entries
         try{
@@ -98,7 +98,7 @@ export class SyncRepositoryExecutor extends BaseExecutor<Stage> {
             this.deleteIssueResources(this.issueService),
           ])
         }catch(err){
-          console.log(err);
+          console.error(err);
         };
     }
     await this.updateLastSync();
@@ -183,42 +183,42 @@ export class SyncRepositoryExecutor extends BaseExecutor<Stage> {
   private async deleteCommitResources(
     service: CommitService
   ): Promise<void>{
-    const valuesWithCount = await service.findByRepositoryId(this.repository.id);
+    const valuesWithCount = await service.findByRepositoryId(this.repository.id,'commit');
     const commits = valuesWithCount[0]
     let i = 0;
-    do {
+    while ( i < valuesWithCount[1]) {
       try {
         await service.deleteCommitEntity(commits[i]);
       } catch{}
       i++;
-    } while ( i < valuesWithCount[1]);
+    } 
   }
 
   private async deleteMergeRequestsResources(
     service: MergeRequestService
   ): Promise<void>{
-    const valuesWithCount = await service.findByRepositoryId(this.repository.id);
+    const valuesWithCount = await service.findByRepositoryId(this.repository.id, 'merge_request');
     const merge_requests = valuesWithCount[0]
     let i = 0;
-    do {
+    while ( i < valuesWithCount[1]) {
       try {
         await service.deleteMergeRequestEntity(merge_requests[i]);
       } catch{}
       i++;
-    } while ( i < valuesWithCount[1]);
+    } 
   }
 
   private async deleteIssueResources(
     service: IssueService
   ): Promise<void>{
-    const valuesWithCount = await service.findByRepositoryId(this.repository.id);
+    const valuesWithCount = await service.findByRepositoryId(this.repository.id, 'issue');
     const issues = valuesWithCount[0]
     let i = 0;
-    do {
+    while ( i < valuesWithCount[1]) {
       try {
         await service.deleteIssueEntity(issues[i]);
       } catch{}
       i++;
-    } while ( i < valuesWithCount[1]);
+    } 
   }
 }

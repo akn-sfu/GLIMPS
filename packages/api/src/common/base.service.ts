@@ -39,8 +39,8 @@ export abstract class BaseService<
     return this.serviceRepository.findOne(id);
   }
 
-  findByRepositoryId(repo_id: string){
-    let query = this.serviceRepository.createQueryBuilder('merge_request');
+  findByRepositoryId(repo_id: string, table_name: string){
+    let query = this.serviceRepository.createQueryBuilder(table_name);
     query.where('repository_id = :repositoryId', { repositoryId: repo_id })
     return query.getManyAndCount();
   }
