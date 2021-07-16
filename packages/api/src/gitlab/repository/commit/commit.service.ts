@@ -82,7 +82,7 @@ export class CommitService extends BaseService<
   buildSort(
     query: SelectQueryBuilder<CommitEntity>,
     sortKey = 'authored_date',
-    order: 'ASC' | 'DESC' = 'DESC',
+    order: 'ASC' | 'DESC' = 'ASC',
   ): SelectQueryBuilder<CommitEntity> {
     switch (sortKey) {
       case 'authored_date':
