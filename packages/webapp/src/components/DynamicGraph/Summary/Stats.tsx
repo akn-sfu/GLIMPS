@@ -3,7 +3,7 @@ import { Tooltip } from '@material-ui/core';
 
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 
-import info from '../assets/info.svg';
+import info from '../../../assets/info.svg';
 
 const useStyles = makeStyles(() =>
   createStyles({

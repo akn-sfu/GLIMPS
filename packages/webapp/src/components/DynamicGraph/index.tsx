@@ -20,6 +20,7 @@ import { ApiResource } from '../../api/base';
 import StudentDropdown from '../../components/StudentDropdown';
 import Button from '@material-ui/core/Button';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import StatSummary from './Summary/Summary';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -197,6 +198,42 @@ const DynamicGraph: React.FC = () => {
         </Box>
         <Grid justify='center' container>
           <DynamicBarChart graphData={graphData} graphTab={graphTab} />
+          <StatSummary
+            statData={[
+              {
+                name: 'Merge request score',
+                value: `1`,
+                rawValue: `1`,
+                description:
+                  'Sum of merge request diff scores for mrs where member was the only committer + sum of commit diff scores within mrs where more than one member committed.',
+              },
+              {
+                name: 'Commit score',
+                value: `1`,
+                description: 'Sum of commit scores for selected date range',
+              },
+              {
+                name: 'Total commits',
+                value: `1`,
+                description: 'Number of commits made',
+              },
+              {
+                name: 'Lines of code',
+                value: `1`,
+                description:
+                  'Number of additions plus deletions in all merge requests in the date range.',
+              },
+              {
+                name: 'Number of comments',
+                value: `1`,
+              },
+              {
+                name: 'Comments word count',
+                value: `1`,
+                description: 'Sum of words in all comments',
+              },
+            ]}
+          />
         </Grid>
       </Container>
     </>
