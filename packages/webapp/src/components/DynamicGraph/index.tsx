@@ -196,44 +196,47 @@ const DynamicGraph: React.FC = () => {
             <Tab label='Comments' value={GraphTab.comments} />
           </Tabs>
         </Box>
-        <Grid justify='center' container>
-          <DynamicBarChart graphData={graphData} graphTab={graphTab} />
-          <StatSummary
-            statData={[
-              {
-                name: 'Merge request score',
-                value: `1`,
-                rawValue: `1`,
-                description:
-                  'Sum of merge request diff scores for mrs where member was the only committer + sum of commit diff scores within mrs where more than one member committed.',
-              },
-              {
-                name: 'Commit score',
-                value: `1`,
-                description: 'Sum of commit scores for selected date range',
-              },
-              {
-                name: 'Total commits',
-                value: `1`,
-                description: 'Number of commits made',
-              },
-              {
-                name: 'Lines of code',
-                value: `1`,
-                description:
-                  'Number of additions plus deletions in all merge requests in the date range.',
-              },
-              {
-                name: 'Number of comments',
-                value: `1`,
-              },
-              {
-                name: 'Comments word count',
-                value: `1`,
-                description: 'Sum of words in all comments',
-              },
-            ]}
-          />
+        <Grid container justify='space-between' alignItems='center'>
+          <Grid item>
+            <DynamicBarChart graphData={graphData} graphTab={graphTab} />
+          </Grid>
+          <Grid item>
+            <StatSummary
+              statData={[
+                {
+                  name: 'Merge request score',
+                  value: `1`,
+                  rawValue: `1`,
+                  description: 'Sum of merge request diff scores for mrs.',
+                },
+                {
+                  name: 'Commit score',
+                  value: `1`,
+                  description: 'Sum of commit scores for selected date range',
+                },
+                {
+                  name: 'Total commits',
+                  value: `1`,
+                  description: 'Number of commits made',
+                },
+                {
+                  name: 'Total commits',
+                  value: `1`,
+                  description: 'Number of mrs made',
+                },
+                {
+                  name: 'Total comments',
+                  value: `1`,
+                  description: 'Number of comments made',
+                },
+                {
+                  name: 'Comments word count',
+                  value: `1`,
+                  description: 'Sum of words in all comments',
+                },
+              ]}
+            />
+          </Grid>
         </Grid>
       </Container>
     </>

@@ -35,7 +35,7 @@ const DateTick: React.FC<any> = (props) => {
 const DynamicBarChart: React.FC<BarChartProps> = ({ graphData, graphTab }) => {
   if (graphTab === GraphTab.code) {
     return (
-      <ResponsiveContainer width={1200} height={600}>
+      <ResponsiveContainer width={1000} height={600}>
         <BarChart stackOffset='sign' data={graphData}>
           <CartesianGrid strokeDasharray='3 3' />
           <XAxis dataKey='date' tick={DateTick} />
@@ -50,7 +50,7 @@ const DynamicBarChart: React.FC<BarChartProps> = ({ graphData, graphTab }) => {
             }
             formatter={(value) => Math.abs(value).toString()}
           />
-          <Legend layout='vertical' align='right' verticalAlign='top' />
+          <Legend layout='horizontal' align='right' verticalAlign='top' />
           <Bar dataKey='commitCount' name='Commit' stackId='a' fill='#0A4D63' />
           <Bar
             dataKey='mergeRequestCount'
@@ -63,7 +63,7 @@ const DynamicBarChart: React.FC<BarChartProps> = ({ graphData, graphTab }) => {
     );
   } else if (graphTab === GraphTab.scores) {
     return (
-      <ResponsiveContainer width={1200} height={600}>
+      <ResponsiveContainer width={1000} height={600}>
         <BarChart stackOffset='sign' data={graphData}>
           <CartesianGrid strokeDasharray='3 3' />
           <XAxis dataKey='date' tick={DateTick} />
@@ -78,7 +78,7 @@ const DynamicBarChart: React.FC<BarChartProps> = ({ graphData, graphTab }) => {
             }
             formatter={(value) => Math.abs(value).toFixed(1)}
           />
-          <Legend layout='vertical' align='right' verticalAlign='top' />
+          <Legend layout='horizontal' align='right' verticalAlign='top' />
           <Bar dataKey='commitScore' name='Commit' stackId='a' fill='#0A4D63' />
           <Bar
             dataKey='mergeRequestScore'
@@ -91,7 +91,7 @@ const DynamicBarChart: React.FC<BarChartProps> = ({ graphData, graphTab }) => {
     );
   } else {
     return (
-      <ResponsiveContainer width={1200} height={600}>
+      <ResponsiveContainer width={1000} height={600}>
         <BarChart stackOffset='sign' data={graphData}>
           <CartesianGrid strokeDasharray='3 3' />
           <XAxis dataKey='date' tick={DateTick} />
@@ -106,7 +106,7 @@ const DynamicBarChart: React.FC<BarChartProps> = ({ graphData, graphTab }) => {
             }
             formatter={(value) => Math.abs(value).toString()}
           />
-          <Legend layout='vertical' align='right' verticalAlign='top' />
+          <Legend layout='horizontal' align='right' verticalAlign='top' />
           <Bar
             dataKey='issueWordCount'
             name='Issue'
