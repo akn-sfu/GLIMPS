@@ -19,9 +19,6 @@ enum Stage {
   linkCommitsAndMergeRequests = 'linkCommitsAndMergeRequests',
   linkNotesAndMergeRequests = 'linkNotesAndMergeRequests',
   linkAuthors = 'linkAuthors',
-  deleteMergeRequests = 'deleteMergeRequests',
-  deleteCommits = 'deleteCommitRequests',
-  deleteIssues = 'deleteIssues',
 }
 
 export class SyncRepositoryExecutor extends BaseExecutor<Stage> {
@@ -45,9 +42,6 @@ export class SyncRepositoryExecutor extends BaseExecutor<Stage> {
       'Link Commits and Merge Requests',
     );
     this.addStage(Stage.linkAuthors, 'Link Authors');
-    this.addStage(Stage.deleteMergeRequests, 'Delete Merge Requests');
-    this.addStage(Stage.deleteCommits, 'Delete Commits');
-    this.addStage(Stage.deleteIssues, 'Delete Issues');
   }
 
   private repository: Repository;
@@ -99,9 +93,9 @@ export class SyncRepositoryExecutor extends BaseExecutor<Stage> {
         //delete all branch related entries
         try{
           await Promise.all([
-            this.deleteMergeRequestsResources(Stage.deleteMergeRequests,this.mergeRequestService),
-            this.deleteCommitResources(Stage.deleteCommits,this.commitService),
-            this.deleteIssueResources(Stage.deleteIssues,this.issueService),
+            this.deleteMergeRequestsResources(this.mergeRequestService),
+            this.deleteCommitResources(this.commitService),
+            this.deleteIssueResources(this.issueService),
           ])
         }catch(err){
           console.log(err);
@@ -187,10 +181,8 @@ export class SyncRepositoryExecutor extends BaseExecutor<Stage> {
   }
 
   private async deleteCommitResources(
-    name: Stage,
     service: CommitService
   ): Promise<void>{
-    await this.startStage(name);
     const valuesWithCount = await service.findByRepositoryId(this.repository.id);
     const commits = valuesWithCount[0]
     let i = 0;
@@ -200,15 +192,11 @@ export class SyncRepositoryExecutor extends BaseExecutor<Stage> {
       } catch{}
       i++;
     } while ( i < valuesWithCount[1]);
-
-    await this.completeStage(name);
   }
 
   private async deleteMergeRequestsResources(
-    name: Stage,
     service: MergeRequestService
   ): Promise<void>{
-    await this.startStage(name);
     const valuesWithCount = await service.findByRepositoryId(this.repository.id);
     const merge_requests = valuesWithCount[0]
     let i = 0;
@@ -218,15 +206,11 @@ export class SyncRepositoryExecutor extends BaseExecutor<Stage> {
       } catch{}
       i++;
     } while ( i < valuesWithCount[1]);
-
-    await this.completeStage(name);
   }
 
   private async deleteIssueResources(
-    name: Stage,
     service: IssueService
   ): Promise<void>{
-    await this.startStage(name);
     const valuesWithCount = await service.findByRepositoryId(this.repository.id);
     const issues = valuesWithCount[0]
     let i = 0;
@@ -236,7 +220,5 @@ export class SyncRepositoryExecutor extends BaseExecutor<Stage> {
       } catch{}
       i++;
     } while ( i < valuesWithCount[1]);
-
-    await this.completeStage(name);
   }
 }
