@@ -33,6 +33,14 @@ export class BaseExecutor<TStage extends string> {
     });
   }
 
+  protected async terminateStage(key: TStage) {
+    await this.updateStage(key, {
+      status: Operation.Status.TERMINATED,
+      end_time: new Date().toISOString(),
+      percentage: 0,
+    });
+  }
+
   protected async updateStage(
     key: TStage,
     properties: Partial<Operation.Stage>,

@@ -24,10 +24,17 @@ export class FetchRepositoriesExecutor extends BaseExecutor<Stage> {
   async run() {
     await this.init();
     await this.startStage(Stage.fetch);
-    await this.repositoryService.fetchFromGitlabForUser(
-      this.operation.user,
-      this.token,
-    );
+
+    try{
+      await this.repositoryService.fetchFromGitlabForUser(
+        this.operation.user,
+        this.token,
+      ); 
+    } catch {
+      //Error is: 'could not fetch resources from GitLab', usually happens with an incorrect API key
+      await this.terminateStage(Stage.fetch);
+      return;
+      }
     await this.completeStage(Stage.fetch);
   }
 
