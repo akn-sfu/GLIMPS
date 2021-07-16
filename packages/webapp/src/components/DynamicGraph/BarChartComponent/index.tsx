@@ -9,6 +9,7 @@ import {
   Legend,
   ReferenceLine,
   ResponsiveContainer,
+  CartesianGrid,
 } from 'recharts';
 import { GraphTab } from '..';
 import SmartDate from '../../SmartDate';
@@ -36,6 +37,7 @@ const DynamicBarChart: React.FC<BarChartProps> = ({ graphData, graphTab }) => {
     return (
       <ResponsiveContainer width={1200} height={600}>
         <BarChart stackOffset='sign' data={graphData}>
+          <CartesianGrid strokeDasharray='3 3' />
           <XAxis dataKey='date' tick={DateTick} />
           <YAxis
             tickFormatter={(value) => Math.abs(value).toString()}
@@ -63,6 +65,7 @@ const DynamicBarChart: React.FC<BarChartProps> = ({ graphData, graphTab }) => {
     return (
       <ResponsiveContainer width={1200} height={600}>
         <BarChart stackOffset='sign' data={graphData}>
+          <CartesianGrid strokeDasharray='3 3' />
           <XAxis dataKey='date' tick={DateTick} />
           <YAxis
             tickFormatter={(value) => Math.round(Math.abs(value)).toString()}
@@ -90,6 +93,7 @@ const DynamicBarChart: React.FC<BarChartProps> = ({ graphData, graphTab }) => {
     return (
       <ResponsiveContainer width={1200} height={600}>
         <BarChart stackOffset='sign' data={graphData}>
+          <CartesianGrid strokeDasharray='3 3' />
           <XAxis dataKey='date' tick={DateTick} />
           <YAxis
             tickFormatter={(value) => Math.abs(value).toString()}
