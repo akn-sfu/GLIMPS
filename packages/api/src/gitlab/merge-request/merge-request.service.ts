@@ -92,7 +92,7 @@ export class MergeRequestService extends BaseService<
   buildSort(
     query: SelectQueryBuilder<MergeRequestEntity>,
   ): SelectQueryBuilder<MergeRequestEntity> {
-    return query.orderBy("merge_request.resource #>> '{merged_at}'", 'DESC');
+    return query.orderBy("merge_request.resource #>> '{merged_at}'", 'ASC');
   }
 
   async buildDailyCounts(
