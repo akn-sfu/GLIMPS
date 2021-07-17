@@ -154,6 +154,31 @@ const DynamicGraph: React.FC = () => {
     setGraphTab(newTab);
   };
 
+  const totalMrScore = graphData.reduce(
+    (n, { mergeRequestScore }) => n + mergeRequestScore,
+    0,
+  );
+  const totalCommitScore = graphData.reduce(
+    (n, { commitScore }) => n + commitScore,
+    0,
+  );
+  const totalMrCount = graphData.reduce(
+    (n, { mergeRequestCount }) => n + mergeRequestCount,
+    0,
+  );
+  const totalCommitCount = graphData.reduce(
+    (n, { commitCount }) => n + commitCount,
+    0,
+  );
+  const totalIssueWordCount = graphData.reduce(
+    (n, { issueWordCount }) => n + issueWordCount,
+    0,
+  );
+  const totalmergeRequestWordCount = graphData.reduce(
+    (n, { mergeRequestWordCount }) => n + mergeRequestWordCount,
+    0,
+  );
+
   return (
     <>
       <Container>
@@ -205,34 +230,30 @@ const DynamicGraph: React.FC = () => {
               statData={[
                 {
                   name: 'Merge request score',
-                  value: `1`,
-                  rawValue: `1`,
-                  description: 'Sum of merge request diff scores for mrs.',
+                  value: Math.abs(totalMrScore).toFixed(1),
+                  description:
+                    'Sum of merge request diff scores for mrs for selected date range.',
                 },
                 {
                   name: 'Commit score',
-                  value: `1`,
+                  value: totalCommitScore.toFixed(1),
                   description: 'Sum of commit scores for selected date range',
                 },
                 {
-                  name: 'Total commits',
-                  value: `1`,
-                  description: 'Number of commits made',
+                  name: 'Total Merge request',
+                  value: Math.abs(totalMrCount),
+                  description: 'Number of mrs made for selected date range',
                 },
                 {
                   name: 'Total commits',
-                  value: `1`,
-                  description: 'Number of mrs made',
-                },
-                {
-                  name: 'Total comments',
-                  value: `1`,
-                  description: 'Number of comments made',
+                  value: totalCommitCount,
+                  description: 'Number of commits made for selected date range',
                 },
                 {
                   name: 'Comments word count',
-                  value: `1`,
-                  description: 'Sum of words in all comments',
+                  value: totalIssueWordCount + totalmergeRequestWordCount,
+                  description:
+                    'Sum of words in all comments for selected date range',
                 },
               ]}
             />
