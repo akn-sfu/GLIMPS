@@ -19,6 +19,34 @@ import { useRepositoryMembers } from '../../api/repo_members';
 import { ApiResource } from '../../api/base';
 import StudentDropdown from '../../components/StudentDropdown';
 
+const TIMEZONE = {
+  '0': 'GMT',
+  '1': 'CET',
+  '2': 'EET',
+  '3': 'MSK',
+  '4': 'AMT',
+  '5': 'PKT',
+  '6': 'OMSK',
+  '7': 'KRAT',
+  '8': 'CST',
+  '9': 'JST',
+  '10': 'AEST',
+  '11': 'SAKT',
+  '12': 'NZST',
+  '-1': 'AT',
+  '-2': 'ART',
+  '-3': 'AST',
+  '-4': 'EST',
+  '-5': 'CST',
+  '-6': 'MDT',
+  '-7': 'PST',
+  '-8': 'AKST',
+  '-9': 'HST',
+  '-10': 'NT',
+  '-11': 'IDLW',
+  '-12': 'BIT',
+};
+
 function combineData(
   startDate: string,
   endDate: string,
@@ -88,7 +116,10 @@ function findRepoMemberId(
 }
 
 const DynamicGraph: React.FC = () => {
-  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const timezoneOffset = new Date().getTimezoneOffset();
+  const timezone = TIMEZONE[String((timezoneOffset / 60) * -1)];
+  console.log(timezoneOffset);
+  console.log(timezone);
   const { startDate, endDate, author } = useFilterContext();
   const { repositoryId } = useRepositoryContext();
   const { data: members } = useRepositoryMembers(repositoryId);
