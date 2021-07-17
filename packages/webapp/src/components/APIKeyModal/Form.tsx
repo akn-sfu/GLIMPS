@@ -56,7 +56,7 @@ const Form: React.FC = () => {
     >
       <h3>Please Enter your GitLab API Key</h3>
       <h4>
-        Targeted Server: <a href={targetURL}>{targetURL}</a>
+        Target Server: <a href={targetURL}>{targetURL}</a>
       </h4>
       <TextField
         value={apiKey}
