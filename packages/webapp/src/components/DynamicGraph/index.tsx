@@ -171,6 +171,8 @@ const DynamicGraph: React.FC = () => {
     setGraphTab(newTab);
   };
 
+  console.log(graphData);
+
   return (
     <>
       <Container>
