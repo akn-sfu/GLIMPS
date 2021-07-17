@@ -142,4 +142,10 @@ export class IssueService extends BaseService<
       resource: issue,
     });
   }
+
+  async deleteIssueEntity(
+    issue: IssueEntity
+  ){
+    return this.delete(issue);
+  }
 }

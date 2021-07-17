@@ -196,7 +196,7 @@ export class CommitService extends BaseService<
     pageSize = 10,
   ): Promise<AxiosResponse<Commit[]>> {
     const url = `projects/${repo.resource.id}/repository/commits`;
-    const params = { page: page, per_page: pageSize, target_branch: 'master' };
+    const params = { page: page, per_page: pageSize, target_branch: repo.resource.default_branch };
     return await this.fetchWithRetries<Commit>(token, url, params);
   }
 
@@ -267,5 +267,11 @@ export class CommitService extends BaseService<
         await this.storeScore(commit, weights);
       }),
     );
+  }
+
+  async deleteCommitEntity(
+    commit: CommitEntity
+  ){
+    return this.delete(commit);
   }
 }
