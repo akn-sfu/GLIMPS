@@ -100,7 +100,7 @@ export const fileMapping = (fileName: string): string => {
     fileType = 'scss';
   }
   if (extension === 'ts' || extension === 'tsx') {
-    fileType = 'ts';
+    fileType = 'typescript';
   }
   if (extension === 'vba') {
     fileType = 'vba';

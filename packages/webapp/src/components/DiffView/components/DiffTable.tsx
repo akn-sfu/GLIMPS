@@ -66,6 +66,7 @@ const DiffTable = ({ lines, weight, fileType }) => {
   useEffect(() => {
     refs.forEach((ref) => {
       if (ref.current) {
+        console.log(ref.current);
         highlight.highlightElement(ref.current);
       }
     });
@@ -91,7 +92,7 @@ const DiffTable = ({ lines, weight, fileType }) => {
                     </TableCell>
                     <TableCell
                       style={{
-                        minWidth: 250,
+                        width: '45%',
                         backgroundColor: Color(color.left).alpha(0.6),
                       }}
                       className={classes.tableCell}
@@ -105,9 +106,9 @@ const DiffTable = ({ lines, weight, fileType }) => {
                   </>
                 ) : (
                   <>
-                    <TableCell className={classes.empty} />
+                    <TableCell className={classes.empty} style={{ width: 0 }} />
                     <TableCell
-                      style={{ minWidth: 250 }}
+                      style={{ width: '45%' }}
                       className={classes.empty}
                     />
                   </>
@@ -125,7 +126,7 @@ const DiffTable = ({ lines, weight, fileType }) => {
                     </TableCell>
                     <TableCell
                       style={{
-                        minWidth: 250,
+                        width: '45%',
                         backgroundColor: Color(color.right).alpha(0.6),
                       }}
                       className={classes.tableCell}
@@ -160,7 +161,8 @@ const DiffTable = ({ lines, weight, fileType }) => {
 
 const useStyles = makeStyles({
   table: {
-    minWidth: 650,
+    // minWidth: 650,
+    width: '100%',
   },
   tableCell: {
     borderBottom: 'none',
