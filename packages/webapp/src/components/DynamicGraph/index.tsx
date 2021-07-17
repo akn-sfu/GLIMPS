@@ -29,6 +29,11 @@ const useStyles = makeStyles((theme: Theme) =>
         margin: theme.spacing(1),
       },
     },
+    graph: {
+      border: 1,
+      borderColor: '#9e9e9e',
+      borderStyle: 'solid',
+    },
   }),
 );
 
@@ -221,44 +226,52 @@ const DynamicGraph: React.FC = () => {
             <Tab label='Comments' value={GraphTab.comments} />
           </Tabs>
         </Box>
-        <Grid container justify='space-between' alignItems='center'>
-          <Grid item>
-            <DynamicBarChart graphData={graphData} graphTab={graphTab} />
+        <Container>
+          <Grid
+            container
+            justify='space-between'
+            alignItems='center'
+            className={classes.graph}
+          >
+            <Grid item>
+              <DynamicBarChart graphData={graphData} graphTab={graphTab} />
+            </Grid>
+            <Grid item justify='flex-start'>
+              <StatSummary
+                statData={[
+                  {
+                    name: 'Merge request score',
+                    value: Math.abs(totalMrScore).toFixed(1),
+                    description:
+                      'Sum of merge request diff scores for mrs for selected date range.',
+                  },
+                  {
+                    name: 'Commit score',
+                    value: totalCommitScore.toFixed(1),
+                    description: 'Sum of commit scores for selected date range',
+                  },
+                  {
+                    name: 'Total Merge request',
+                    value: Math.abs(totalMrCount),
+                    description: 'Number of mrs made for selected date range',
+                  },
+                  {
+                    name: 'Total commits',
+                    value: totalCommitCount,
+                    description:
+                      'Number of commits made for selected date range',
+                  },
+                  {
+                    name: 'Comments word count',
+                    value: totalIssueWordCount + totalmergeRequestWordCount,
+                    description:
+                      'Sum of words in all comments for selected date range',
+                  },
+                ]}
+              />
+            </Grid>
           </Grid>
-          <Grid item>
-            <StatSummary
-              statData={[
-                {
-                  name: 'Merge request score',
-                  value: Math.abs(totalMrScore).toFixed(1),
-                  description:
-                    'Sum of merge request diff scores for mrs for selected date range.',
-                },
-                {
-                  name: 'Commit score',
-                  value: totalCommitScore.toFixed(1),
-                  description: 'Sum of commit scores for selected date range',
-                },
-                {
-                  name: 'Total Merge request',
-                  value: Math.abs(totalMrCount),
-                  description: 'Number of mrs made for selected date range',
-                },
-                {
-                  name: 'Total commits',
-                  value: totalCommitCount,
-                  description: 'Number of commits made for selected date range',
-                },
-                {
-                  name: 'Comments word count',
-                  value: totalIssueWordCount + totalmergeRequestWordCount,
-                  description:
-                    'Sum of words in all comments for selected date range',
-                },
-              ]}
-            />
-          </Grid>
-        </Grid>
+        </Container>
       </Container>
     </>
   );

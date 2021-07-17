@@ -13,13 +13,17 @@ const useStyles = makeStyles(() =>
       flex: 1,
       alignItems: 'center',
       justifyContent: 'center',
-      borderLeft: '1px',
-      borderColor: 'grey.500',
-      borderTop: '1px',
+      border: 1,
+      borderColor: '#9e9e9e',
+      borderStyle: 'solid',
+      width: '17.5rem',
+      height: '600px',
     },
     name: {
       display: 'flex',
-      color: 'grey.500',
+      alignItems: 'center',
+      justifyContent: 'center',
+      color: '#9e9e9e',
       margin: 0,
     },
 
@@ -31,7 +35,10 @@ const useStyles = makeStyles(() =>
     },
 
     value: {
-      margin: '6px',
+      margin: '6px 0 0',
+      alignItems: 'center',
+      justifyContent: 'center',
+      fontSize: '20px',
     },
   }),
 );

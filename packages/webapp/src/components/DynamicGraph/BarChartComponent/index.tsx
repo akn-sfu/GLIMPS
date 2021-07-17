@@ -35,7 +35,7 @@ const DateTick: React.FC<any> = (props) => {
 const DynamicBarChart: React.FC<BarChartProps> = ({ graphData, graphTab }) => {
   if (graphTab === GraphTab.code) {
     return (
-      <ResponsiveContainer width={1000} height={600}>
+      <ResponsiveContainer width={900} height={600}>
         <BarChart stackOffset='sign' data={graphData}>
           <CartesianGrid strokeDasharray='3 3' />
           <XAxis dataKey='date' tick={DateTick} />
@@ -63,7 +63,7 @@ const DynamicBarChart: React.FC<BarChartProps> = ({ graphData, graphTab }) => {
     );
   } else if (graphTab === GraphTab.scores) {
     return (
-      <ResponsiveContainer width={1000} height={600}>
+      <ResponsiveContainer width={900} height={600}>
         <BarChart stackOffset='sign' data={graphData}>
           <CartesianGrid strokeDasharray='3 3' />
           <XAxis dataKey='date' tick={DateTick} />
@@ -91,7 +91,7 @@ const DynamicBarChart: React.FC<BarChartProps> = ({ graphData, graphTab }) => {
     );
   } else {
     return (
-      <ResponsiveContainer width={1000} height={600}>
+      <ResponsiveContainer width={870} height={600}>
         <BarChart stackOffset='sign' data={graphData}>
           <CartesianGrid strokeDasharray='3 3' />
           <XAxis dataKey='date' tick={DateTick} />
