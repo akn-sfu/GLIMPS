@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { GitlabToken } from '../entities/gitlab-token.entity';
 import { Repository } from 'typeorm';
 import { AxiosResponse } from 'axios';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class GitlabTokenService {
@@ -10,6 +11,7 @@ export class GitlabTokenService {
     @InjectRepository(GitlabToken)
     private gitlabTokenRepository: Repository<GitlabToken>,
     private httpService: HttpService,
+    private configService: ConfigService,
   ) {}
 
   findOne(id: string) {
@@ -61,5 +63,9 @@ export class GitlabTokenService {
     gitlabToken.token = token;
     gitlabToken.expired = false;
     return this.gitlabTokenRepository.save(gitlabToken);
+  }
+
+  async grabURL(){
+    return this.configService.get<string>('gitlabBaseUrl');
   }
 }
