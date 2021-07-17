@@ -13,11 +13,8 @@ const useStyles = makeStyles(() =>
       flex: 1,
       alignItems: 'center',
       justifyContent: 'center',
-      border: 1,
-      borderColor: '#9e9e9e',
-      borderStyle: 'solid',
       width: '17.5rem',
-      height: '600px',
+      lineHeight: '3.5rem',
     },
     name: {
       display: 'flex',

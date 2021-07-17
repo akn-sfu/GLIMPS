@@ -18,7 +18,6 @@ import { useGetWordCount } from '../../api/note';
 import { useRepositoryMembers } from '../../api/repo_members';
 import { ApiResource } from '../../api/base';
 import StudentDropdown from '../../components/StudentDropdown';
-import Button from '@material-ui/core/Button';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import StatSummary from './Summary/Summary';
 
@@ -30,9 +29,7 @@ const useStyles = makeStyles((theme: Theme) =>
       },
     },
     graph: {
-      border: 1,
       borderColor: '#9e9e9e',
-      borderStyle: 'solid',
     },
   }),
 );
@@ -192,27 +189,16 @@ const DynamicGraph: React.FC = () => {
             <DefaultPageTitleFormat>Contribution Graph</DefaultPageTitleFormat>
           </Grid>
           <Grid item>
-            <Box position='relative' className={classes.root}>
-              <Button variant='contained' color='primary' size='medium'>
-                COPY
-              </Button>
+            <Box mb={1} paddingRight={6}>
+              <StudentDropdown
+                repositoryId={repositoryId}
+                onChange={(newEmails) => {
+                  setEmails(newEmails);
+                }}
+              />
             </Box>
           </Grid>
         </Grid>
-        <Container maxWidth='md'>
-          <Grid container justify='flex-end' alignItems='flex-end' spacing={1}>
-            <Grid item>
-              <Box mb={1}>
-                <StudentDropdown
-                  repositoryId={repositoryId}
-                  onChange={(newEmails) => {
-                    setEmails(newEmails);
-                  }}
-                />
-              </Box>
-            </Grid>
-          </Grid>
-        </Container>
         <Box my={2}>
           <Tabs
             value={graphTab}

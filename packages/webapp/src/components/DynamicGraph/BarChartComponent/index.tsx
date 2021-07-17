@@ -91,7 +91,7 @@ const DynamicBarChart: React.FC<BarChartProps> = ({ graphData, graphTab }) => {
     );
   } else {
     return (
-      <ResponsiveContainer width={870} height={600}>
+      <ResponsiveContainer width={900} height={600}>
         <BarChart stackOffset='sign' data={graphData}>
           <CartesianGrid strokeDasharray='3 3' />
           <XAxis dataKey='date' tick={DateTick} />
