@@ -106,7 +106,7 @@ const DiffTable = ({ lines, weight, fileType }) => {
                   </>
                 ) : (
                   <>
-                    <TableCell className={classes.empty} style={{ width: 0 }} />
+                    <TableCell className={classes.emptyNumber} />
                     <TableCell
                       style={{ width: '45%' }}
                       className={classes.empty}
@@ -118,6 +118,9 @@ const DiffTable = ({ lines, weight, fileType }) => {
                     <TableCell
                       className={classes.number}
                       style={{
+                        padding: 0,
+                        textAlign: 'center',
+                        width: 0,
                         borderLeft: '1px solid #ddd',
                         backgroundColor: color.right,
                       }}
@@ -143,10 +146,7 @@ const DiffTable = ({ lines, weight, fileType }) => {
                   </>
                 ) : (
                   <>
-                    <TableCell
-                      className={classes.empty}
-                      style={{ borderLeft: '1px solid #ddd' }}
-                    />
+                    <TableCell className={classes.emptyNumber} />
                     <TableCell className={classes.empty} />
                   </>
                 )}
@@ -180,12 +180,26 @@ const useStyles = makeStyles({
     paddingTop: 4,
     paddingBottom: 4,
     fontFamily: 'monospace',
+    padding: 0,
+    textAlign: 'center',
+    width: 0,
   },
+
   empty: {
     backgroundColor: '#fff',
     borderBottom: 'none',
     paddingTop: 4,
     paddingBottom: 4,
+  },
+  emptyNumber: {
+    backgroundColor: '#fff',
+    borderBottom: 'none',
+    paddingTop: 4,
+    paddingBottom: 4,
+    padding: 0,
+    textAlign: 'center',
+    width: 0,
+    maxWidth: 30,
   },
 });
 
