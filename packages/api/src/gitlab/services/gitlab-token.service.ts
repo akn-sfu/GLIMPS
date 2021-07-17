@@ -65,7 +65,7 @@ export class GitlabTokenService {
     return this.gitlabTokenRepository.save(gitlabToken);
   }
 
-  async grabURL(){
+  async grabTargetURL(){
     return this.configService.get<string>('gitlabBaseUrl');
   }
 }

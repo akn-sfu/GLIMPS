@@ -34,7 +34,7 @@ export class GitlabTokenController {
 
   @Get('targetServer')
   async targetServer(){
-    const targetURL = await this.tokenService.grabURL();
+    const targetURL = await this.tokenService.grabTargetURL();
     return targetURL;
   }
 }
