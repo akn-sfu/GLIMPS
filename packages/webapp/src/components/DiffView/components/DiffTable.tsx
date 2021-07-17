@@ -54,10 +54,10 @@ const DiffTable = ({ lines, weight, fileType }) => {
   const classes = useStyles();
   console.log(weight);
   const [refs, setRefs] = useState([]);
-
   useEffect(() => {
     const arrRefs = [];
     lines.forEach(() => {
+      arrRefs.push(createRef());
       arrRefs.push(createRef());
     });
     setRefs(arrRefs);
@@ -118,9 +118,6 @@ const DiffTable = ({ lines, weight, fileType }) => {
                     <TableCell
                       className={classes.number}
                       style={{
-                        padding: 0,
-                        textAlign: 'center',
-                        width: 0,
                         borderLeft: '1px solid #ddd',
                         backgroundColor: color.right,
                       }}
@@ -137,7 +134,7 @@ const DiffTable = ({ lines, weight, fileType }) => {
                       <pre className={classes.pre}>
                         <code
                           className={fileType}
-                          ref={refs[lines.length - index]}
+                          ref={refs[lines.length * 2 - index]}
                         >
                           {line.right.lineContent}
                         </code>
@@ -146,7 +143,10 @@ const DiffTable = ({ lines, weight, fileType }) => {
                   </>
                 ) : (
                   <>
-                    <TableCell className={classes.emptyNumber} />
+                    <TableCell
+                      className={classes.emptyNumber}
+                      style={{ borderLeft: '1px solid #ddd' }}
+                    />
                     <TableCell className={classes.empty} />
                   </>
                 )}
@@ -161,7 +161,6 @@ const DiffTable = ({ lines, weight, fileType }) => {
 
 const useStyles = makeStyles({
   table: {
-    // minWidth: 650,
     width: '100%',
   },
   tableCell: {
