@@ -39,6 +39,12 @@ export abstract class BaseService<
     return this.serviceRepository.findOne(id);
   }
 
+  findByRepositoryId(repo_id: string, table_name: string){
+    let query = this.serviceRepository.createQueryBuilder(table_name);
+    query.where('repository_id = :repositoryId', { repositoryId: repo_id })
+    return query.getManyAndCount();
+  }
+
   create<T extends DeepPartial<TEntity>>(data: T) {
     const entity = this.serviceRepository.create(data);
     return this.serviceRepository.save(entity as any);
@@ -47,6 +53,11 @@ export abstract class BaseService<
   async update<T extends DeepPartial<TEntity>>(data: T) {
     const entity = await this.serviceRepository.preload(data);
     return this.serviceRepository.save(entity as any);
+  }
+
+  async delete<T extends DeepPartial<TEntity>>(data: T) {
+    const entity = await this.serviceRepository.preload(data);
+    return this.serviceRepository.remove(entity as any);
   }
 
   abstract buildFilters(
