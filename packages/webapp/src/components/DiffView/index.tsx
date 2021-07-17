@@ -15,10 +15,10 @@ import ScorePopover from './components/ScorePopper';
 import EditIcon from '@material-ui/icons/Edit';
 import ScoreOverrideForm from '../../pages/ListMergeRequestPage/components/ScoreOverrideForm';
 import { useScoreOverrideQueue } from '../../pages/ListMergeRequestPage/contexts/ScoreOverrideQueue';
-// import LineComparison from './components/LineComparison';
 import { makeStyles } from '@material-ui/core/styles';
 import OverridePopper from '../OverridePopper';
 import DiffTable from './components/DiffTable';
+import { fileMapping } from './utils/fileMapping';
 
 const StyledAccordionSummary = styled(AccordionSummary)`
   &.MuiAccordionSummary-root.Mui-focused {
@@ -101,6 +101,7 @@ const DiffView: React.FC<DiffViewProps> = ({
     },
   }));
 
+  const fileType = fileMapping(fileName);
   const isExcluded = extensions?.override?.exclude;
   const hasOverride = ScoreOverride.hasOverride(extensions?.override);
   const fileNameTextDecoration = isExcluded ? 'line-through' : '';
@@ -183,14 +184,11 @@ const DiffView: React.FC<DiffViewProps> = ({
         </StyledAccordionSummary>
         <AccordionDetails>
           <Root>
-            <DiffTable lines={lines} weight={extensions?.weight || 0} />
-            {/* {lines?.map((line, index) => (
-              <LineComparison
-                key={index}
-                line={line}
-                weight={extensions?.weight || 0}
-              />
-            ))} */}
+            <DiffTable
+              lines={lines}
+              fileType={fileType}
+              weight={extensions?.weight || 0}
+            />
           </Root>
         </AccordionDetails>
       </Accordion>

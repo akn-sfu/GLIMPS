@@ -11,6 +11,7 @@ import Color from 'color';
 import { useState } from 'react';
 
 import highlight from 'highlight.js';
+import '../utils/github.css';
 
 const LINE_COLOR_MAP = {
   [Line.Type.add]: '#ccffd8',
@@ -49,10 +50,9 @@ const getColors = (line: { left: string; right: string; type: string }) => {
   return lineColor;
 };
 
-const DiffTable = ({ lines, weight }) => {
+const DiffTable = ({ lines, weight, fileType }) => {
   const classes = useStyles();
   console.log(weight);
-
   const [refs, setRefs] = useState([]);
 
   useEffect(() => {
@@ -95,9 +95,12 @@ const DiffTable = ({ lines, weight }) => {
                         backgroundColor: Color(color.left).alpha(0.6),
                       }}
                       className={classes.tableCell}
-                      ref={refs[index]}
                     >
-                      <pre className={classes.pre}>{line.left.lineContent}</pre>
+                      <pre className={classes.pre}>
+                        <code className={fileType} ref={refs[index]}>
+                          {line.left.lineContent}
+                        </code>
+                      </pre>
                     </TableCell>
                   </>
                 ) : (
@@ -127,11 +130,13 @@ const DiffTable = ({ lines, weight }) => {
                       }}
                       className={classes.tableCell}
                     >
-                      <pre
-                        ref={refs[lines.length - index]}
-                        className={classes.pre}
-                      >
-                        {line.right.lineContent}
+                      <pre className={classes.pre}>
+                        <code
+                          className={fileType}
+                          ref={refs[lines.length - index]}
+                        >
+                          {line.right.lineContent}
+                        </code>
                       </pre>
                     </TableCell>
                   </>

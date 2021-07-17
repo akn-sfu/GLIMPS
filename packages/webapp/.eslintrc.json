@@ -16,7 +16,7 @@
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "extraFileExtensions": [".json"],
+    "extraFileExtensions": [".json", ".css"],
     "project": "tsconfig.json",
     "ecmaFeatures": {
       "jsx": true
