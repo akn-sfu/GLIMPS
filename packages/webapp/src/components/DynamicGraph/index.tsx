@@ -239,7 +239,8 @@ const DynamicGraph: React.FC = () => {
                   {
                     name: 'Total Merge request',
                     value: Math.abs(totalMrCount),
-                    description: 'Number of mrs made for selected date range',
+                    description:
+                      'Number of merge requests made for selected date range',
                   },
                   {
                     name: 'Total commits',
