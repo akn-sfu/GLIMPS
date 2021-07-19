@@ -53,7 +53,6 @@ const getColors = (line: { left: string; right: string; type: string }) => {
 
 const DiffTable = ({ lines, weight, fileType }) => {
   const classes = useStyles();
-  console.log(weight);
   const [refs, setRefs] = useState([]);
   useEffect(() => {
     const arrRefs = [];
@@ -99,11 +98,13 @@ const DiffTable = ({ lines, weight, fileType }) => {
                       }}
                       className={classes.tableCell}
                     >
-                      <pre className={classes.pre}>
-                        <code className={fileType} ref={refs[index]}>
-                          {line.left.lineContent}
-                        </code>
-                      </pre>
+                      <Tooltip title={tooltip}>
+                        <pre className={classes.pre}>
+                          <code className={fileType} ref={refs[index]}>
+                            {line.left.lineContent}
+                          </code>
+                        </pre>
+                      </Tooltip>
                     </TableCell>
                   </>
                 ) : (
