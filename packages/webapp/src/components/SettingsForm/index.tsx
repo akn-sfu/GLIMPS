@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
-import { useVerifyToken } from '../../api/token';
+import { useVerifyToken, getTargetServer } from '../../api/token';
 import Form from './Form';
 import Container from '@material-ui/core/Container';
 import Box from '@material-ui/core/Box';
@@ -24,6 +24,7 @@ const SettingsForm: React.FC = () => {
   const styles = useStyles();
   const hasValidApi = useVerifyToken();
   const { push } = useHistory();
+  const targetURL = String(getTargetServer().data).split('/api/')[0];
   const message = hasValidApi
     ? 'You have a valid API Key. To update your API Key, enter a new one below:'
     : 'You have an invalid API Key. Please enter a valid API Key below:';
@@ -42,6 +43,9 @@ const SettingsForm: React.FC = () => {
       <Box my={15}>
         <div className={styles.form}>
           <Typography variant='h5'>{message}</Typography>
+          <Typography variant='h6'>
+            Target Server: <a href={targetURL}>{targetURL}</a>
+          </Typography>
           <Form />
         </div>
       </Box>
