@@ -6,9 +6,10 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
-import { Line } from '@ceres/types';
+import { Line, LINE_SCORING } from '@ceres/types';
 import Color from 'color';
 import { useState } from 'react';
+import Tooltip from '@material-ui/core/Tooltip';
 
 import highlight from 'highlight.js';
 import '../utils/github.css';
@@ -66,7 +67,6 @@ const DiffTable = ({ lines, weight, fileType }) => {
   useEffect(() => {
     refs.forEach((ref) => {
       if (ref.current) {
-        console.log(ref.current);
         highlight.highlightElement(ref.current);
       }
     });
@@ -78,6 +78,9 @@ const DiffTable = ({ lines, weight, fileType }) => {
         <TableBody>
           {lines.map((line, index) => {
             const color = getColors(line);
+            const tooltip = `${line.type}: ${
+              LINE_SCORING[line.type]
+            } × ${weight}`;
             return (
               <TableRow key={index} style={{ width: '100%' }}>
                 {line.left ? (
@@ -92,7 +95,6 @@ const DiffTable = ({ lines, weight, fileType }) => {
                     </TableCell>
                     <TableCell
                       style={{
-                        width: '45%',
                         backgroundColor: Color(color.left).alpha(0.6),
                       }}
                       className={classes.tableCell}
@@ -107,10 +109,7 @@ const DiffTable = ({ lines, weight, fileType }) => {
                 ) : (
                   <>
                     <TableCell className={classes.emptyNumber} />
-                    <TableCell
-                      style={{ width: '45%' }}
-                      className={classes.empty}
-                    />
+                    <TableCell className={classes.empty} />
                   </>
                 )}
                 {line.right ? (
@@ -126,19 +125,20 @@ const DiffTable = ({ lines, weight, fileType }) => {
                     </TableCell>
                     <TableCell
                       style={{
-                        width: '45%',
                         backgroundColor: Color(color.right).alpha(0.6),
                       }}
                       className={classes.tableCell}
                     >
-                      <pre className={classes.pre}>
-                        <code
-                          className={fileType}
-                          ref={refs[lines.length * 2 - index]}
-                        >
-                          {line.right.lineContent}
-                        </code>
-                      </pre>
+                      <Tooltip title={tooltip}>
+                        <pre className={classes.pre}>
+                          <code
+                            className={fileType}
+                            ref={refs[lines.length * 2 - index]}
+                          >
+                            {line.right.lineContent}
+                          </code>
+                        </pre>
+                      </Tooltip>
                     </TableCell>
                   </>
                 ) : (
@@ -167,6 +167,7 @@ const useStyles = makeStyles({
     borderBottom: 'none',
     paddingTop: 4,
     paddingBottom: 4,
+    width: '45%',
   },
   pre: {
     margin: 0,
@@ -189,6 +190,7 @@ const useStyles = makeStyles({
     borderBottom: 'none',
     paddingTop: 4,
     paddingBottom: 4,
+    width: '45%',
   },
   emptyNumber: {
     backgroundColor: '#fff',
