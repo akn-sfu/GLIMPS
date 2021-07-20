@@ -19,35 +19,22 @@ import { useGetWordCount } from '../../api/note';
 import { useRepositoryMembers } from '../../api/repo_members';
 import { ApiResource } from '../../api/base';
 import StudentDropdown from '../../components/StudentDropdown';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import StatSummary from './Summary/Summary';
 import Alert from '@material-ui/lab/Alert';
 
-const TIMEZONE = {
-  '0': 'GMT',
-  '1': 'CET',
-  '2': 'EET',
-  '3': 'MSK',
-  '4': 'AMT',
-  '5': 'PKT',
-  '6': 'OMSK',
-  '7': 'KRAT',
-  '8': 'CST',
-  '9': 'JST',
-  '10': 'AEST',
-  '11': 'SAKT',
-  '12': 'NZST',
-  '-1': 'AT',
-  '-2': 'ART',
-  '-3': 'AST',
-  '-4': 'EST',
-  '-5': 'CST',
-  '-6': 'MDT',
-  '-7': 'PST',
-  '-8': 'AKST',
-  '-9': 'HST',
-  '-10': 'NT',
-  '-11': 'IDLW',
-  '-12': 'BIT',
-};
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      '& > *': {
+        margin: theme.spacing(1),
+      },
+    },
+    graph: {
+      borderColor: '#9e9e9e',
+    },
+  }),
+);
 
 function combineData(
   startDate: string,
@@ -118,10 +105,8 @@ function findRepoMemberId(
 }
 
 const DynamicGraph: React.FC = () => {
-  const timezoneOffset = new Date().getTimezoneOffset();
-  const timezone = TIMEZONE[String((timezoneOffset / 60) * -1)];
-  console.log(timezoneOffset);
-  console.log(timezone);
+  const classes = useStyles();
+  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const { startDate, endDate, author } = useFilterContext();
   const { repositoryId } = useRepositoryContext();
   const { data } = useGetRepository(repositoryId);
@@ -174,7 +159,30 @@ const DynamicGraph: React.FC = () => {
     setGraphTab(newTab);
   };
 
-  console.log(graphData);
+  const totalMrScore = graphData.reduce(
+    (n, { mergeRequestScore }) => n + mergeRequestScore,
+    0,
+  );
+  const totalCommitScore = graphData.reduce(
+    (n, { commitScore }) => n + commitScore,
+    0,
+  );
+  const totalMrCount = graphData.reduce(
+    (n, { mergeRequestCount }) => n + mergeRequestCount,
+    0,
+  );
+  const totalCommitCount = graphData.reduce(
+    (n, { commitCount }) => n + commitCount,
+    0,
+  );
+  const totalIssueWordCount = graphData.reduce(
+    (n, { issueWordCount }) => n + issueWordCount,
+    0,
+  );
+  const totalmergeRequestWordCount = graphData.reduce(
+    (n, { mergeRequestWordCount }) => n + mergeRequestWordCount,
+    0,
+  );
 
   return (
     <>
@@ -186,21 +194,21 @@ const DynamicGraph: React.FC = () => {
             {startDate.split('T')[0]} to {endDate.split('T')[0]}
           </Alert>
         </Box>
-        <DefaultPageTitleFormat>Contribution Graph</DefaultPageTitleFormat>
-        <Container maxWidth='md'>
-          <Grid container justify='flex-end' spacing={1}>
-            <Grid item xs={4}>
-              <Box mb={1}>
-                <StudentDropdown
-                  repositoryId={repositoryId}
-                  onChange={(newEmails) => {
-                    setEmails(newEmails);
-                  }}
-                />
-              </Box>
-            </Grid>
+        <Grid container justify='space-between' alignItems='center'>
+          <Grid item>
+            <DefaultPageTitleFormat>Contribution Graph</DefaultPageTitleFormat>
           </Grid>
-        </Container>
+          <Grid item>
+            <Box mb={1} paddingRight={6}>
+              <StudentDropdown
+                repositoryId={repositoryId}
+                onChange={(newEmails) => {
+                  setEmails(newEmails);
+                }}
+              />
+            </Box>
+          </Grid>
+        </Grid>
         <Box my={2}>
           <Tabs
             value={graphTab}
@@ -214,9 +222,53 @@ const DynamicGraph: React.FC = () => {
             <Tab label='Comments' value={GraphTab.comments} />
           </Tabs>
         </Box>
-        <Grid justify='center' container>
-          <DynamicBarChart graphData={graphData} graphTab={graphTab} />
-        </Grid>
+        <Container>
+          <Grid
+            container
+            justify='space-between'
+            alignItems='center'
+            className={classes.graph}
+          >
+            <Grid item>
+              <DynamicBarChart graphData={graphData} graphTab={graphTab} />
+            </Grid>
+            <Grid item justify='flex-start'>
+              <StatSummary
+                statData={[
+                  {
+                    name: 'Merge request score',
+                    value: Math.abs(totalMrScore).toFixed(1),
+                    description:
+                      'Sum of merge request diff scores for mrs for selected date range.',
+                  },
+                  {
+                    name: 'Commit score',
+                    value: totalCommitScore.toFixed(1),
+                    description: 'Sum of commit scores for selected date range',
+                  },
+                  {
+                    name: 'Total Merge request',
+                    value: Math.abs(totalMrCount),
+                    description:
+                      'Number of merge requests made for selected date range',
+                  },
+                  {
+                    name: 'Total commits',
+                    value: totalCommitCount,
+                    description:
+                      'Number of commits made for selected date range',
+                  },
+                  {
+                    name: 'Comments word count',
+                    value: totalIssueWordCount + totalmergeRequestWordCount,
+                    description:
+                      'Sum of words in all comments for selected date range',
+                  },
+                ]}
+              />
+            </Grid>
+          </Grid>
+        </Container>
       </Container>
     </>
   );
