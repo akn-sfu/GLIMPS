@@ -7,3 +7,7 @@ export function usePostToken() {
 export function useVerifyToken() {
   return useApiQuery<{ verified: boolean }>('/token/verify');
 }
+
+export function getTargetServer() {
+  return useApiQuery('/token/targetServer');
+}
