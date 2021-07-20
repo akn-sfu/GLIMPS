@@ -12,5 +12,7 @@
   "devDependencies": {
     "lerna": "^3.22.1"
   },
-  "dependencies": {}
+  "dependencies": {
+    "highlight.js": "^11.1.0"
+  }
 }
