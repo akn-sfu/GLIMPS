@@ -30,9 +30,6 @@ const useStyles = makeStyles((theme: Theme) =>
         margin: theme.spacing(1),
       },
     },
-    graph: {
-      borderColor: '#9e9e9e',
-    },
   }),
 );
 
