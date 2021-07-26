@@ -22,6 +22,21 @@ import StudentDropdown from '../../components/StudentDropdown';
 import StatSummary from './Summary/Summary';
 import Alert from '@material-ui/lab/Alert';
 import MemberDropdown from '../MemberDropdown';
+// import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+
+// const useStyles = makeStyles((theme: Theme) =>
+//   createStyles({
+//     root: {
+//       '& > *': {
+//         margin: theme.spacing(1),
+//       },
+//     },
+//     memberDropDown: {
+//       minWidth: '15rem',
+
+//     }
+//   }),
+// );
 
 function combineData(
   startDate: string,

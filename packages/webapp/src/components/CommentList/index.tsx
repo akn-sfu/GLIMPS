@@ -4,7 +4,7 @@ import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { useGetNotesByRepository, useGetTotalNotes } from '../../api/note';
 import NotePaper from './NotePaper';
 import { useRepositoryContext } from '../../contexts/RepositoryContext';
@@ -22,7 +22,7 @@ import MemberDropdown from '../MemberDropdown';
 import ItemPerPageDropdown from './ItemPerPageDropdown';
 import { Note } from '@ceres/types';
 
-const useStyles = makeStyles(() =>
+const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       display: 'flex',
@@ -58,6 +58,10 @@ const useStyles = makeStyles(() =>
       padding: '30px',
       display: 'flex',
       justifyContent: 'center',
+    },
+    formControl: {
+      margin: theme.spacing(1),
+      minWidth: 200,
     },
   }),
 );
@@ -147,7 +151,9 @@ const CommentList: React.FC = () => {
           <Typography variant='h1' color='primary'>
             Comments
           </Typography>
-          <MemberDropdown repositoryId={repositoryId} />
+          <Box className={classes.formControl}>
+            <MemberDropdown repositoryId={repositoryId} />
+          </Box>
         </AlternatePageTitleFormat>
         <Box my={1} className={classes.root}>
           <Grid container justify='space-between'>
