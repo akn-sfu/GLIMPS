@@ -22,21 +22,20 @@ import StudentDropdown from '../../components/StudentDropdown';
 import StatSummary from './Summary/Summary';
 import Alert from '@material-ui/lab/Alert';
 import MemberDropdown from '../MemberDropdown';
-// import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
-// const useStyles = makeStyles((theme: Theme) =>
-//   createStyles({
-//     root: {
-//       '& > *': {
-//         margin: theme.spacing(1),
-//       },
-//     },
-//     memberDropDown: {
-//       minWidth: '15rem',
-
-//     }
-//   }),
-// );
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      '& > *': {
+        margin: theme.spacing(1),
+      },
+    },
+    memberDropDown: {
+      minWidth: '15rem',
+    },
+  }),
+);
 
 function combineData(
   startDate: string,
@@ -107,6 +106,7 @@ function findRepoMemberId(
 }
 
 const DynamicGraph: React.FC = () => {
+  const classes = useStyles();
   const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const { startDate, endDate, author } = useFilterContext();
   const { repositoryId } = useRepositoryContext();
@@ -201,7 +201,7 @@ const DynamicGraph: React.FC = () => {
           </Grid>
           <Grid item>
             {graphTab != GraphTab.comments ? (
-              <Box mb={1} paddingRight={6}>
+              <Box mb={1}>
                 <StudentDropdown
                   repositoryId={repositoryId}
                   onChange={(newEmails) => {
@@ -210,7 +210,7 @@ const DynamicGraph: React.FC = () => {
                 />
               </Box>
             ) : (
-              <Box mb={1} paddingRight={6}>
+              <Box mb={1} className={classes.memberDropDown}>
                 <MemberDropdown repositoryId={repositoryId} />
               </Box>
             )}

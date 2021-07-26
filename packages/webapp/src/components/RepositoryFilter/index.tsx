@@ -97,7 +97,9 @@ const RepoFilter: React.FC = () => {
             />
           </Grid>
           <Grid item xs={3}>
-            <MemberDropdown repositoryId={repositoryId} />
+            <Box paddingRight={2}>
+              <MemberDropdown repositoryId={repositoryId} />
+            </Box>
           </Grid>
           <Grid item xs={3}>
             <FormControl variant='filled' fullWidth>
