@@ -19,19 +19,9 @@ import { useGetWordCount } from '../../api/note';
 import { useRepositoryMembers } from '../../api/repo_members';
 import { ApiResource } from '../../api/base';
 import StudentDropdown from '../../components/StudentDropdown';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import StatSummary from './Summary/Summary';
 import Alert from '@material-ui/lab/Alert';
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      '& > *': {
-        margin: theme.spacing(1),
-      },
-    },
-  }),
-);
+import MemberDropdown from '../MemberDropdown';
 
 function combineData(
   startDate: string,
@@ -102,7 +92,6 @@ function findRepoMemberId(
 }
 
 const DynamicGraph: React.FC = () => {
-  const classes = useStyles();
   const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const { startDate, endDate, author } = useFilterContext();
   const { repositoryId } = useRepositoryContext();
@@ -196,14 +185,20 @@ const DynamicGraph: React.FC = () => {
             <DefaultPageTitleFormat>Contribution Graph</DefaultPageTitleFormat>
           </Grid>
           <Grid item>
-            <Box mb={1} paddingRight={6}>
-              <StudentDropdown
-                repositoryId={repositoryId}
-                onChange={(newEmails) => {
-                  setEmails(newEmails);
-                }}
-              />
-            </Box>
+            {graphTab != GraphTab.comments ? (
+              <Box mb={1} paddingRight={6}>
+                <StudentDropdown
+                  repositoryId={repositoryId}
+                  onChange={(newEmails) => {
+                    setEmails(newEmails);
+                  }}
+                />
+              </Box>
+            ) : (
+              <Box mb={1} paddingRight={6}>
+                <MemberDropdown repositoryId={repositoryId} />
+              </Box>
+            )}
           </Grid>
         </Grid>
         <Box my={2}>
@@ -220,12 +215,7 @@ const DynamicGraph: React.FC = () => {
           </Tabs>
         </Box>
         <Container>
-          <Grid
-            container
-            justify='space-between'
-            alignItems='center'
-            className={classes.graph}
-          >
+          <Grid container justify='space-between' alignItems='center'>
             <Grid item>
               <DynamicBarChart graphData={graphData} graphTab={graphTab} />
             </Grid>
