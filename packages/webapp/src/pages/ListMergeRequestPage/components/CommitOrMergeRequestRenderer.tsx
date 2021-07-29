@@ -70,8 +70,6 @@ const CommitOrMergeRequestRenderer: React.FC<CommitOrMergeRequestRendererProps> 
   const isExcluded = extensions?.override?.exclude;
   const hasOverride = ScoreOverride.hasOverride(extensions?.override);
   const fileNameTextDecoration = isExcluded ? 'line-through' : '';
-  //merge request overview
-  const description = mergeRequest?.description;
 
   const date = mergeRequest?.merged_at || commit?.created_at;
   // Check if merge request or commit, or one of it's diffs has an override
@@ -124,9 +122,6 @@ const CommitOrMergeRequestRenderer: React.FC<CommitOrMergeRequestRendererProps> 
                   {shortenTitle(title, shrink)}
                 </Typography>
               </Grid>
-              <Typography variant='body2' color='textSecondary'>
-                {description}
-              </Typography>
             </Grid>
             {shrink && (
               <Grid container justify='space-between'>

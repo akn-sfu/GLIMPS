@@ -108,6 +108,7 @@ const CodeView: React.FC<CodeViewProps> = ({ mergeRequest, commit }) => {
             <Typography variant='h2'>
               {commit?.title || mergeRequest?.title}
             </Typography>
+            <Typography variant='h6'> {mergeRequest?.description} </Typography>
           </Grid>
           <Grid item>
             {allowEdit && (
