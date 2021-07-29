@@ -23,6 +23,8 @@ import { useRepositoryContext } from '../../../contexts/RepositoryContext';
 import { useGetRepository } from '../../../api/repository';
 import { useAuthContext } from '../../../contexts/AuthContext';
 import { useEffect } from 'react';
+import Paper from '@material-ui/core/Paper';
+import ReactMarkdown from 'react-markdown';
 
 interface CodeViewProps {
   mergeRequest?: ApiResource<MergeRequest>;
@@ -108,7 +110,6 @@ const CodeView: React.FC<CodeViewProps> = ({ mergeRequest, commit }) => {
             <Typography variant='h2'>
               {commit?.title || mergeRequest?.title}
             </Typography>
-            <Typography variant='h6'> {mergeRequest?.description} </Typography>
           </Grid>
           <Grid item>
             {allowEdit && (
@@ -125,6 +126,11 @@ const CodeView: React.FC<CodeViewProps> = ({ mergeRequest, commit }) => {
                 />
               </Grid>
             )}
+          </Grid>
+          <Grid item>
+            <Paper variant='outlined'>
+              <ReactMarkdown>{mergeRequest?.description}</ReactMarkdown>
+            </Paper>
           </Grid>
         </Grid>
       </Box>
