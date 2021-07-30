@@ -25,6 +25,7 @@ import { useAuthContext } from '../../../contexts/AuthContext';
 import { useEffect } from 'react';
 import Paper from '@material-ui/core/Paper';
 import ReactMarkdown from 'react-markdown';
+import gfm from 'remark-gfm';
 
 interface CodeViewProps {
   mergeRequest?: ApiResource<MergeRequest>;
@@ -129,7 +130,13 @@ const CodeView: React.FC<CodeViewProps> = ({ mergeRequest, commit }) => {
           </Grid>
           <Grid item>
             <Paper variant='outlined'>
-              <ReactMarkdown>{mergeRequest?.description}</ReactMarkdown>
+              <Box p={2}>
+                <Grid container>
+                  <ReactMarkdown remarkPlugins={[gfm]}>
+                    {mergeRequest?.description}
+                  </ReactMarkdown>
+                </Grid>
+              </Box>
             </Paper>
           </Grid>
         </Grid>
