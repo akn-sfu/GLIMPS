@@ -27,6 +27,7 @@ import Tab from '@material-ui/core/Tab/Tab';
 import { useInterval } from '../../util/useInterval';
 import { Snackbar } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
+import axios from 'axios';
 function hasPendingSync(operations: Operation[], id: string) {
   return (
     operations.filter((operation) => operation.input.repository_id === id)
@@ -48,6 +49,8 @@ const tabToRoleMappings = {
 
 const RepositoryList: React.FC = () => {
   const [openError, setOpenError] = useState(false);
+  const repoCancelToken = axios.CancelToken;
+  const source = repoCancelToken.source();
   const [sort, setSort] = useState('-project_created');
   const [search, setSearch] = useState('');
   const [tab, setTab] = useState(TabOption.all);
@@ -67,15 +70,17 @@ const RepositoryList: React.FC = () => {
   const {
     data: pendingFetches,
     invalidate: invalidatePendingFetches,
-    cancel: cancelFetches,
-  } = useGetOperations({
-    status: [
-      Operation.Status.PROCESSING,
-      Operation.Status.PENDING,
-      Operation.Status.TERMINATED,
-    ],
-    type: [Operation.Type.FETCH_REPOSITORIES],
-  });
+  } = useGetOperations(
+    {
+      status: [
+        Operation.Status.PROCESSING,
+        Operation.Status.PENDING,
+        Operation.Status.TERMINATED,
+      ],
+      type: [Operation.Type.FETCH_REPOSITORIES],
+    },
+    source,
+  );
 
   const { sync } = useSyncRepository();
   const { fetch } = useFetchRepositories();
@@ -103,7 +108,6 @@ const RepositoryList: React.FC = () => {
   useInterval(
     () => {
       void invalidatePendingFetches();
-      void cancelFetches();
       void invalidateData();
     },
     isFetchingRepositories ? 1000 * 4 : null,
@@ -143,6 +147,15 @@ const RepositoryList: React.FC = () => {
               disabled={isFetchingRepositories}
             >
               Fetch
+            </Button>
+            <Button
+              variant='contained'
+              color='secondary'
+              size='large'
+              onClick={() => source.cancel('Fetch cancelled')}
+              disabled={!isFetchingRepositories}
+            >
+              Cancel Fetch
             </Button>
             {isFetchingRepositories && (
               <Box position='absolute' top='.25rem' left='1.5rem'>
