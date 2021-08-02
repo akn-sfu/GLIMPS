@@ -90,6 +90,15 @@ const RepositoryList: React.FC = () => {
       },
     });
   };
+
+  const cancelRepositoryFetch = () => {
+    console.log(pendingFetches);
+    useInterval(() => {
+      void invalidatePendingFetches();
+      void invalidateData();
+    }, 0);
+  };
+
   useInterval(
     () => {
       void invalidatePendingFetches();
@@ -125,7 +134,14 @@ const RepositoryList: React.FC = () => {
             >
               Fetch
             </Button>
-
+            <Button
+              variant='contained'
+              color='secondary'
+              size='large'
+              onClick={cancelRepositoryFetch}
+            >
+              Cancel Fetch
+            </Button>
             {isFetchingRepositories && (
               <Box position='absolute' top='.25rem' left='1.5rem'>
                 <CircularProgress color='secondary' />
