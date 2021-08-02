@@ -25,6 +25,8 @@ import {
 import { TextField } from '@material-ui/core';
 import Tab from '@material-ui/core/Tab/Tab';
 import { useInterval } from '../../util/useInterval';
+import { Snackbar } from '@material-ui/core';
+import { Alert } from '@material-ui/lab';
 function hasPendingSync(operations: Operation[], id: string) {
   return (
     operations.filter((operation) => operation.input.repository_id === id)
@@ -45,6 +47,7 @@ const tabToRoleMappings = {
 };
 
 const RepositoryList: React.FC = () => {
+  const [openError, setOpenError] = useState(false);
   const [sort, setSort] = useState('-project_created');
   const [search, setSearch] = useState('');
   const [tab, setTab] = useState(TabOption.all);
@@ -64,7 +67,7 @@ const RepositoryList: React.FC = () => {
   const {
     data: pendingFetches,
     invalidate: invalidatePendingFetches,
-    // cancel: cancelPendingFetches,
+    cancel: cancelFetches,
   } = useGetOperations({
     status: [
       Operation.Status.PROCESSING,
@@ -90,17 +93,17 @@ const RepositoryList: React.FC = () => {
       onSuccess: () => {
         void invalidatePendingFetches();
       },
+      onError: () => {
+        void invalidatePendingFetches();
+        setOpenError(true);
+      },
     });
-  };
-
-  const cancelRepositoryFetch = () => {
-    console.log(pendingFetches);
-    // cancelPendingFetches();
   };
 
   useInterval(
     () => {
       void invalidatePendingFetches();
+      void cancelFetches();
       void invalidateData();
     },
     isFetchingRepositories ? 1000 * 4 : null,
@@ -118,6 +121,14 @@ const RepositoryList: React.FC = () => {
     ) : null;
   return (
     <Container>
+      <Snackbar
+        open={openError}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert onClose={() => setOpenError(false)} severity='error'>
+          Repository fetch has failed
+        </Alert>
+      </Snackbar>
       <Grid container justify='space-between' alignItems='center'>
         <Grid item>
           <DefaultPageTitleFormat>Repositories</DefaultPageTitleFormat>
@@ -132,14 +143,6 @@ const RepositoryList: React.FC = () => {
               disabled={isFetchingRepositories}
             >
               Fetch
-            </Button>
-            <Button
-              variant='contained'
-              color='secondary'
-              size='large'
-              onClick={cancelRepositoryFetch}
-            >
-              Cancel Fetch
             </Button>
             {isFetchingRepositories && (
               <Box position='absolute' top='.25rem' left='1.5rem'>
