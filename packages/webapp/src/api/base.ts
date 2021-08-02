@@ -33,9 +33,8 @@ export function usePaginatedQuery<T>(
   const result = useQuery<SearchResults<T>>(
     key,
     async () => {
-      console.log(cancelTokenSource);
       const response = await axios.get<SearchResults<T>>(route, {
-        cancelToken: cancelTokenSource.token,
+        cancelToken: cancelTokenSource.source,
         params: {
           ...params,
           page,

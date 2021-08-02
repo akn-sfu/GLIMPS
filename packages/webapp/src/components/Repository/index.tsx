@@ -105,6 +105,10 @@ const RepositoryList: React.FC = () => {
     });
   };
 
+  const cancelFetchRepo = () => {
+    source.cancel('Cancel Fetch');
+  };
+
   useInterval(
     () => {
       void invalidatePendingFetches();
@@ -152,7 +156,7 @@ const RepositoryList: React.FC = () => {
               variant='contained'
               color='secondary'
               size='large'
-              onClick={() => source.cancel('Fetch cancelled')}
+              onClick={cancelFetchRepo}
               disabled={!isFetchingRepositories}
             >
               Cancel Fetch
