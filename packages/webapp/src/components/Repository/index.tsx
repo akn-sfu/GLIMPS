@@ -64,6 +64,7 @@ const RepositoryList: React.FC = () => {
   const {
     data: pendingFetches,
     invalidate: invalidatePendingFetches,
+    // cancel: cancelPendingFetches,
   } = useGetOperations({
     status: [
       Operation.Status.PROCESSING,
@@ -94,11 +95,7 @@ const RepositoryList: React.FC = () => {
 
   const cancelRepositoryFetch = () => {
     console.log(pendingFetches);
-    fetch({
-      onSettled: () => {
-        void invalidatePendingFetches();
-      },
-    });
+    // cancelPendingFetches();
   };
 
   useInterval(

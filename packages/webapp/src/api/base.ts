@@ -16,6 +16,7 @@ export function useApiQuery<T>(route: string, params?: any) {
   return {
     ...result,
     invalidate: () => client.invalidateQueries([route]),
+    cancel: () => client.cancelQueries([route]),
     remove: () => client.removeQueries([route]),
   };
 }
@@ -42,7 +43,12 @@ export function usePaginatedQuery<T>(
     },
     { keepPreviousData: true },
   );
-  return { ...result, invalidate: () => client.invalidateQueries(key) };
+  return {
+    ...result,
+    invalidate: () => client.invalidateQueries(key),
+    cancel: () => client.cancelQueries(key),
+    remove: () => client.removeQueries(key),
+  };
 }
 
 export function useApiInfiniteQuery<T>(
@@ -96,7 +102,6 @@ export function useApiMutationCancellable<T, B>(
   token: CancelToken,
 ) {
   return useMutation<T, any, B>(route, async (body?) => {
-    console.log(token);
     const result = await axios.request<T>({
       method,
       url: route,
