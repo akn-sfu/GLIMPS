@@ -25,7 +25,6 @@ import {
 import { TextField } from '@material-ui/core';
 import Tab from '@material-ui/core/Tab/Tab';
 import { useInterval } from '../../util/useInterval';
-import axios from 'axios';
 function hasPendingSync(operations: Operation[], id: string) {
   return (
     operations.filter((operation) => operation.input.repository_id === id)
@@ -66,13 +65,15 @@ const RepositoryList: React.FC = () => {
     data: pendingFetches,
     invalidate: invalidatePendingFetches,
   } = useGetOperations({
-    status: [Operation.Status.PROCESSING, Operation.Status.PENDING],
+    status: [
+      Operation.Status.PROCESSING,
+      Operation.Status.PENDING,
+      Operation.Status.TERMINATED,
+    ],
     type: [Operation.Type.FETCH_REPOSITORIES],
   });
 
-  const CancelToken = axios.CancelToken;
-  const source = CancelToken.source();
-  const { sync } = useSyncRepository(source.token);
+  const { sync } = useSyncRepository();
   const { fetch } = useFetchRepositories();
   const isFetchingRepositories = pendingFetches?.total > 0;
   const isSyncingRepositories = operationsData?.total > 0;
@@ -93,10 +94,11 @@ const RepositoryList: React.FC = () => {
 
   const cancelRepositoryFetch = () => {
     console.log(pendingFetches);
-    useInterval(() => {
-      void invalidatePendingFetches();
-      void invalidateData();
-    }, 0);
+    fetch({
+      onSettled: () => {
+        void invalidatePendingFetches();
+      },
+    });
   };
 
   useInterval(
@@ -207,7 +209,6 @@ const RepositoryList: React.FC = () => {
               isShared={user?.id !== repo?.extensions?.owner?.id}
               isSyncing={isSyncing}
               syncRepository={syncRepository}
-              onCancelSync={() => source.cancel()}
               key={repo.meta.id}
             />
           );

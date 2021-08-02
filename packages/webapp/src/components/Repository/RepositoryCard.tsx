@@ -18,7 +18,6 @@ interface RepositoryCardProps {
   isShared: boolean;
   isSyncing: boolean;
   syncRepository: (id: string) => void;
-  onCancelSync: () => void;
 }
 
 const SyncButton = (props: { syncing: boolean; onClick: () => void }) => (
@@ -54,7 +53,6 @@ const RepositoryCard: React.FC<RepositoryCardProps> = ({
   isShared,
   isSyncing,
   syncRepository,
-  onCancelSync,
 }) => {
   const { setRepositoryId } = useRepositoryContext();
   const hasBeenSynced = !!repository?.extensions?.lastSync;
@@ -143,22 +141,6 @@ const RepositoryCard: React.FC<RepositoryCardProps> = ({
             <Box position='absolute' top='3.5rem' left='50%'>
               <CircularProgress size={25} />
             </Box>
-            <Grid
-              container
-              direction='row'
-              justify='flex-end'
-              alignItems='center'
-            >
-              <Box position='absolute' top='2.75rem' right='5%'>
-                <Button
-                  variant='contained'
-                  color='primary'
-                  onClick={() => onCancelSync()}
-                >
-                  Cancel
-                </Button>
-              </Box>
-            </Grid>
           </Box>
         </Box>
       )}
