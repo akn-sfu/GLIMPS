@@ -8,7 +8,6 @@ import DynamicBarChart from './BarChartComponent';
 import Container from '@material-ui/core/Container';
 import Box from '@material-ui/core/Box';
 import { useRepositoryContext } from '../../contexts/RepositoryContext';
-import { useGetRepository } from '../../api/repository';
 import { useGetCountMergeRequests } from '../../api/mergeRequests';
 import { useGetCountCommits } from '../../api/commit';
 import { Commit, MergeRequest, Note, RepositoryMember } from '@ceres/types';
@@ -20,8 +19,8 @@ import { useRepositoryMembers } from '../../api/repo_members';
 import { ApiResource } from '../../api/base';
 import StudentDropdown from '../../components/StudentDropdown';
 import StatSummary from './Summary/Summary';
-import Alert from '@material-ui/lab/Alert';
 import MemberDropdown from '../MemberDropdown';
+import RepoAndDateAlert from '../RepoAndDateAlert';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -110,7 +109,6 @@ const DynamicGraph: React.FC = () => {
   const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const { startDate, endDate, author } = useFilterContext();
   const { repositoryId } = useRepositoryContext();
-  const { data } = useGetRepository(repositoryId);
   const { data: members } = useRepositoryMembers(repositoryId);
   const authorIds = findRepoMemberId(author, members);
   const [emails, setEmails] = useState<string[]>([]);
@@ -189,11 +187,7 @@ const DynamicGraph: React.FC = () => {
     <>
       <Container>
         <Box my={2}>
-          <Alert severity='info'>
-            {data?.name}
-            {' > '}
-            {startDate.split('T')[0]} to {endDate.split('T')[0]}
-          </Alert>
+          <RepoAndDateAlert />
         </Box>
         <Grid container justify='space-between' alignItems='center'>
           <Grid item>
