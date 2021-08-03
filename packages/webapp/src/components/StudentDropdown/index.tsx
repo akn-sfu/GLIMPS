@@ -28,15 +28,18 @@ const StudentDropdown: React.FC<StudentDropdownProps> = ({
   repositoryId,
   onChange,
 }) => {
-  const { author } = useFilterContext();
+  const { author, setAuthor } = useFilterContext();
   const [value, setValue] = useState(author);
   const { data: members } = useRepositoryMembers(repositoryId);
   const { data: authors } = useRepositoryAuthors(repositoryId);
+
   useEffect(() => {
     if (value !== 'all') {
       const emails = findEmailsForMember(value, authors);
+      setAuthor(value);
       onChange(emails.length > 0 ? emails : ['doesnotexist@email.com']);
     } else {
+      setAuthor(value);
       onChange([]);
     }
   }, [value]);
