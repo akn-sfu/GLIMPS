@@ -34,6 +34,7 @@ const useStyles = makeStyles((theme: Theme) =>
       ...theme.typography.body1,
       color: theme.palette.text.primary,
       wordBreak: 'break-word',
+      maxWidth: '61.5em',
       '& .anchor-link': {
         marginTop: -(96 + 36), // Offset for the anchor.
         position: 'absolute',
@@ -179,11 +180,12 @@ const useStyles = makeStyles((theme: Theme) =>
       },
       '& blockquote': {
         borderLeft: '.25em solid #dfe2e5',
-        backgroundColor: 'rgba(255,229,100,0.2)',
+        backgroundColor: '#fafafa',
         padding: '4px 24px',
         margin: '24px 0',
         '& p': {
           marginTop: '16px',
+          color: '#145561',
         },
       },
       '& a, & a code': {
