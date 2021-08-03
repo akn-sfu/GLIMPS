@@ -7,7 +7,6 @@ import {
   MuiPickersUtilsProvider,
   KeyboardDateTimePicker,
 } from '@material-ui/pickers';
-import MemberDropdown from '../../components/MemberDropdown';
 import { DateTime } from 'luxon';
 import Box from '@material-ui/core/Box';
 import FormControl from '@material-ui/core/FormControl';
@@ -65,8 +64,8 @@ const RepoFilter: React.FC = () => {
   return (
     <Box p={2}>
       <MuiPickersUtilsProvider utils={LuxonUtils}>
-        <Grid container spacing={1}>
-          <Grid item xs={3}>
+        <Grid container spacing={6}>
+          <Grid item xs={4}>
             <KeyboardDateTimePicker
               variant='inline'
               inputVariant='filled'
@@ -79,9 +78,10 @@ const RepoFilter: React.FC = () => {
               KeyboardButtonProps={{
                 'aria-label': 'change date',
               }}
+              fullWidth
             />
           </Grid>
-          <Grid item xs={3}>
+          <Grid item xs={4}>
             <KeyboardDateTimePicker
               variant='inline'
               inputVariant='filled'
@@ -94,14 +94,10 @@ const RepoFilter: React.FC = () => {
               KeyboardButtonProps={{
                 'aria-label': 'change date',
               }}
+              fullWidth
             />
           </Grid>
-          <Grid item xs={3}>
-            <Box paddingRight={2}>
-              <MemberDropdown repositoryId={repositoryId} />
-            </Box>
-          </Grid>
-          <Grid item xs={3}>
+          <Grid item xs={4}>
             <FormControl variant='filled' fullWidth>
               <InputLabel>Iteration:</InputLabel>
               <Select
