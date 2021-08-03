@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme: Theme) =>
       '& pre': {
         margin: theme.spacing(3, 'auto'),
         padding: theme.spacing(2),
-        backgroundColor: '#272c34',
+        backgroundColor: '#ffffff',
         direction: 'ltr',
         borderRadius: theme.shape.borderRadius,
         overflow: 'auto',
@@ -60,12 +60,9 @@ const useStyles = makeStyles((theme: Theme) =>
         WebkitFontSmoothing: 'subpixel-antialiased',
         padding: '0 3px',
         color: theme.palette.text.primary,
-        backgroundColor:
-          theme.palette.type === 'light'
-            ? 'rgba(255, 229, 100, 0.2)'
-            : 'rgba(255, 229, 100, 0.2)',
-        fontSize: '.85em',
-        borderRadius: 2,
+        backgroundColor: 'rgba(27,31,35,.05)',
+        fontSize: '.8em',
+        borderRadius: '3px',
       },
       '& code[class*="language-"]': {
         backgroundColor: '#272c34',
@@ -181,7 +178,7 @@ const useStyles = makeStyles((theme: Theme) =>
         padding: 16,
       },
       '& blockquote': {
-        borderLeft: '5px solid #d1d0ccd3',
+        borderLeft: '.25em solid #dfe2e5',
         backgroundColor: 'rgba(255,229,100,0.2)',
         padding: '4px 24px',
         margin: '24px 0',
@@ -190,12 +187,8 @@ const useStyles = makeStyles((theme: Theme) =>
         },
       },
       '& a, & a code': {
-        // Style taken from the Link component
-        color: theme.palette.secondary.main,
-        textDecoration: 'none',
-        '&:hover': {
-          textDecoration: 'underline',
-        },
+        // for Link component
+        color: '#blue',
       },
       '& img, video': {
         maxWidth: '100%',
@@ -216,7 +209,7 @@ const useStyles = makeStyles((theme: Theme) =>
         padding: '2px 5px',
         font: '11px Consolas,Liberation Mono,Menlo,monospace',
         lineHeight: '10px',
-        color: '#444d56',
+        color: '#564944',
         verticalAlign: 'middle',
         backgroundColor: '#fafbfc',
         border: '1px solid #d1d5da',
