@@ -70,7 +70,6 @@ const DiffTable = ({ lines, weight, fileType }) => {
       }
     });
   }, [refs]);
-
   return (
     <TableContainer component={Paper}>
       <Table className={classes.table} aria-label='diff view table'>
