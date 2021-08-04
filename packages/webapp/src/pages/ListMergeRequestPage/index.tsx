@@ -177,17 +177,18 @@ const ListMergeRequestPage = () => {
                 </Box>
                 <Grid item>
                   <Container maxWidth='md'>
-                    <Grid container justify='flex-end' spacing={1}>
-                      <Grid item xs={4}>
-                        <Box mb={1}>
-                          <StudentDropdown
-                            repositoryId={id}
-                            onChange={(newEmails) => {
-                              setEmails(newEmails);
-                            }}
-                          />
-                        </Box>
-                      </Grid>
+                    <Grid flex
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'flex-end',
+                      }}
+                    >
+                      <StudentDropdown
+                        repositoryId={id}
+                        onChange={(newEmails) => {
+                          setEmails(newEmails);
+                        }}
+                      />
                     </Grid>
                   </Container>
                 </Grid>
