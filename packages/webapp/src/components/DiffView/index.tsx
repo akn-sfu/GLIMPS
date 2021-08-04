@@ -134,7 +134,6 @@ const DiffView: React.FC<DiffViewProps> = ({
                     >
                       {fileName}
                     </Typography>
-                    <Typography>{fileOperation}</Typography>
                   </Grid>
                 </Grid>
               </Grid>
