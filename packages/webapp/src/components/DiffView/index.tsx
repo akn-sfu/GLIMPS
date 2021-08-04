@@ -183,7 +183,7 @@ const DiffView: React.FC<DiffViewProps> = ({
               </Grid>
               <Grid item>
                 {fileOperation == 0 ? (
-                  <DiffFactWrapper name='Operation' value='New File' />
+                  <DiffFactWrapper name='Operation' value='File Created' />
                 ) : fileOperation == 1 ? (
                   <DiffFactWrapper name='Operation' value='File Deleted' />
                 ) : (
