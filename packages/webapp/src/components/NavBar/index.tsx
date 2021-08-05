@@ -41,15 +41,15 @@ const NavBar: React.FC<UserNameProps> = (UserNameProps) => {
             repositoryDependent
           />
           <ItemBox
-            icon='merge'
-            primary={'Code'}
-            url={`/merge/${repositoryId}`}
-            repositoryDependent
-          />
-          <ItemBox
             icon='graph'
             primary={'Graphs'}
             url={`/graph/${repositoryId}`}
+            repositoryDependent
+          />
+          <ItemBox
+            icon='merge'
+            primary={'Code'}
+            url={`/merge/${repositoryId}`}
             repositoryDependent
           />
           <ItemBox
