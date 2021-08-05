@@ -58,6 +58,7 @@ const StatSummary: React.FC<IStatSummaryProps> = ({ statData }) => {
     setCsvString(
       [
         ...statData.map((stat) => [
+          //Pad the strings with spaces to be the same length
           stat.name + new Array(15 - stat.name.length + 4).join(' '),
           stat.rawValue ?? stat.value,
         ]),
