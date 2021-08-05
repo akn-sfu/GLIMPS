@@ -56,7 +56,12 @@ const StatSummary: React.FC<IStatSummaryProps> = ({ statData }) => {
 
   useEffect(() => {
     setCsvString(
-      [...statData.map((stat) => [stat.name, stat.rawValue ?? stat.value])]
+      [
+        ...statData.map((stat) => [
+          stat.name + new Array(15 - stat.name.length + 4).join(' '),
+          stat.rawValue ?? stat.value,
+        ]),
+      ]
         .map((row) => row.join('\t'))
         .join('\n'),
     );
