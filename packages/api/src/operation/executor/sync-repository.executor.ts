@@ -13,6 +13,7 @@ import { BaseExecutor } from './base.executor';
 import { IssueService } from '../../gitlab/repository/issue/issue.service';
 
 enum Stage {
+  sync = 'sync',
   syncCommits = 'syncCommits',
   syncMergeRequests = 'syncMergeRequests',
   syncIssues = 'syncIssues',
@@ -34,6 +35,7 @@ export class SyncRepositoryExecutor extends BaseExecutor<Stage> {
     private readonly repositoryMemberService: RepositoryMemberService,
   ) {
     super(operation, operationRepository);
+    this.addStage(Stage.sync, 'Starting sync');
     this.addStage(Stage.syncCommits, 'Sync Commits');
     this.addStage(Stage.syncMergeRequests, 'Sync Merge Requests');
     this.addStage(Stage.syncIssues, 'Sync Issues');
@@ -49,29 +51,71 @@ export class SyncRepositoryExecutor extends BaseExecutor<Stage> {
   private members: RepositoryMember[] = [];
 
   async run() {
-    await this.init();
+    await this.startStage(Stage.sync);
+    try{
+      await this.init();
     await Promise.all([
       this.syncResource(Stage.syncCommits, this.commitService),
       this.syncResource(Stage.syncMergeRequests, this.mergeRequestService),
       this.syncResource(Stage.syncIssues, this.issueService),
     ]);
     await Promise.all([this.linkCommitsAndMergeRequests(), this.linkAuthors()]);
+    }catch(err){
+      console.error(err);
+      await this.terminateStage(Stage.sync);
+      await this.terminateStage(Stage.syncCommits);
+      await this.terminateStage(Stage.syncMergeRequests);
+      await this.terminateStage(Stage.syncIssues);
+      await this.terminateStage(Stage.linkCommitsAndMergeRequests);
+      await this.terminateStage(Stage.linkAuthors);
+      return;
+    }
+    await this.completeStage(Stage.sync);
   }
 
   private async init() {
     const payload = this.operation.resource
       .input as Operation.SyncRepositoryPayload;
+
     const repository = await this.repositoryService.findOne(
       payload.repository_id,
     );
     const { token } = await this.tokenService.findOneByUserId(
       this.operation.user.id,
     );
+    
     this.repository = repository;
     this.token = token;
+
     this.members = await this.repositoryMemberService.findAllForRepository(
       repository,
     );
+    const actualDefaultBranch = await this.repositoryService.getDefaultBranch(
+      repository.resource.id,
+      token
+    );
+
+    if (repository.resource.default_branch != actualDefaultBranch){
+      //update resource.default_branch in database  
+      try{
+        await this.repositoryService.updateDefaultBranch(
+          actualDefaultBranch,
+          this.repository,
+        )
+      } catch(err){
+        console.error(err);
+      }
+        //delete all branch related entries
+        try{
+          await Promise.all([
+            this.deleteMergeRequestsResources(this.mergeRequestService),
+            this.deleteCommitResources(this.commitService),
+            this.deleteIssueResources(this.issueService),
+          ])
+        }catch(err){
+          console.error(err);
+        };
+    }
     await this.updateLastSync();
   }
 
@@ -149,5 +193,47 @@ export class SyncRepositoryExecutor extends BaseExecutor<Stage> {
       }),
     );
     await this.completeStage(Stage.linkAuthors);
+  }
+
+  private async deleteCommitResources(
+    service: CommitService
+  ): Promise<void>{
+    const valuesWithCount = await service.findByRepositoryId(this.repository.id,'commit');
+    const commits = valuesWithCount[0]
+    let i = 0;
+    while ( i < valuesWithCount[1]) {
+      try {
+        await service.deleteCommitEntity(commits[i]);
+      } catch{}
+      i++;
+    } 
+  }
+
+  private async deleteMergeRequestsResources(
+    service: MergeRequestService
+  ): Promise<void>{
+    const valuesWithCount = await service.findByRepositoryId(this.repository.id, 'merge_request');
+    const merge_requests = valuesWithCount[0]
+    let i = 0;
+    while ( i < valuesWithCount[1]) {
+      try {
+        await service.deleteMergeRequestEntity(merge_requests[i]);
+      } catch{}
+      i++;
+    } 
+  }
+
+  private async deleteIssueResources(
+    service: IssueService
+  ): Promise<void>{
+    const valuesWithCount = await service.findByRepositoryId(this.repository.id, 'issue');
+    const issues = valuesWithCount[0]
+    let i = 0;
+    while ( i < valuesWithCount[1]) {
+      try {
+        await service.deleteIssueEntity(issues[i]);
+      } catch{}
+      i++;
+    } 
   }
 }

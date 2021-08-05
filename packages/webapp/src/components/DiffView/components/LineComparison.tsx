@@ -26,7 +26,7 @@ const LineRenderer: React.FC<{
   color?: string;
   lineNumber?: number;
   content?: string;
-}> = ({ color, lineNumber, content }) => {
+}> = ({ lineNumber, content }) => {
   if (!content) {
     return <Box />;
   }
@@ -37,13 +37,14 @@ const LineRenderer: React.FC<{
       </Box>
       <pre
         style={{
-          color,
           margin: '0',
-          whiteSpace: 'pre-wrap',
+          whiteSpace: 'pre-line',
           wordWrap: 'break-word',
         }}
       >
-        {content}
+        <div className='code' style={{ fontSize: 'small' }}>
+          {content}
+        </div>
       </pre>
     </Box>
   );

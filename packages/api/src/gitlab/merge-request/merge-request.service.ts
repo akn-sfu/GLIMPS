@@ -92,7 +92,7 @@ export class MergeRequestService extends BaseService<
   buildSort(
     query: SelectQueryBuilder<MergeRequestEntity>,
   ): SelectQueryBuilder<MergeRequestEntity> {
-    return query.orderBy("merge_request.resource #>> '{merged_at}'", 'DESC');
+    return query.orderBy("merge_request.resource #>> '{merged_at}'", 'ASC');
   }
 
   async buildDailyCounts(
@@ -306,7 +306,7 @@ export class MergeRequestService extends BaseService<
       page: page,
       per_page: pageSize,
       state: 'merged',
-      target_branch: 'master',
+      target_branch: repo.resource.default_branch,
     };
     return this.fetchWithRetries(token, url, params);
   }
@@ -392,5 +392,11 @@ export class MergeRequestService extends BaseService<
         await this.storeScore(mergeRequest, weights);
       }),
     );
+  }
+
+  async deleteMergeRequestEntity(
+    merge_request: MergeRequestEntity
+  ){
+    return this.delete(merge_request);
   }
 }

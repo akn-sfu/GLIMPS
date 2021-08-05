@@ -18,6 +18,23 @@ import { useGetWordCount } from '../../api/note';
 import { useRepositoryMembers } from '../../api/repo_members';
 import { ApiResource } from '../../api/base';
 import StudentDropdown from '../../components/StudentDropdown';
+import StatSummary from './Summary/Summary';
+import MemberDropdown from '../MemberDropdown';
+import RepoAndDateAlert from '../RepoAndDateAlert';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      '& > *': {
+        margin: theme.spacing(1),
+      },
+    },
+    memberDropDown: {
+      minWidth: '15rem',
+    },
+  }),
+);
 
 function combineData(
   startDate: string,
@@ -88,6 +105,7 @@ function findRepoMemberId(
 }
 
 const DynamicGraph: React.FC = () => {
+  const classes = useStyles();
   const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const { startDate, endDate, author } = useFilterContext();
   const { repositoryId } = useRepositoryContext();
@@ -140,13 +158,43 @@ const DynamicGraph: React.FC = () => {
     setGraphTab(newTab);
   };
 
+  const totalMrScore = graphData.reduce(
+    (n, { mergeRequestScore }) => n + mergeRequestScore,
+    0,
+  );
+  const totalCommitScore = graphData.reduce(
+    (n, { commitScore }) => n + commitScore,
+    0,
+  );
+  const totalMrCount = graphData.reduce(
+    (n, { mergeRequestCount }) => n + mergeRequestCount,
+    0,
+  );
+  const totalCommitCount = graphData.reduce(
+    (n, { commitCount }) => n + commitCount,
+    0,
+  );
+  const totalIssueWordCount = graphData.reduce(
+    (n, { issueWordCount }) => n + issueWordCount,
+    0,
+  );
+  const totalmergeRequestWordCount = graphData.reduce(
+    (n, { mergeRequestWordCount }) => n + mergeRequestWordCount,
+    0,
+  );
+
   return (
     <>
       <Container>
-        <DefaultPageTitleFormat>Contribution Graph</DefaultPageTitleFormat>
-        <Container maxWidth='md'>
-          <Grid container justify='flex-end' spacing={1}>
-            <Grid item xs={4}>
+        <Box my={2}>
+          <RepoAndDateAlert />
+        </Box>
+        <Grid container justify='space-between' alignItems='center'>
+          <Grid item>
+            <DefaultPageTitleFormat>Contribution Graph</DefaultPageTitleFormat>
+          </Grid>
+          <Grid item>
+            {graphTab != GraphTab.comments ? (
               <Box mb={1}>
                 <StudentDropdown
                   repositoryId={repositoryId}
@@ -155,9 +203,13 @@ const DynamicGraph: React.FC = () => {
                   }}
                 />
               </Box>
-            </Grid>
+            ) : (
+              <Box mb={1} className={classes.memberDropDown}>
+                <MemberDropdown repositoryId={repositoryId} />
+              </Box>
+            )}
           </Grid>
-        </Container>
+        </Grid>
         <Box my={2}>
           <Tabs
             value={graphTab}
@@ -171,9 +223,48 @@ const DynamicGraph: React.FC = () => {
             <Tab label='Comments' value={GraphTab.comments} />
           </Tabs>
         </Box>
-        <Grid justify='center' container>
-          <DynamicBarChart graphData={graphData} graphTab={graphTab} />
-        </Grid>
+        <Container>
+          <Grid container justify='space-between' alignItems='center'>
+            <Grid item>
+              <DynamicBarChart graphData={graphData} graphTab={graphTab} />
+            </Grid>
+            <Grid item justify='flex-start'>
+              <StatSummary
+                statData={[
+                  {
+                    name: 'Merge request score',
+                    value: Math.abs(totalMrScore).toFixed(1),
+                    description:
+                      'Sum of merge request diff scores for mrs for selected date range.',
+                  },
+                  {
+                    name: 'Commit score',
+                    value: totalCommitScore.toFixed(1),
+                    description: 'Sum of commit scores for selected date range',
+                  },
+                  {
+                    name: 'Total Merge request',
+                    value: Math.abs(totalMrCount),
+                    description:
+                      'Number of merge requests made for selected date range',
+                  },
+                  {
+                    name: 'Total commits',
+                    value: totalCommitCount,
+                    description:
+                      'Number of commits made for selected date range',
+                  },
+                  {
+                    name: 'Comments word count',
+                    value: totalIssueWordCount + totalmergeRequestWordCount,
+                    description:
+                      'Sum of words in all comments for selected date range',
+                  },
+                ]}
+              />
+            </Grid>
+          </Grid>
+        </Container>
       </Container>
     </>
   );

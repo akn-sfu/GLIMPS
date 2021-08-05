@@ -22,6 +22,7 @@ import { useScoreOverrideQueue } from '../contexts/ScoreOverrideQueue';
 import { useRepositoryContext } from '../../../contexts/RepositoryContext';
 import { useGetRepository } from '../../../api/repository';
 import { useAuthContext } from '../../../contexts/AuthContext';
+import { useEffect } from 'react';
 
 interface CodeViewProps {
   mergeRequest?: ApiResource<MergeRequest>;
@@ -68,6 +69,13 @@ const CodeView: React.FC<CodeViewProps> = ({ mergeRequest, commit }) => {
     setOpenOverride(false);
     setAnchor(null);
   };
+
+  useEffect(() => {
+    const defaultExpanded = diffs?.results.filter(
+      (diff) => diff?.lines.length < 500,
+    );
+    setExpandedDiffs(defaultExpanded || []);
+  }, [diffs]);
 
   const onSubmitPopper = (values: ScoreOverride) => {
     add({
