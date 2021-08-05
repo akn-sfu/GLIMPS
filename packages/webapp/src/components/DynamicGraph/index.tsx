@@ -8,7 +8,6 @@ import DynamicBarChart from './BarChartComponent';
 import Container from '@material-ui/core/Container';
 import Box from '@material-ui/core/Box';
 import { useRepositoryContext } from '../../contexts/RepositoryContext';
-import { useGetRepository } from '../../api/repository';
 import { useGetCountMergeRequests } from '../../api/mergeRequests';
 import { useGetCountCommits } from '../../api/commit';
 import { Commit, MergeRequest, Note, RepositoryMember } from '@ceres/types';
@@ -19,9 +18,10 @@ import { useGetWordCount } from '../../api/note';
 import { useRepositoryMembers } from '../../api/repo_members';
 import { ApiResource } from '../../api/base';
 import StudentDropdown from '../../components/StudentDropdown';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import StatSummary from './Summary/Summary';
-import Alert from '@material-ui/lab/Alert';
+import MemberDropdown from '../MemberDropdown';
+import RepoAndDateAlert from '../RepoAndDateAlert';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -30,8 +30,8 @@ const useStyles = makeStyles((theme: Theme) =>
         margin: theme.spacing(1),
       },
     },
-    graph: {
-      borderColor: '#9e9e9e',
+    memberDropDown: {
+      minWidth: '15rem',
     },
   }),
 );
@@ -109,7 +109,6 @@ const DynamicGraph: React.FC = () => {
   const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const { startDate, endDate, author } = useFilterContext();
   const { repositoryId } = useRepositoryContext();
-  const { data } = useGetRepository(repositoryId);
   const { data: members } = useRepositoryMembers(repositoryId);
   const authorIds = findRepoMemberId(author, members);
   const [emails, setEmails] = useState<string[]>([]);
@@ -188,25 +187,27 @@ const DynamicGraph: React.FC = () => {
     <>
       <Container>
         <Box my={2}>
-          <Alert severity='info'>
-            {data?.name}
-            {' > '}
-            {startDate.split('T')[0]} to {endDate.split('T')[0]}
-          </Alert>
+          <RepoAndDateAlert />
         </Box>
         <Grid container justify='space-between' alignItems='center'>
           <Grid item>
             <DefaultPageTitleFormat>Contribution Graph</DefaultPageTitleFormat>
           </Grid>
           <Grid item>
-            <Box mb={1} paddingRight={6}>
-              <StudentDropdown
-                repositoryId={repositoryId}
-                onChange={(newEmails) => {
-                  setEmails(newEmails);
-                }}
-              />
-            </Box>
+            {graphTab != GraphTab.comments ? (
+              <Box mb={1}>
+                <StudentDropdown
+                  repositoryId={repositoryId}
+                  onChange={(newEmails) => {
+                    setEmails(newEmails);
+                  }}
+                />
+              </Box>
+            ) : (
+              <Box mb={1} className={classes.memberDropDown}>
+                <MemberDropdown repositoryId={repositoryId} />
+              </Box>
+            )}
           </Grid>
         </Grid>
         <Box my={2}>
@@ -223,12 +224,7 @@ const DynamicGraph: React.FC = () => {
           </Tabs>
         </Box>
         <Container>
-          <Grid
-            container
-            justify='space-between'
-            alignItems='center'
-            className={classes.graph}
-          >
+          <Grid container justify='space-between' alignItems='center'>
             <Grid item>
               <DynamicBarChart graphData={graphData} graphTab={graphTab} />
             </Grid>

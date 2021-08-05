@@ -13,6 +13,7 @@ import { BaseExecutor } from './base.executor';
 import { IssueService } from '../../gitlab/repository/issue/issue.service';
 
 enum Stage {
+  sync = 'sync',
   syncCommits = 'syncCommits',
   syncMergeRequests = 'syncMergeRequests',
   syncIssues = 'syncIssues',
@@ -34,6 +35,7 @@ export class SyncRepositoryExecutor extends BaseExecutor<Stage> {
     private readonly repositoryMemberService: RepositoryMemberService,
   ) {
     super(operation, operationRepository);
+    this.addStage(Stage.sync, 'Starting sync');
     this.addStage(Stage.syncCommits, 'Sync Commits');
     this.addStage(Stage.syncMergeRequests, 'Sync Merge Requests');
     this.addStage(Stage.syncIssues, 'Sync Issues');
@@ -49,13 +51,26 @@ export class SyncRepositoryExecutor extends BaseExecutor<Stage> {
   private members: RepositoryMember[] = [];
 
   async run() {
-    await this.init();
+    await this.startStage(Stage.sync);
+    try{
+      await this.init();
     await Promise.all([
       this.syncResource(Stage.syncCommits, this.commitService),
       this.syncResource(Stage.syncMergeRequests, this.mergeRequestService),
       this.syncResource(Stage.syncIssues, this.issueService),
     ]);
     await Promise.all([this.linkCommitsAndMergeRequests(), this.linkAuthors()]);
+    }catch(err){
+      console.error(err);
+      await this.terminateStage(Stage.sync);
+      await this.terminateStage(Stage.syncCommits);
+      await this.terminateStage(Stage.syncMergeRequests);
+      await this.terminateStage(Stage.syncIssues);
+      await this.terminateStage(Stage.linkCommitsAndMergeRequests);
+      await this.terminateStage(Stage.linkAuthors);
+      return;
+    }
+    await this.completeStage(Stage.sync);
   }
 
   private async init() {

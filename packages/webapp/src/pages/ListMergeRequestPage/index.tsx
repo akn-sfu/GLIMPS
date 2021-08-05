@@ -13,15 +13,14 @@ import CommitList from './components/CommitList';
 import CommitOrMergeRequestRenderer from './components/CommitOrMergeRequestRenderer';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
-import Alert from '@material-ui/lab/Alert';
 import DefaultPageTitleFormat from '../../components/DefaultPageTitleFormat';
 import styled from 'styled-components';
 import { useFilterContext } from '../../contexts/FilterContext';
-import { useGetRepository } from '../../api/repository';
 import { ScoreOverrideQueueProvider } from './contexts/ScoreOverrideQueue';
 import ScoreOverrideQueueInfo from './components/ScoreOverrideQueueInfo';
 import { useInfiniteCommit } from '../../api/commit';
 import { DateTime } from 'luxon';
+import RepoAndDateAlert from '../../components/RepoAndDateAlert';
 import StudentDropdown from '../../components/StudentDropdown';
 
 const IndependentScrollGrid = styled(Grid)`
@@ -88,7 +87,6 @@ const RegularTableHeaders: React.FC = () => {
 
 const ListMergeRequestPage = () => {
   const { id } = useParams<{ id: string }>();
-  const { data } = useGetRepository(id);
   const { startDate, endDate } = useFilterContext();
   const [emails, setEmails] = useState<string[]>([]);
   const [activeMergeRequest, setActiveMergeRequest] = useState<
@@ -164,11 +162,7 @@ const ListMergeRequestPage = () => {
               <Container>
                 <ScoreOverrideQueueInfo />
                 <Box my={2}>
-                  <Alert severity='info'>
-                    {data?.name}
-                    {' > '}
-                    {startDate.split('T')[0]} to {endDate.split('T')[0]}
-                  </Alert>
+                  <RepoAndDateAlert />
                 </Box>
                 <Box my={2}>
                   <DefaultPageTitleFormat>

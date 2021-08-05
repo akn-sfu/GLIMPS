@@ -4,7 +4,7 @@ import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { useGetNotesByRepository, useGetTotalNotes } from '../../api/note';
 import NotePaper from './NotePaper';
 import { useRepositoryContext } from '../../contexts/RepositoryContext';
@@ -14,15 +14,14 @@ import { RepositoryMember } from '@ceres/types';
 import { useRepositoryMembers } from '../../api/repo_members';
 import DifferentiatingIcon from './DifferentiatingIcon';
 import { Typography } from '@material-ui/core';
-import Alert from '@material-ui/lab/Alert';
-import { useGetRepository } from '../../api/repository';
 import AlternatePageTitleFormat from '../AlternatePageTitleFormat';
 import { Pagination } from '@material-ui/lab';
 import MemberDropdown from '../MemberDropdown';
 import ItemPerPageDropdown from './ItemPerPageDropdown';
 import { Note } from '@ceres/types';
+import RepoAndDateAlert from '../RepoAndDateAlert';
 
-const useStyles = makeStyles(() =>
+const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       display: 'flex',
@@ -59,6 +58,10 @@ const useStyles = makeStyles(() =>
       display: 'flex',
       justifyContent: 'center',
     },
+    formControl: {
+      margin: theme.spacing(1),
+      minWidth: 200,
+    },
   }),
 );
 
@@ -85,7 +88,6 @@ const CommentList: React.FC = () => {
   const [page, setPage] = useState(0);
   const { startDate, endDate, author } = useFilterContext();
   const { repositoryId } = useRepositoryContext();
-  const { data } = useGetRepository(repositoryId);
   const { data: members } = useRepositoryMembers(repositoryId);
   const authorIds = findRepoMemberId(author, members);
   const { data: allNotes } = useGetNotesByRepository(
@@ -137,17 +139,15 @@ const CommentList: React.FC = () => {
     <>
       <Container>
         <Box my={2}>
-          <Alert severity='info'>
-            {data?.name}
-            {' > '}
-            {startDate.split('T')[0]} to {endDate.split('T')[0]}
-          </Alert>
+          <RepoAndDateAlert />
         </Box>
         <AlternatePageTitleFormat>
           <Typography variant='h1' color='primary'>
             Comments
           </Typography>
-          <MemberDropdown repositoryId={repositoryId} />
+          <Box className={classes.formControl}>
+            <MemberDropdown repositoryId={repositoryId} />
+          </Box>
         </AlternatePageTitleFormat>
         <Box my={1} className={classes.root}>
           <Grid container justify='space-between'>
