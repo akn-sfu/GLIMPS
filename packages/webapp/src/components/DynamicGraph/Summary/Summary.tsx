@@ -54,16 +54,32 @@ const StatSummary: React.FC<IStatSummaryProps> = ({ statData }) => {
     timeoutRef.current = setTimeout(() => setCopyMessage('Copy stats'), 5000);
   };
 
+  //an uppercase occupied 3 space but a lowercase occupied 2 space(eg: in google sheet),
+  //which is different from in VScode format
+  const countSpecialSpace = (str: string) => {
+    const upperCaseWords = str.replace(/[^A-Z]/g, '')?.length;
+    const lowerCaseWords = str.replace(/[^a-z]/g, '')?.length;
+    const sharpWords = str.includes('#') == true ? 1 : 0;
+    console.log(str);
+    console.log(upperCaseWords);
+    console.log(lowerCaseWords);
+    console.log(sharpWords);
+    return lowerCaseWords + 2 * upperCaseWords + sharpWords;
+  };
+
   useEffect(() => {
     setCsvString(
       [
         ...statData.map((stat) => [
           //Pad the strings with spaces to be the same length
-          stat.name + new Array(15 - stat.name.length + 4).join(' '),
+          stat.name +
+            new Array(
+              26 - stat.name.length + 1 - countSpecialSpace(stat.name) + 4,
+            ).join(' '),
           stat.rawValue ?? stat.value,
         ]),
       ]
-        .map((row) => row.join('\t'))
+        .map((row) => row.join(''))
         .join('\n'),
     );
   }, [statData]);
