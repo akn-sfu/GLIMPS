@@ -30,7 +30,7 @@ export function useGetCountCommits(params: CommitSearchParams) {
 export function useGetCommits(
   params: CommitSearchParams,
   page?: number,
-  pageSize?: number,
+  pageSize = 100,
 ) {
   return usePaginatedQuery<Commit>(`/commit`, params, page, pageSize);
 }
