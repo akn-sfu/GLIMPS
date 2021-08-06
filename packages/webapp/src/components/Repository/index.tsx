@@ -5,6 +5,7 @@ import {
   useFetchRepositories,
   useGetOperations,
   useSyncRepository,
+  useDeleteRepository,
 } from '../../api/operation';
 import { useRepository } from '../../api/repository';
 import { useAuthContext } from '../../contexts/AuthContext';
@@ -70,11 +71,19 @@ const RepositoryList: React.FC = () => {
   });
 
   const { sync } = useSyncRepository();
+  const { delete2 } = useDeleteRepository();
   const { fetch } = useFetchRepositories();
   const isFetchingRepositories = pendingFetches?.total > 0;
   const isSyncingRepositories = operationsData?.total > 0;
   const syncRepository = (id: string) => {
     sync(id, {
+      onSuccess: () => {
+        void invalidateOperations();
+      },
+    });
+  };
+  const deleteRepository = (id: string) => {
+    delete2(id, {
       onSuccess: () => {
         void invalidateOperations();
       },
@@ -188,6 +197,7 @@ const RepositoryList: React.FC = () => {
               isShared={user?.id !== repo?.extensions?.owner?.id}
               isSyncing={isSyncing}
               syncRepository={syncRepository}
+              deleteRepository={deleteRepository}
               key={repo.meta.id}
             />
           );
