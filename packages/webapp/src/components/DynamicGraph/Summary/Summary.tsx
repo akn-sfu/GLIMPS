@@ -38,21 +38,27 @@ const tooltipTheme = createMuiTheme({
 
 const StatSummary: React.FC<IStatSummaryProps> = ({ statData }) => {
   const classes = useStyles();
-  const [copyMessage, setCopyMessage] = useState('Copy stats');
+  const [copyMessage, setCopyMessage] = useState('Copy stats (Font: Arial)');
   const [csvString, setCsvString] = useState('');
   const timeoutRef = useRef<NodeJS.Timeout>();
   const copyNodeRef = useRef<HTMLTextAreaElement>(null);
   const clipboardCopyFallback = () => {
     if (!copyNodeRef.current) {
       setCopyMessage('Failed to copy');
-      timeoutRef.current = setTimeout(() => setCopyMessage('Copy stats'), 5000);
+      timeoutRef.current = setTimeout(
+        () => setCopyMessage('Copy stats (Font: Arial)'),
+        5000,
+      );
       return;
     }
     copyNodeRef.current.value = csvString;
     copyNodeRef.current.select();
     document.execCommand('copy');
     setCopyMessage('Copied!');
-    timeoutRef.current = setTimeout(() => setCopyMessage('Copy stats'), 5000);
+    timeoutRef.current = setTimeout(
+      () => setCopyMessage('Copy stats (Font: Arial)'),
+      5000,
+    );
   };
 
   //Calculate the pixel width of the string since characters show different pixel width on google sheet
@@ -61,7 +67,7 @@ const StatSummary: React.FC<IStatSummaryProps> = ({ statData }) => {
       return 0;
     }
     const avg = 0.5279276315789471;
-    //pixel width for one space since we need add a "tab(4 spaces)" between them
+    //pixel width for one space since we need a "tab(4 spaces)" between them
     const aSpacePxWidth = 2.796875;
     let totalLen =
       string
@@ -94,7 +100,7 @@ const StatSummary: React.FC<IStatSummaryProps> = ({ statData }) => {
       .then(() => {
         setCopyMessage('Copied!');
         timeoutRef.current = setTimeout(
-          () => setCopyMessage('Copy stats'),
+          () => setCopyMessage('Copy stats (Font: Arial)'),
           5000,
         );
       })
