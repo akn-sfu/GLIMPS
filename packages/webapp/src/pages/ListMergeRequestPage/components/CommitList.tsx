@@ -29,9 +29,13 @@ const CommitList: React.FC<CommitListProps> = ({
   setActiveCommit,
   authorEmails,
 }) => {
-  const { data: commits } = useGetCommits({
-    merge_request: mergeRequest.meta.id,
-  });
+  const { data: commits } = useGetCommits(
+    {
+      merge_request: mergeRequest.meta.id,
+    },
+    0,
+    100,
+  );
   return (
     <>
       <Box pr={3}>
