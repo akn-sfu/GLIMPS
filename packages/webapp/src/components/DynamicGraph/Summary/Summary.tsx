@@ -4,6 +4,7 @@ import Stat, { IStatProps } from '../Summary/Stats';
 import { createMuiTheme } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import clipboard from '../../../assets/clipboard.svg';
+import widths from '../Summary/PixelWidthArray';
 const useStyles = makeStyles(() =>
   createStyles({
     container: {
@@ -56,15 +57,22 @@ const StatSummary: React.FC<IStatSummaryProps> = ({ statData }) => {
 
   //an uppercase occupied 3 space but a lowercase occupied 2 space(eg: in google sheet),
   //which is different from in VScode format
-  const countSpecialSpace = (str: string) => {
-    const upperCaseWords = str.replace(/[^A-Z]/g, '')?.length;
-    const lowerCaseWords = str.replace(/[^a-z]/g, '')?.length;
-    const sharpWords = str.includes('#') == true ? 1 : 0;
-    console.log(str);
-    console.log(upperCaseWords);
-    console.log(lowerCaseWords);
-    console.log(sharpWords);
-    return lowerCaseWords + 2 * upperCaseWords + sharpWords;
+  const measureText = (string: string, fontSize = 10) => {
+    if (string == null) {
+      return 0;
+    }
+    const avg = 0.5279276315789471;
+    const totalLen =
+      string
+        .split('')
+        .map((c) =>
+          c.charCodeAt(0) < widths.length ? widths[c.charCodeAt(0)] : avg,
+        )
+        .reduce((cur, acc) => acc + cur) * fontSize;
+    console.log(string);
+    console.log(totalLen);
+
+    return totalLen.toFixed(0);
   };
 
   useEffect(() => {
@@ -72,10 +80,7 @@ const StatSummary: React.FC<IStatSummaryProps> = ({ statData }) => {
       [
         ...statData.map((stat) => [
           //Pad the strings with spaces to be the same length
-          stat.name +
-            new Array(
-              26 - stat.name.length + 1 - countSpecialSpace(stat.name) + 4,
-            ).join(' '),
+          stat.name + new Array(measureText(stat.name)).join(' '),
           stat.rawValue ?? stat.value,
         ]),
       ]
