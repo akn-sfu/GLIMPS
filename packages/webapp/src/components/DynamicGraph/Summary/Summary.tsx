@@ -55,24 +55,23 @@ const StatSummary: React.FC<IStatSummaryProps> = ({ statData }) => {
     timeoutRef.current = setTimeout(() => setCopyMessage('Copy stats'), 5000);
   };
 
-  //an uppercase occupied 3 space but a lowercase occupied 2 space(eg: in google sheet),
-  //which is different from in VScode format
+  //Calculate the pixel width of the string since characters show different pixel width on google sheet
   const measureText = (string: string, fontSize = 10) => {
     if (string == null) {
       return 0;
     }
     const avg = 0.5279276315789471;
-    const totalLen =
+    //pixel width for one space since we need add a "tab(4 spaces)" between them
+    const aSpacePxWidth = 2.796875;
+    let totalLen =
       string
         .split('')
         .map((c) =>
           c.charCodeAt(0) < widths.length ? widths[c.charCodeAt(0)] : avg,
         )
         .reduce((cur, acc) => acc + cur) * fontSize;
-    console.log(string);
-    console.log(totalLen);
-
-    return totalLen.toFixed(0);
+    totalLen /= aSpacePxWidth;
+    return Math.floor(totalLen);
   };
 
   useEffect(() => {
@@ -80,7 +79,7 @@ const StatSummary: React.FC<IStatSummaryProps> = ({ statData }) => {
       [
         ...statData.map((stat) => [
           //Pad the strings with spaces to be the same length
-          stat.name + new Array(measureText(stat.name)).join(' '),
+          stat.name + new Array(26 - measureText(stat.name) + 5).join(' '),
           stat.rawValue ?? stat.value,
         ]),
       ]

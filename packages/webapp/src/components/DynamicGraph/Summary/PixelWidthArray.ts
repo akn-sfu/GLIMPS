@@ -1,3 +1,7 @@
+//Pixel width for characters
+//Obviously assumes no kerning, no ligatures, no wrapping, etc.
+//Only supports ASCII; otherwise it assumes a default average character width.
+//It's also missing a lot of weird thin spaces and such.
 const widths = [
   0,
   0,
