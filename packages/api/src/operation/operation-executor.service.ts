@@ -9,6 +9,7 @@ import { RepositoryService } from '../gitlab/repository/repository.service';
 import { GitlabTokenService } from '../gitlab/services/gitlab-token.service';
 import { FetchRepositoriesExecutor } from './executor/fetch-repositories.executor';
 import { SyncRepositoryExecutor } from './executor/sync-repository.executor';
+import { DeleteRepositoryExecutor } from './executor/delete-repository.executor';
 import { Operation as OperationEntity } from './operation.entity';
 import { Injectable } from '@nestjs/common';
 import { IssueService } from '../gitlab/repository/issue/issue.service';
@@ -39,6 +40,9 @@ export class OperationExecutorService {
         break;
       case Operation.Type.FETCH_REPOSITORIES:
         await this.executeFetchRepositoriesOperation(operation);
+        break;
+      case Operation.Type.DELETE_REPOSITORY:
+        await this.executeDeleteRepositoryOperation(operation);
         break;
     }
     operation.resource = OperationExecutorService.completeOperation(
@@ -76,6 +80,16 @@ export class OperationExecutorService {
 
   private executeFetchRepositoriesOperation(operation: OperationEntity) {
     const executor = new FetchRepositoriesExecutor(
+      operation,
+      this.operationRepository,
+      this.tokenService,
+      this.repositoryService,
+    );
+    return executor.run();
+  }
+
+  private executeDeleteRepositoryOperation(operation: OperationEntity) {
+    const executor = new DeleteRepositoryExecutor(
       operation,
       this.operationRepository,
       this.tokenService,
