@@ -64,7 +64,7 @@ const RepositoryList: React.FC = () => {
     data: operationsData,
     invalidate: invalidateOperations,
   } = useGetOperations({
-    status: [Operation.Status.PROCESSING, Operation.Status.PENDING],
+    status: [Operation.Status.PROCESSING, Operation.Status.TERMINATED],
     type: [Operation.Type.SYNC_REPOSITORY],
   });
   const {
