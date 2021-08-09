@@ -60,7 +60,7 @@ const RepositoryList: React.FC = () => {
     invalidate: invalidateOperations,
   } = useGetOperations({
     status: [Operation.Status.PROCESSING, Operation.Status.PENDING],
-    type: [Operation.Type.SYNC_REPOSITORY],
+    type: [Operation.Type.SYNC_REPOSITORY, Operation.Type.DELETE_REPOSITORY],
   });
   const {
     data: pendingFetches,
