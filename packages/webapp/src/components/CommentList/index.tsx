@@ -13,9 +13,9 @@ import { ApiResource } from '../../api/base';
 import { RepositoryMember } from '@ceres/types';
 import { useRepositoryMembers } from '../../api/repo_members';
 import DifferentiatingIcon from './DifferentiatingIcon';
-import { Typography } from '@material-ui/core';
+import { Collapse, Typography } from '@material-ui/core';
 import AlternatePageTitleFormat from '../AlternatePageTitleFormat';
-import { Pagination } from '@material-ui/lab';
+import { Alert, Pagination } from '@material-ui/lab';
 import MemberDropdown from '../MemberDropdown';
 import ItemPerPageDropdown from './ItemPerPageDropdown';
 import { Note } from '@ceres/types';
@@ -61,6 +61,9 @@ const useStyles = makeStyles((theme: Theme) =>
     formControl: {
       margin: theme.spacing(1),
       minWidth: 200,
+    },
+    alert: {
+      marginTop: 5,
     },
   }),
 );
@@ -118,6 +121,7 @@ const CommentList: React.FC = () => {
     (comment) => comment.noteable_type == 'Issue',
   );
 
+  const [alertOpen, setOpen] = useState(true);
   const [tab, setTab] = useState(TabOption.codeReview);
   const notes =
     tab === TabOption.codeReview ? mergeRequestNotes || [] : issueNotes || [];
@@ -140,6 +144,15 @@ const CommentList: React.FC = () => {
       <Container>
         <Box my={2}>
           <RepoAndDateAlert />
+          <Collapse in={alertOpen}>
+            <Alert
+              className={classes.alert}
+              severity='info'
+              onClose={() => setOpen(!alertOpen)}
+            >
+              Comments are only shown for users in the repository
+            </Alert>
+          </Collapse>
         </Box>
         <AlternatePageTitleFormat>
           <Typography variant='h1' color='primary'>
