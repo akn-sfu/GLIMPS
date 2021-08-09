@@ -101,7 +101,7 @@ const CommentList: React.FC = () => {
     page,
     itemsPerPage,
   );
-
+  console.log(allNotes);
   const { data: totalNotes } = useGetTotalNotes({
     repository_id: repositoryId,
     created_start_date: startDate,
