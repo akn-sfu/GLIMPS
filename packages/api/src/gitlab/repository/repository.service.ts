@@ -215,4 +215,10 @@ export class RepositoryService extends BaseService<
     });
     return this.update(repository);
   }
+
+  async deleteRepositoryEntity(
+    repo: RepositoryEntity
+  ){
+    return this.delete(repo);
+  }
 }

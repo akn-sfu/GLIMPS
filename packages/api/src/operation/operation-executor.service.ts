@@ -92,7 +92,6 @@ export class OperationExecutorService {
     const executor = new DeleteRepositoryExecutor(
       operation,
       this.operationRepository,
-      this.tokenService,
       this.repositoryService,
     );
     return executor.run();
