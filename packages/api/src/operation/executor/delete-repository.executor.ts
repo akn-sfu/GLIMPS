@@ -29,6 +29,7 @@ export class DeleteRepositoryExecutor extends BaseExecutor<Stage> {
     } catch(err){
       console.error(err);
       await this.terminateStage(Stage.deleteRepo);
+      return;
     }
     await this.completeStage(Stage.deleteRepo);
   }
