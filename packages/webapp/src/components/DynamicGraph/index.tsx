@@ -232,7 +232,7 @@ const DynamicGraph: React.FC = () => {
               <StatSummary
                 statData={[
                   {
-                    name: 'Merge request score',
+                    name: 'MR score',
                     value: Math.abs(totalMrScore).toFixed(1),
                     description:
                       'Sum of merge request diff scores for mrs for selected date range.',
@@ -243,19 +243,19 @@ const DynamicGraph: React.FC = () => {
                     description: 'Sum of commit scores for selected date range',
                   },
                   {
-                    name: 'Total Merge request',
+                    name: '# Merge request',
                     value: Math.abs(totalMrCount),
                     description:
                       'Number of merge requests made for selected date range',
                   },
                   {
-                    name: 'Total commits',
+                    name: '# Commits',
                     value: totalCommitCount,
                     description:
                       'Number of commits made for selected date range',
                   },
                   {
-                    name: 'Comments word count',
+                    name: 'Comment words',
                     value: totalIssueWordCount + totalmergeRequestWordCount,
                     description:
                       'Sum of words in all comments for selected date range',

@@ -4,6 +4,7 @@ import Stat, { IStatProps } from '../Summary/Stats';
 import { createMuiTheme } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import clipboard from '../../../assets/clipboard.svg';
+import widths from '../Summary/PixelWidthArray';
 const useStyles = makeStyles(() =>
   createStyles({
     container: {
@@ -37,30 +38,58 @@ const tooltipTheme = createMuiTheme({
 
 const StatSummary: React.FC<IStatSummaryProps> = ({ statData }) => {
   const classes = useStyles();
-  const [copyMessage, setCopyMessage] = useState('Copy stats');
+  const [copyMessage, setCopyMessage] = useState('Copy stats (Font: Arial)');
   const [csvString, setCsvString] = useState('');
   const timeoutRef = useRef<NodeJS.Timeout>();
   const copyNodeRef = useRef<HTMLTextAreaElement>(null);
   const clipboardCopyFallback = () => {
     if (!copyNodeRef.current) {
       setCopyMessage('Failed to copy');
-      timeoutRef.current = setTimeout(() => setCopyMessage('Copy stats'), 5000);
+      timeoutRef.current = setTimeout(
+        () => setCopyMessage('Copy stats (Font: Arial)'),
+        5000,
+      );
       return;
     }
     copyNodeRef.current.value = csvString;
     copyNodeRef.current.select();
     document.execCommand('copy');
     setCopyMessage('Copied!');
-    timeoutRef.current = setTimeout(() => setCopyMessage('Copy stats'), 5000);
+    timeoutRef.current = setTimeout(
+      () => setCopyMessage('Copy stats (Font: Arial)'),
+      5000,
+    );
+  };
+
+  //Calculate the pixel width of the string since characters show different pixel width on google sheet
+  const measureText = (string: string, fontSize = 10) => {
+    if (string == null) {
+      return 0;
+    }
+    const avg = 0.5279276315789471;
+    //pixel width for one space since we need a "tab(4 spaces)" between them
+    const aSpacePxWidth = 2.796875;
+    let totalLen =
+      string
+        .split('')
+        .map((c) =>
+          c.charCodeAt(0) < widths.length ? widths[c.charCodeAt(0)] : avg,
+        )
+        .reduce((cur, acc) => acc + cur) * fontSize;
+    totalLen /= aSpacePxWidth;
+    return Math.floor(totalLen);
   };
 
   useEffect(() => {
     setCsvString(
       [
-        ['Stat', 'Value'],
-        ...statData.map((stat) => [stat.name, stat.rawValue ?? stat.value]),
+        ...statData.map((stat) => [
+          //Pad the strings with spaces to be the same length
+          stat.name + new Array(26 - measureText(stat.name) + 5).join(' '),
+          stat.rawValue ?? stat.value,
+        ]),
       ]
-        .map((row) => row.join('\t'))
+        .map((row) => row.join(''))
         .join('\n'),
     );
   }, [statData]);
@@ -71,7 +100,7 @@ const StatSummary: React.FC<IStatSummaryProps> = ({ statData }) => {
       .then(() => {
         setCopyMessage('Copied!');
         timeoutRef.current = setTimeout(
-          () => setCopyMessage('Copy stats'),
+          () => setCopyMessage('Copy stats (Font: Arial)'),
           5000,
         );
       })
