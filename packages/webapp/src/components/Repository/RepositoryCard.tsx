@@ -18,10 +18,11 @@ interface RepositoryCardProps {
   isShared: boolean;
   isSyncing: boolean;
   syncRepository: (id: string) => void;
+  deleteRepository: (id: string) => void;
 }
 
 const SyncButton = (props: { syncing: boolean; onClick: () => void }) => (
-  <Box position='absolute' right='4rem' top='3rem'>
+  <Box position='absolute' right='10rem' top='3rem'>
     {!props.syncing && (
       <Button
         variant='contained'
@@ -30,6 +31,20 @@ const SyncButton = (props: { syncing: boolean; onClick: () => void }) => (
         onClick={props.onClick}
       >
         Sync
+      </Button>
+    )}
+  </Box>
+);
+const DeleteButton = (props: { syncing: boolean; onClick: () => void }) => (
+  <Box position='absolute' right='4rem' top='3rem'>
+    {!props.syncing && (
+      <Button
+        variant='contained'
+        color='secondary'
+        disabled={props.syncing}
+        onClick={props.onClick}
+      >
+        Delete
       </Button>
     )}
   </Box>
@@ -53,6 +68,7 @@ const RepositoryCard: React.FC<RepositoryCardProps> = ({
   isShared,
   isSyncing,
   syncRepository,
+  deleteRepository,
 }) => {
   const { setRepositoryId } = useRepositoryContext();
   const hasBeenSynced = !!repository?.extensions?.lastSync;
@@ -125,6 +141,12 @@ const RepositoryCard: React.FC<RepositoryCardProps> = ({
         <SyncButton
           syncing={isSyncing}
           onClick={() => syncRepository(repository.meta.id)}
+        />
+      )}
+      {!isShared && (
+        <DeleteButton
+          syncing={isSyncing}
+          onClick={() => deleteRepository(repository.meta.id)}
         />
       )}
       {isSyncing && (
