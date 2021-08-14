@@ -30,17 +30,16 @@ const CommitList: React.FC<CommitListProps> = ({
   setActiveCommit,
   authorEmails,
 }) => {
-  // const { data: commits } = useGetCommits({
-  //   merge_request: mergeRequest.meta.id,
-  // });
-
   const {
     data: infCommits,
     fetchNextPage: fetchNextPageCommit,
     hasNextPage: hasNextPageCommit,
-  } = useInfiniteCommit({
-    merge_request: mergeRequest.meta.id,
-  });
+  } = useInfiniteCommit(
+    {
+      merge_request: mergeRequest.meta.id,
+    },
+    10,
+  );
 
   const reducedCommits =
     infCommits?.pages.reduce(
