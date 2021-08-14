@@ -5,10 +5,11 @@ import Typography from '@material-ui/core/Typography';
 import React from 'react';
 import styled from 'styled-components';
 import { ApiResource } from '../../../api/base';
-import { useGetCommits } from '../../../api/commit';
+import { useInfiniteCommit } from '../../../api/commit';
 import ScoringChip from '../../../components/ScoringChip';
 import SmartDate from '../../../components/SmartDate';
 import OverridePopper from '../../../components/OverridePopper';
+import { Button } from '@material-ui/core';
 
 interface CommitListProps {
   mergeRequest: ApiResource<MergeRequest>;
@@ -29,15 +30,30 @@ const CommitList: React.FC<CommitListProps> = ({
   setActiveCommit,
   authorEmails,
 }) => {
-  const { data: commits } = useGetCommits({
+  // const { data: commits } = useGetCommits({
+  //   merge_request: mergeRequest.meta.id,
+  // });
+
+  const {
+    data: infCommits,
+    fetchNextPage: fetchNextPageCommit,
+    hasNextPage: hasNextPageCommit,
+  } = useInfiniteCommit({
     merge_request: mergeRequest.meta.id,
   });
+
+  const reducedCommits =
+    infCommits?.pages.reduce(
+      (accumulated, current) => [...accumulated, ...current.results],
+      [],
+    ) || [];
+
   return (
     <>
       <Box pr={3}>
         <Typography align='right'>Commit Score</Typography>
       </Box>
-      {(commits?.results || []).map((commit) => {
+      {(reducedCommits || []).map((commit) => {
         const isActive =
           authorEmails.length === 0 ||
           authorEmails.includes(commit.author_email);
@@ -98,6 +114,19 @@ const CommitList: React.FC<CommitListProps> = ({
           </Root>
         );
       })}
+      <Box display='flex' justifyContent='right'>
+        {hasNextPageCommit && (
+          <Button
+            variant='contained'
+            color='primary'
+            onClick={() => {
+              void fetchNextPageCommit();
+            }}
+          >
+            Load More
+          </Button>
+        )}
+      </Box>
     </>
   );
 };
