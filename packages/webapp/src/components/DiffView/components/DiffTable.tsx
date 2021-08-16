@@ -58,7 +58,6 @@ const getColors = (
   if (operation == FileType.Removed) {
     lineColor.left = LINE_COLOR_MAP[Line.Type.delete];
   }
-
   return lineColor;
 };
 
