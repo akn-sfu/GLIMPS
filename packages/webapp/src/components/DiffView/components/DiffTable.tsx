@@ -10,6 +10,7 @@ import { Line, LINE_SCORING } from '@ceres/types';
 import Color from 'color';
 import { useState } from 'react';
 import Tooltip from '@material-ui/core/Tooltip';
+import { FileType } from '../utils/utils';
 
 import highlight from 'highlight.js';
 import '../utils/github.css';
@@ -25,7 +26,10 @@ const LINE_COLOR_MAP = {
   [Line.Type.blank]: '#fff',
 };
 
-const getColors = (line: { left: string; right: string; type: string }) => {
+const getColors = (
+  line: { left: string; right: string; type: string },
+  operation,
+) => {
   const lineColor = {
     left: LINE_COLOR_MAP[Line.Type.blank],
     right: LINE_COLOR_MAP[Line.Type.blank],
@@ -48,10 +52,17 @@ const getColors = (line: { left: string; right: string; type: string }) => {
     lineColor.left = LINE_COLOR_MAP[Line.Type.syntaxChange];
     lineColor.right = LINE_COLOR_MAP[Line.Type.syntaxChange];
   }
+  if (operation == FileType.New) {
+    lineColor.right = LINE_COLOR_MAP[Line.Type.add];
+  }
+  if (operation == FileType.Removed) {
+    lineColor.left = LINE_COLOR_MAP[Line.Type.delete];
+  }
+
   return lineColor;
 };
 
-const DiffTable = ({ lines, weight, fileType }) => {
+const DiffTable = ({ lines, weight, fileType, operation }) => {
   const classes = useStyles();
   const [refs, setRefs] = useState([]);
   useEffect(() => {
@@ -75,7 +86,7 @@ const DiffTable = ({ lines, weight, fileType }) => {
       <Table className={classes.table} aria-label='diff view table'>
         <TableBody>
           {lines.map((line, index) => {
-            const color = getColors(line);
+            const color = getColors(line, operation);
             const tooltip = `${line.type}: ${
               LINE_SCORING[line.type]
             } × ${weight}`;

@@ -199,6 +199,7 @@ const DiffView: React.FC<DiffViewProps> = ({
               lines={lines}
               fileType={fileType}
               weight={extensions?.weight || 0}
+              operation={fileOperation}
             />
           </Root>
         </AccordionDetails>
