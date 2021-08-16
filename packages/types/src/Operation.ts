@@ -18,6 +18,7 @@ export namespace Operation {
   export enum Type {
     FETCH_REPOSITORIES = 'fetch-repositories',
     SYNC_REPOSITORY = 'sync-repository',
+    DELETE_REPOSITORY = 'delete-repository',
   }
 
   export enum Status {
@@ -42,6 +43,15 @@ export namespace Operation {
   export function buildSyncRepositoryPayload(repositoryId: string) {
     return {
       type: Operation.Type.SYNC_REPOSITORY,
+      input: {
+        repository_id: repositoryId,
+      }
+    }
+  }
+
+  export function buildDeleteRepositoryPayload(repositoryId: string) {
+    return {
+      type: Operation.Type.DELETE_REPOSITORY,
       input: {
         repository_id: repositoryId,
       }
