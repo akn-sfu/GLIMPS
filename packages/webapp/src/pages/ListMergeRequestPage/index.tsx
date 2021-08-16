@@ -134,7 +134,6 @@ const ListMergeRequestPage = () => {
       (accumulated, current) => [...accumulated, ...current.results],
       [],
     ) || [];
-
   const commitsAndMergeRequests = reducedCommits.concat(reducedMergeRequests);
 
   commitsAndMergeRequests.sort((a, b) => {
