@@ -28,11 +28,11 @@ export class NoteController {
         'merge request or issue or repository id must be provided',
       );
     }
-    return paginatedToResponse(this.noteService.search(query));
+    return paginatedToResponse(this.noteService.search({...query, sort:"+updated_at"}));
   }
 
-  @Get("total")
-  totalNotes(@Query() query: NoteQueryDto){
+  @Get('total')
+  totalNotes(@Query() query: NoteQueryDto) {
     return this.noteService.getTotalCounts(query);
   }
 
