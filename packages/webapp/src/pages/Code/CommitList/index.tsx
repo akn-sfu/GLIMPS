@@ -6,7 +6,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { ApiResource } from '../../../api/base';
 import { useInfiniteCommit } from '../../../api/commit';
-import ScoringChip from '../../../components/ScoringChip';
+import ScoringChip from '../ScoringChip';
 import SmartDate from '../../../components/SmartDate';
 import OverridePopper from '../../../components/OverridePopper';
 import { Button } from '@material-ui/core';

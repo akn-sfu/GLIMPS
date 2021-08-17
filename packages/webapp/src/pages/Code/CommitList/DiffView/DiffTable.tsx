@@ -10,10 +10,9 @@ import { Line, LINE_SCORING } from '@ceres/types';
 import Color from 'color';
 import { useState } from 'react';
 import Tooltip from '@material-ui/core/Tooltip';
-import { FileType } from '../utils/utils';
-
+import { FileType } from './utils/utils';
 import highlight from 'highlight.js';
-import '../utils/github.css';
+import '../DiffView/utils/github.css';
 
 const LINE_COLOR_MAP = {
   [Line.Type.add]: '#ccffd8',

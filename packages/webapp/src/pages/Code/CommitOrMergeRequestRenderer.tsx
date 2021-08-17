@@ -8,11 +8,11 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import React from 'react';
-import { ApiResource } from '../../../api/base';
-import ScoringChip from '../../../components/ScoringChip';
-import SmartDate from '../../../components/SmartDate';
-import { useFilterContext } from '../../../contexts/FilterContext';
-import OverridePopper from '../../../components/OverridePopper';
+import { ApiResource } from '../../api/base';
+import ScoringChip from './ScoringChip';
+import SmartDate from '../../components/SmartDate';
+import { useFilterContext } from '../../contexts/FilterContext';
+import OverridePopper from '../../components/OverridePopper';
 import styled from 'styled-components';
 
 const StyledAccordionDetails = styled(AccordionDetails)`

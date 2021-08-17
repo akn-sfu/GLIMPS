@@ -9,7 +9,7 @@ import BrowseGroupConfigPage from '../../pages/GlobalSettings/IterationConfig';
 import EditGroupConfigPage from '../../pages/GlobalSettings/IterationConfig/Edit';
 import SfuVerify from '../../pages/SfuVerify';
 import Graph from '../../pages/Graph';
-import ListMergeRequestPage from '../../pages/ListMergeRequestPage';
+import ListMergeRequestPage from '../../pages/Code';
 import ApiSettingPage from '../../pages/GlobalSettings/ApiSetting';
 import SettingsPage from '../../pages/GlobalSettings';
 import { useAuthContext } from '../../contexts/AuthContext';

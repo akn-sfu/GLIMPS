@@ -12,7 +12,7 @@ import Typography from '@material-ui/core/Typography';
 import React, { useState } from 'react';
 import { ApiResource } from '../../../api/base';
 import { useGetDiffs } from '../../../api/diff';
-import DiffView from '../../../components/DiffView';
+import DiffView from './DiffView';
 import CallMadeIcon from '@material-ui/icons/CallMade';
 import Grid from '@material-ui/core/Grid';
 import EditIcon from '@material-ui/icons/Edit';
