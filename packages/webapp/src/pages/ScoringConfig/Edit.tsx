@@ -45,7 +45,7 @@ const EditScoringConfigPage: React.FC = () => {
   const onSubmit = (values: ScoringConfig) => {
     createScoringConfig(values, {
       onSuccess: () => {
-        push('/scoring');
+        push('/settings/scoring');
       },
     });
   };
