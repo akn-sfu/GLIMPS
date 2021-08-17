@@ -18,7 +18,7 @@ import { useGetWordCount } from '../../../api/note';
 import { useRepositoryMembers } from '../../../api/repo_members';
 import { ApiResource } from '../../../api/base';
 import StudentDropdown from '../../../shared/components/StudentDropdown';
-import StatSummary from '../Summary/StatSummary';
+import StatSummary from '../Summary';
 import MemberDropdown from '../../../shared/components/MemberDropdown';
 import RepoAndDateAlert from '../../../shared/components/RepoAndDateAlert';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';

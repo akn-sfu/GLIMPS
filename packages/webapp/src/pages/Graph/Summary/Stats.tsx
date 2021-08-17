@@ -1,7 +1,7 @@
 import React from 'react';
 import { Tooltip } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
-import Info from '../../../../assets/info.svg';
+import Info from '../../../app/img/info.svg';
 
 const useStyles = makeStyles(() =>
   createStyles({
