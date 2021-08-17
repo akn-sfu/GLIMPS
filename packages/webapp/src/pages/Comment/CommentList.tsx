@@ -5,20 +5,20 @@ import Box from '@material-ui/core/Box';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import { useGetNotesByRepository, useGetTotalNotes } from '../../../api/note';
+import { useGetNotesByRepository, useGetTotalNotes } from '../../api/note';
 import NotePaper from './NotePaper';
-import { useRepositoryContext } from '../../../contexts/RepositoryContext';
-import { useFilterContext } from '../../../contexts/FilterContext';
-import { ApiResource } from '../../../api/base';
+import { useRepositoryContext } from '../../contexts/RepositoryContext';
+import { useFilterContext } from '../../contexts/FilterContext';
+import { ApiResource } from '../../api/base';
 import { RepositoryMember } from '@ceres/types';
-import { useRepositoryMembers } from '../../../api/repo_members';
+import { useRepositoryMembers } from '../../api/repo_members';
 import DifferentiatingIcon from './DifferentiatingIcon';
 import { Collapse, Typography } from '@material-ui/core';
 import { Alert, Pagination } from '@material-ui/lab';
-import MemberDropdown from '../../../shared/components/MemberDropdown';
+import MemberDropdown from '../../shared/components/MemberDropdown';
 import ItemPerPageDropdown from './ItemPerPageDropdown';
 import { Note } from '@ceres/types';
-import RepoAndDateAlert from '../../../shared/components/RepoAndDateAlert';
+import RepoAndDateAlert from '../../shared/components/RepoAndDateAlert';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
-import RepositoryPage from '../../pages/Repository';
+import RepositoryPage from '../../pages/Repositories';
 import Login from '../../pages/Login';
 import OperationsPage from '../../pages/Operations';
 import BrowseScoringConfigsPage from '../../pages/GlobalSettings/ScoreConfig';
@@ -14,7 +14,7 @@ import ApiSettingPage from '../../pages/GlobalSettings/ApiSetting';
 import SettingsPage from '../../pages/GlobalSettings';
 import { useAuthContext } from '../../contexts/AuthContext';
 import RepoSetupPage from '../../pages/RepositorySetup';
-import { RepositoryScoringContextProvider } from '../../pages/RepositorySetup/RepositoryScoringContext';
+import { RepositoryScoringContextProvider } from '../../pages/RepositorySetup/ScoringConfig/RepositoryScoringContext';
 import CommentPage from '../../pages/Comment';
 
 export function Router() {

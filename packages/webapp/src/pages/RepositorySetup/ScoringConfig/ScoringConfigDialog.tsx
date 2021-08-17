@@ -10,7 +10,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 import React from 'react';
-import { useRepositoryScoringContext } from '../RepositoryScoringContext';
+import { useRepositoryScoringContext } from './RepositoryScoringContext';
 
 interface ScoringConfigDialogProps {
   repository: Repository;

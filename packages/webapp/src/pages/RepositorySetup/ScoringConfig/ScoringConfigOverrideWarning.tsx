@@ -2,7 +2,7 @@ import { Repository } from '@ceres/types';
 import Alert from '@material-ui/lab/Alert';
 import { isEqual } from 'lodash';
 import React from 'react';
-import { useRepositoryScoringContext } from '../RepositoryScoringContext';
+import { useRepositoryScoringContext } from './RepositoryScoringContext';
 
 interface ScoringConfigOverrideWarningProps {
   repository?: Repository;

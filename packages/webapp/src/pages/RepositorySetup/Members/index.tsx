@@ -2,10 +2,10 @@ import { Commit, RepositoryMember } from '@ceres/types';
 import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
 import React from 'react';
-import { useRepositoryAuthors } from '../../api/author';
-import { ApiResource } from '../../api/base';
-import { useRepositoryMembers } from '../../api/repo_members';
-import Author from './components/Author';
+import { useRepositoryAuthors } from '../../../api/author';
+import { ApiResource } from '../../../api/base';
+import { useRepositoryMembers } from '../../../api/repo_members';
+import Author from './Author';
 
 interface MembersProps {
   id: string;
