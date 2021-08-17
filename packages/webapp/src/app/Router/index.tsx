@@ -7,7 +7,7 @@ import BrowseScoringConfigsPage from '../../pages/GlobalSettings/ScoreConfig';
 import EditScoringConfigPage from '../../pages/GlobalSettings/ScoreConfig/EditScoringConfigPage';
 import BrowseGroupConfigPage from '../../pages/GlobalSettings/IterationConfig';
 import EditGroupConfigPage from '../../pages/GlobalSettings/IterationConfig/Edit';
-import SfuVerify from '../../pages/SfuVerify';
+import SfuVerify from '../../pages/Login/SfuVerify';
 import Graph from '../../pages/Graph';
 import ListMergeRequestPage from '../../pages/Code';
 import ApiSettingPage from '../../pages/GlobalSettings/ApiSetting';

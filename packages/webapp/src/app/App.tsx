@@ -1,11 +1,11 @@
 import { SnackbarProvider } from 'notistack';
 import React from 'react';
 import './App.css';
-import { Router } from './app/Router';
-import ThemeProvider from './app/ThemeProvider';
-import { AuthContextProvider } from './contexts/AuthContext';
-import { RepositoryContextProvider } from './contexts/RepositoryContext';
-import { FilterContextProvider } from './contexts/FilterContext';
+import { Router } from './Router';
+import ThemeProvider from './ThemeProvider';
+import { AuthContextProvider } from '../contexts/AuthContext';
+import { RepositoryContextProvider } from '../contexts/RepositoryContext';
+import { FilterContextProvider } from '../contexts/FilterContext';
 import LuxonUtils from '@date-io/luxon';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 

@@ -4,7 +4,7 @@ import Stat, { IStatProps } from './Stats';
 import { createMuiTheme } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import widths from './PixelWidthArray';
-import Clipboard from '../../../../assets/clipboard.svg';
+import Clipboard from '../../../assets/clipboard.svg';
 const useStyles = makeStyles(() =>
   createStyles({
     container: {
