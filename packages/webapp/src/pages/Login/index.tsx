@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import HomeLogin from '../../components/HomeLogin';
+import HomeLogin from './HomeLogin';
 
 const useStyles = makeStyles(() => ({
   root: {
