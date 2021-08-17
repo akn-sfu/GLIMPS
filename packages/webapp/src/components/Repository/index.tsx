@@ -26,6 +26,9 @@ import {
 import { TextField } from '@material-ui/core';
 import Tab from '@material-ui/core/Tab/Tab';
 import { useInterval } from '../../util/useInterval';
+import { Snackbar } from '@material-ui/core';
+import { Alert } from '@material-ui/lab';
+
 function hasPendingSync(operations: Operation[], id: string) {
   return (
     operations.filter((operation) => operation.input.repository_id === id)
@@ -46,6 +49,7 @@ const tabToRoleMappings = {
 };
 
 const RepositoryList: React.FC = () => {
+  const [openError, setOpenError] = useState(false);
   const [sort, setSort] = useState('-project_created');
   const [search, setSearch] = useState('');
   const [tab, setTab] = useState(TabOption.all);
@@ -94,8 +98,13 @@ const RepositoryList: React.FC = () => {
       onSuccess: () => {
         void invalidatePendingFetches();
       },
+      onError: () => {
+        void invalidatePendingFetches();
+        setOpenError(true);
+      },
     });
   };
+
   useInterval(
     () => {
       void invalidatePendingFetches();
@@ -114,9 +123,16 @@ const RepositoryList: React.FC = () => {
     data?.results.length == 0 ? (
       <Typography>No repositories found.</Typography>
     ) : null;
-
   return (
     <Container>
+      <Snackbar
+        open={openError}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert onClose={() => setOpenError(false)} severity='error'>
+          Repository fetch has failed
+        </Alert>
+      </Snackbar>
       <Grid container justify='space-between' alignItems='center'>
         <Grid item>
           <DefaultPageTitleFormat>Repositories</DefaultPageTitleFormat>

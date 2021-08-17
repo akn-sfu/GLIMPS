@@ -42,7 +42,11 @@ export function usePaginatedQuery<T>(
     },
     { keepPreviousData: true },
   );
-  return { ...result, invalidate: () => client.invalidateQueries(key) };
+  return {
+    ...result,
+    invalidate: () => client.invalidateQueries(key),
+    remove: () => client.removeQueries(key),
+  };
 }
 
 export function useApiInfiniteQuery<T>(
@@ -89,7 +93,6 @@ export function useApiMutation<T, B>(route: string, method: Method) {
     return result.data;
   });
 }
-
 export type ApiResource<T> = T & {
   meta: {
     createdAt: string;
