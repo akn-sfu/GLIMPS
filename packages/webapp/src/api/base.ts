@@ -1,4 +1,4 @@
-import { CancelToken, Method } from 'axios';
+import { Method } from 'axios';
 import {
   useInfiniteQuery,
   useMutation,
@@ -16,7 +16,6 @@ export function useApiQuery<T>(route: string, params?: any) {
   return {
     ...result,
     invalidate: () => client.invalidateQueries([route]),
-    cancel: () => client.cancelQueries([route]),
     remove: () => client.removeQueries([route]),
   };
 }
@@ -26,7 +25,6 @@ export function usePaginatedQuery<T>(
   params: any,
   page = 0,
   pageSize = 10,
-  cancelTokenSource?: any,
 ) {
   const client = useQueryClient();
   const key = [route, params, page, pageSize];
@@ -34,7 +32,6 @@ export function usePaginatedQuery<T>(
     key,
     async () => {
       const response = await axios.get<SearchResults<T>>(route, {
-        cancelToken: cancelTokenSource.source,
         params: {
           ...params,
           page,
@@ -48,7 +45,6 @@ export function usePaginatedQuery<T>(
   return {
     ...result,
     invalidate: () => client.invalidateQueries(key),
-    cancel: () => client.cancelQueries(key),
     remove: () => client.removeQueries(key),
   };
 }
@@ -97,23 +93,6 @@ export function useApiMutation<T, B>(route: string, method: Method) {
     return result.data;
   });
 }
-
-export function useApiMutationCancellable<T, B>(
-  route: string,
-  method: Method,
-  token: CancelToken,
-) {
-  return useMutation<T, any, B>(route, async (body?) => {
-    const result = await axios.request<T>({
-      method,
-      url: route,
-      data: body,
-      cancelToken: token,
-    });
-    return result.data;
-  });
-}
-
 export type ApiResource<T> = T & {
   meta: {
     createdAt: string;

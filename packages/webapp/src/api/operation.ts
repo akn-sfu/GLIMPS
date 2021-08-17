@@ -38,17 +38,10 @@ interface QueryParams {
 
 export function useGetOperations(
   params: QueryParams,
-  cancelToken?: any,
   page?: number,
   pageSize?: number,
 ) {
-  return usePaginatedQuery<Operation>(
-    '/operation',
-    params,
-    page,
-    pageSize,
-    cancelToken,
-  );
+  return usePaginatedQuery<Operation>('/operation', params, page, pageSize);
 }
 
 export function useCreateOperation<T extends OperationInput>() {
