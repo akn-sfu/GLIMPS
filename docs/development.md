@@ -11,7 +11,7 @@
 3. In the project root, run `npm run build`, this will build all our packages in order.
 4. In **packages/api** folder run: `npm run migrate` and then `npm run start:dev` to start the API.
 5. In **packages/webapp** run `npm run start` to start the webapp at `http://localhost:3000`.
-6. Change `https://cmpt373-1211-09.cmpt.sfu.ca/api/v4` (packages/src/config) to `https://csil-git1.cs.surrey.sfu.ca/v4` if you want to target to sfu Gitlab server on your local.
+6. Change `https://cmpt373-1211-09.cmpt.sfu.ca/api/v4` (packages/api/src/config) to `https://csil-git1.cs.surrey.sfu.ca/v4` if you want to target to sfu Gitlab server on your local.
 
 ## Packages and Commands Explanations
 
