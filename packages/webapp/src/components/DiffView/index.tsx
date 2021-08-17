@@ -19,6 +19,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import OverridePopper from '../OverridePopper';
 import DiffTable from './components/DiffTable';
 import { fileMapping } from './utils/fileMapping';
+import { newOrDeletedFile } from './utils/utils';
 
 const StyledAccordionSummary = styled(AccordionSummary)`
   &.MuiAccordionSummary-root.Mui-focused {
@@ -102,6 +103,7 @@ const DiffView: React.FC<DiffViewProps> = ({
   }));
 
   const fileType = fileMapping(fileName);
+  const fileOperation = newOrDeletedFile(lines);
   const isExcluded = extensions?.override?.exclude;
   const hasOverride = ScoreOverride.hasOverride(extensions?.override);
   const fileNameTextDecoration = isExcluded ? 'line-through' : '';
@@ -179,6 +181,15 @@ const DiffView: React.FC<DiffViewProps> = ({
               <Grid item>
                 <DiffFactWrapper name='Filetype' value={extensions?.glob} />
               </Grid>
+              <Grid item>
+                {fileOperation == 0 ? (
+                  <DiffFactWrapper name='Operation' value='File Created' />
+                ) : fileOperation == 1 ? (
+                  <DiffFactWrapper name='Operation' value='File Deleted' />
+                ) : (
+                  <DiffFactWrapper name='Operation' value='File Edited' />
+                )}
+              </Grid>
             </Grid>
           </Box>
         </StyledAccordionSummary>
@@ -188,6 +199,7 @@ const DiffView: React.FC<DiffViewProps> = ({
               lines={lines}
               fileType={fileType}
               weight={extensions?.weight || 0}
+              operation={fileOperation}
             />
           </Root>
         </AccordionDetails>
