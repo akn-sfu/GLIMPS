@@ -2,7 +2,7 @@
 
 GitLab Analyzer is an analysis tool to analyze user contributions to a GitLab project.
 
-## Sites and Servers
+## Sites & Servers
 
 * `master` is continuously deployed on: <https://cmpt373-1211-08.cmpt.sfu.ca/> (Target Gitlab Server: <https://cmpt373-1211-09.cmpt.sfu.ca/>).
   ``` 
