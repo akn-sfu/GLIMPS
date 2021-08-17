@@ -1,8 +1,8 @@
 import { SnackbarProvider } from 'notistack';
 import React from 'react';
 import './App.css';
-import { Router } from './components/Router';
-import ThemeProvider from './components/ThemeProvider';
+import { Router } from './app/Router';
+import ThemeProvider from './app/ThemeProvider';
 import { AuthContextProvider } from './contexts/AuthContext';
 import { RepositoryContextProvider } from './contexts/RepositoryContext';
 import { FilterContextProvider } from './contexts/FilterContext';

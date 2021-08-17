@@ -9,7 +9,7 @@ import React from 'react';
 import { ApiResource } from '../../../api/base';
 import { useRepositoryContext } from '../../../contexts/RepositoryContext';
 import SmartDate from '../../../shared/components/SmartDate';
-import UndecoratedLink from '../../../components/UndecoratedLink';
+import UndecoratedLink from '../../../shared/components/UndecoratedLink';
 import WarningIcon from '@material-ui/icons/Warning';
 import ShareIcon from '@material-ui/icons/Share';
 

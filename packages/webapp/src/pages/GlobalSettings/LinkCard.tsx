@@ -3,7 +3,7 @@ import Typography from '@material-ui/core/Typography';
 import React from 'react';
 import styled from 'styled-components';
 import Icon from '../../app/NavBar/iconHelper';
-import UndecoratedLink from '../../components/UndecoratedLink';
+import UndecoratedLink from '../../shared/components/UndecoratedLink';
 
 interface LinkCardProps {
   color?: string;
