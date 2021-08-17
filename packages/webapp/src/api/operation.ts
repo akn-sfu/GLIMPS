@@ -20,6 +20,20 @@ export function useSyncRepository() {
   };
 }
 
+export function useDeleteRepository() {
+  const mutation = useCreateOperation();
+  const delete2 = (
+    id: string,
+    options?: MutateOptions<Operation, any, OperationInput>,
+  ) => {
+    mutation.mutate(Operation.buildDeleteRepositoryPayload(id), options);
+  };
+  return {
+    ...mutation,
+    delete2,
+  };
+}
+
 export function useFetchRepositories() {
   const mutation = useCreateOperation();
   const fetch = (options?: MutateOptions<Operation, any, OperationInput>) =>

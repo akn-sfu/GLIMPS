@@ -25,9 +25,12 @@ export abstract class BaseService<
     const sort = filters.sort && alwaysArray(filters.sort);
     if (sort?.length > 0) {
       const { sortKey, order } = this.determineSort(sort[0]);
-      query = this.buildSort(query, sortKey, order as any);
+      query = this.buildSort(query, sortKey, order as 'ASC' | 'DESC');
     } else {
       query = this.buildSort(query);
+    }
+    if (this.tableName === 'note') {
+      query.orderBy("note.resource #>> '{created_at}'", 'ASC');
     }
     if (isPaginated) {
       paginate(query, filters);
@@ -39,9 +42,9 @@ export abstract class BaseService<
     return this.serviceRepository.findOne(id);
   }
 
-  findByRepositoryId(repo_id: string, table_name: string){
+  findByRepositoryId(repo_id: string, table_name: string) {
     let query = this.serviceRepository.createQueryBuilder(table_name);
-    query.where('repository_id = :repositoryId', { repositoryId: repo_id })
+    query.where('repository_id = :repositoryId', { repositoryId: repo_id });
     return query.getManyAndCount();
   }
 
