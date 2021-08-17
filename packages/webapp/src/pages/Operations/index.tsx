@@ -3,7 +3,7 @@ import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import React from 'react';
-import DefaultPageLayout from '../../components/DefaultPageLayout';
+import DefaultPageLayout from '../../shared/DefaultPageLayout';
 import OperationGroup from './components/OperationGroup';
 import DefaultPageTitleFormat from '../../components/DefaultPageTitleFormat';
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import DefaultPageLayout from '../../components/DefaultPageLayout';
+import DefaultPageLayout from '../../shared/DefaultPageLayout';
 import SettingsForm from '../../components/SettingsForm';
 
 const ApiSettingPage: React.FC = () => {

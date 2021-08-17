@@ -5,7 +5,7 @@ import { useInView } from 'react-intersection-observer';
 import { useParams } from 'react-router-dom';
 import { ApiResource } from '../../api/base';
 import { useInfiniteMergeRequest } from '../../api/mergeRequests';
-import DefaultPageLayout from '../../components/DefaultPageLayout';
+import DefaultPageLayout from '../../shared/DefaultPageLayout';
 import Container from '@material-ui/core/Container';
 import LoadMore from '../../components/LoadMore';
 import CodeView from './components/CodeView';

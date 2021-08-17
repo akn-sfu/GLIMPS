@@ -12,7 +12,7 @@ import {
   useGetRepository,
   useRemoveCollaborator,
 } from '../../api/repository';
-import DefaultPageLayout from '../../components/DefaultPageLayout';
+import DefaultPageLayout from '../../shared/DefaultPageLayout';
 import DefaultPageTitleFormat from '../../components/DefaultPageTitleFormat';
 import SmartDate from '../../components/SmartDate';
 import { useAuthContext } from '../../contexts/AuthContext';

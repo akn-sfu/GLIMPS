@@ -1,5 +1,5 @@
 import React from 'react';
-import DefaultPageLayout from '../../components/DefaultPageLayout';
+import DefaultPageLayout from '../../shared/DefaultPageLayout';
 import DefaultPageTitleFormat from '../../components/DefaultPageTitleFormat';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';

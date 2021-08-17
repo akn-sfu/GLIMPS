@@ -1,5 +1,5 @@
 import React from 'react';
-import DefaultPageLayout from '../../components/DefaultPageLayout';
+import DefaultPageLayout from '../../shared/DefaultPageLayout';
 import MergeRequestCommitList from '../../components/MergeRequestCommitList';
 
 const ListMergeRequestPage = () => {
