@@ -14,7 +14,6 @@ import ApiSettingPage from '../../pages/GlobalSettings/ApiSetting';
 import SettingsPage from '../../pages/GlobalSettings';
 import { useAuthContext } from '../../contexts/AuthContext';
 import RepoSetupPage from '../../pages/RepositorySetup';
-import ScoreRubricPage from '../../pages/ScoreRubric';
 import { RepositoryScoringContextProvider } from '../../pages/RepositorySetup/RepositoryScoringContext';
 import CommentPage from '../../pages/Comment';
 
@@ -36,9 +35,6 @@ export function Router() {
           <RepositoryScoringContextProvider>
             <RepoSetupPage />
           </RepositoryScoringContextProvider>
-        </Route>
-        <Route path='/setup/:id/rubric' exact>
-          <ScoreRubricPage />
         </Route>
         <Route path='/graph/:id' exact>
           <Graph />
