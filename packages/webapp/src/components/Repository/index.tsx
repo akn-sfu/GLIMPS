@@ -10,7 +10,7 @@ import {
 import { useRepository } from '../../api/repository';
 import { useAuthContext } from '../../contexts/AuthContext';
 import RepositoryCard from './RepositoryCard';
-import DefaultPageTitleFormat from '../DefaultPageTitleFormat';
+import DefaultPageTitleFormat from '../../shared/DefaultPageTitleFormat';
 import {
   Box,
   Button,

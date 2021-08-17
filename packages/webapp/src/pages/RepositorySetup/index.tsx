@@ -13,7 +13,7 @@ import {
   useRemoveCollaborator,
 } from '../../api/repository';
 import DefaultPageLayout from '../../shared/DefaultPageLayout';
-import DefaultPageTitleFormat from '../../components/DefaultPageTitleFormat';
+import DefaultPageTitleFormat from '../../shared/DefaultPageTitleFormat';
 import SmartDate from '../../components/SmartDate';
 import { useAuthContext } from '../../contexts/AuthContext';
 import Collaborators from '../RepositorySetup/components/Collaborators';

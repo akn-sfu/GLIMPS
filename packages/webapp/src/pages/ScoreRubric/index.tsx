@@ -1,6 +1,6 @@
 import React from 'react';
 import DefaultPageLayout from '../../shared/DefaultPageLayout';
-import DefaultPageTitleFormat from '../../components/DefaultPageTitleFormat';
+import DefaultPageTitleFormat from '../../shared/DefaultPageTitleFormat';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import { useHistory, useParams } from 'react-router-dom';

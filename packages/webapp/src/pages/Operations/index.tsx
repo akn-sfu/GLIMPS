@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import React from 'react';
 import DefaultPageLayout from '../../shared/DefaultPageLayout';
 import OperationGroup from './components/OperationGroup';
-import DefaultPageTitleFormat from '../../components/DefaultPageTitleFormat';
+import DefaultPageTitleFormat from '../../shared/DefaultPageTitleFormat';
 
 const OperationsPage: React.FC = () => {
   return (

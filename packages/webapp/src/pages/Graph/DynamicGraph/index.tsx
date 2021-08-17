@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import DefaultPageTitleFormat from '../../../components/DefaultPageTitleFormat';
+import DefaultPageTitleFormat from '../../../shared/DefaultPageTitleFormat';
 import { useFilterContext } from '../../../contexts/FilterContext';
 import DynamicBarChart from './DynamicBarChart';
 import Container from '@material-ui/core/Container';

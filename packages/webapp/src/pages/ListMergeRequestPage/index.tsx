@@ -13,7 +13,7 @@ import CommitList from './components/CommitList';
 import CommitOrMergeRequestRenderer from './components/CommitOrMergeRequestRenderer';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
-import DefaultPageTitleFormat from '../../components/DefaultPageTitleFormat';
+import DefaultPageTitleFormat from '../../shared/DefaultPageTitleFormat';
 import styled from 'styled-components';
 import { useFilterContext } from '../../contexts/FilterContext';
 import { ScoreOverrideQueueProvider } from './contexts/ScoreOverrideQueue';

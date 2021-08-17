@@ -4,7 +4,7 @@ import { useVerifyToken, getTargetServer } from '../../api/token';
 import Form from './Form';
 import Container from '@material-ui/core/Container';
 import Box from '@material-ui/core/Box';
-import DefaultPageTitleFormat from '../DefaultPageTitleFormat';
+import DefaultPageTitleFormat from '../../shared/DefaultPageTitleFormat';
 import { Typography } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';

@@ -4,7 +4,7 @@ import Grid from '@material-ui/core/Grid';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import DefaultPageLayout from '../../../shared/DefaultPageLayout';
-import DefaultPageTitleFormat from '../../../components/DefaultPageTitleFormat';
+import DefaultPageTitleFormat from '../../../shared/DefaultPageTitleFormat';
 import IconButton from '@material-ui/core/IconButton';
 import CancelIcon from '@material-ui/icons/Cancel';
 import { useHistory } from 'react-router-dom';
