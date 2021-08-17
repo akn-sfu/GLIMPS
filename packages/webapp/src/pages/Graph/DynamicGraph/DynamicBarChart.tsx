@@ -12,7 +12,7 @@ import {
   CartesianGrid,
 } from 'recharts';
 import { GraphTab } from '.';
-import SmartDate from '../../../components/SmartDate';
+import SmartDate from '../../../shared/components/SmartDate';
 
 interface BarChartProps {
   graphData: any[];

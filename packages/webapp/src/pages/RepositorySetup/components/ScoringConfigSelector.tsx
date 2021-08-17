@@ -11,7 +11,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ApiResource, SearchResults } from '../../../api/base';
 import { useSearchScoringConfigs } from '../../../api/scoringConfig';
-import SmartDate from '../../../components/SmartDate';
+import SmartDate from '../../../shared/components/SmartDate';
 import { useRepositoryScoringContext } from '../RepositoryScoringContext';
 
 interface ScoringConfigSelectorProps {

@@ -1,7 +1,7 @@
 import React, { useEffect, useContext, useState, useMemo } from 'react';
 import { useProfile } from '../api/user';
 import { User } from '@ceres/types';
-import axios from '../util/axios';
+import axios from '../shared/util/axios';
 import { resetFilterStorage } from './FilterContext';
 import { resetContextStorage } from './RepositoryContext';
 

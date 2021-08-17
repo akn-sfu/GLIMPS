@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useSearchScoringConfigs } from '../../../api/scoringConfig';
-import SmartDate from '../../../components/SmartDate';
+import SmartDate from '../../../shared/components/SmartDate';
 import ScoringLayout from './ScoringLayout';
 
 const BrowseScoringConfigsPage: React.FC = () => {

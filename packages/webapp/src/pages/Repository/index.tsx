@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import DefaultPageLayout from '../../shared/DefaultPageLayout';
+import DefaultPageLayout from '../../shared/components/DefaultPageLayout';
 import RepositoryList from '../../components/Repository';
 import APIKeyModal from '../../components/APIKeyModal';
 import { useRepositoryContext } from '../../contexts/RepositoryContext';

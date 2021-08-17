@@ -8,7 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import React from 'react';
 import { ApiResource } from '../../api/base';
 import { useRepositoryContext } from '../../contexts/RepositoryContext';
-import SmartDate from '../SmartDate';
+import SmartDate from '../../shared/components/SmartDate';
 import UndecoratedLink from '../UndecoratedLink';
 import WarningIcon from '@material-ui/icons/Warning';
 import ShareIcon from '@material-ui/icons/Share';

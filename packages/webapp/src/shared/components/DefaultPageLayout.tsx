@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
-import { useAuthContext } from '../contexts/AuthContext';
-import NavBar from '../components/NavBar';
+import { useAuthContext } from '../../contexts/AuthContext';
+import NavBar from '../../components/NavBar';
 
 const useStyles = makeStyles(() => ({
   title: {

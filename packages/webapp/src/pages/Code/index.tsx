@@ -5,7 +5,7 @@ import { useInView } from 'react-intersection-observer';
 import { useParams } from 'react-router-dom';
 import { ApiResource } from '../../api/base';
 import { useInfiniteMergeRequest } from '../../api/mergeRequests';
-import DefaultPageLayout from '../../shared/DefaultPageLayout';
+import DefaultPageLayout from '../../shared/components/DefaultPageLayout';
 import Container from '@material-ui/core/Container';
 import LoadMore from './LoadMore';
 import CodeView from './CommitList/CodeView';
@@ -13,7 +13,7 @@ import CommitOrMergeRequestRenderer from './CommitOrMergeRequestRenderer';
 import CommitList from './CommitList';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
-import DefaultPageTitleFormat from '../../shared/DefaultPageTitleFormat';
+import DefaultPageTitleFormat from '../../shared/components/DefaultPageTitleFormat';
 import styled from 'styled-components';
 import { useFilterContext } from '../../contexts/FilterContext';
 import { ScoreOverrideQueueProvider } from './contexts/ScoreOverrideQueue';
@@ -21,7 +21,7 @@ import { useInfiniteCommit } from '../../api/commit';
 import ScoreOverrideQueueInfo from './CommitList/ScoreOverrideQueueInfo';
 import { DateTime } from 'luxon';
 import RepoAndDateAlert from '../../components/RepoAndDateAlert';
-import StudentDropdown from '../../components/StudentDropdown';
+import StudentDropdown from '../../shared/components/StudentDropdown';
 
 const IndependentScrollGrid = styled(Grid)`
   height: 100vh;

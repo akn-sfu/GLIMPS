@@ -3,9 +3,9 @@ import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import React from 'react';
-import DefaultPageLayout from '../../shared/DefaultPageLayout';
+import DefaultPageLayout from '../../shared/components/DefaultPageLayout';
 import OperationGroup from './OperationGroup';
-import DefaultPageTitleFormat from '../../shared/DefaultPageTitleFormat';
+import DefaultPageTitleFormat from '../../shared/components/DefaultPageTitleFormat';
 
 const OperationsPage: React.FC = () => {
   return (

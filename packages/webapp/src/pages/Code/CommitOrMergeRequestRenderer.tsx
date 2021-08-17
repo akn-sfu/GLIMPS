@@ -10,7 +10,7 @@ import ExpandMore from '@material-ui/icons/ExpandMore';
 import React from 'react';
 import { ApiResource } from '../../api/base';
 import ScoringChip from './ScoringChip';
-import SmartDate from '../../components/SmartDate';
+import SmartDate from '../../shared/components/SmartDate';
 import { useFilterContext } from '../../contexts/FilterContext';
 import OverridePopper from './OverridePopper';
 import styled from 'styled-components';

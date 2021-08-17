@@ -12,9 +12,9 @@ import {
   useGetRepository,
   useRemoveCollaborator,
 } from '../../api/repository';
-import DefaultPageLayout from '../../shared/DefaultPageLayout';
-import DefaultPageTitleFormat from '../../shared/DefaultPageTitleFormat';
-import SmartDate from '../../components/SmartDate';
+import DefaultPageLayout from '../../shared/components/DefaultPageLayout';
+import DefaultPageTitleFormat from '../../shared/components/DefaultPageTitleFormat';
+import SmartDate from '../../shared/components/SmartDate';
 import { useAuthContext } from '../../contexts/AuthContext';
 import Collaborators from '../RepositorySetup/components/Collaborators';
 import LeaveRepository from '../RepositorySetup/components/LeaveRepository';
@@ -31,7 +31,7 @@ import Members from '../Members';
 import ScoringConfigOverrides from './components/ScoringConfigOverrides';
 import ScoringConfigOverrideWarning from './components/ScoringConfigOverrideWarning';
 import ScoringConfigDialog from './components/ScoringConfigDialog';
-import ScrollToTop from '../../shared/ScrollToTop';
+import ScrollToTop from '../../shared/components/ScrollToTop';
 
 const MainContainer = styled.div`
   display: grid;

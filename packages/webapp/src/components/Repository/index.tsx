@@ -10,7 +10,7 @@ import {
 import { useRepository } from '../../api/repository';
 import { useAuthContext } from '../../contexts/AuthContext';
 import RepositoryCard from './RepositoryCard';
-import DefaultPageTitleFormat from '../../shared/DefaultPageTitleFormat';
+import DefaultPageTitleFormat from '../../shared/components/DefaultPageTitleFormat';
 import {
   Box,
   Button,
@@ -25,7 +25,7 @@ import {
 } from '@material-ui/core';
 import { TextField } from '@material-ui/core';
 import Tab from '@material-ui/core/Tab/Tab';
-import { useInterval } from '../../util/useInterval';
+import { useInterval } from '../../shared/util/useInterval';
 import { Snackbar } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 

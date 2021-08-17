@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useSearchGroupConfigs } from '../../../api/groupConfig';
-import SmartDate from '../../../components/SmartDate';
+import SmartDate from '../../../shared/components/SmartDate';
 import GroupLayout from './GroupLayout';
 
 const BrowseIterationConfigPage: React.FC = () => {

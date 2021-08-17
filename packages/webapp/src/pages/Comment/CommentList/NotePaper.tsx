@@ -6,7 +6,7 @@ import { Paper } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { ApiResource } from '../../../api/base';
 import { /*Issue,*/ /*MergeRequest*/ Note } from '@ceres/types';
-import SmartDate from '../../../components/SmartDate';
+import SmartDate from '../../../shared/components/SmartDate';
 import { useGetMergeRequestByNoteId } from '../../../api/mergeRequests';
 import { useGetIssueByNoteId } from '../../../api/issue';
 import { useRepositoryContext } from '../../../contexts/RepositoryContext';
