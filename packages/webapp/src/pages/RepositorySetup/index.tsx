@@ -31,7 +31,7 @@ import Members from '../Members';
 import ScoringConfigOverrides from './components/ScoringConfigOverrides';
 import ScoringConfigOverrideWarning from './components/ScoringConfigOverrideWarning';
 import ScoringConfigDialog from './components/ScoringConfigDialog';
-import ScrollToTop from '../../components/Common/ScrollToTop';
+import ScrollToTop from '../../shared/ScrollToTop';
 
 const MainContainer = styled.div`
   display: grid;

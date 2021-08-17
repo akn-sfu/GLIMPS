@@ -1,6 +1,6 @@
 import React from 'react';
-import CommentList from '../../components/CommentList';
-import ScrollToTop from '../../components/Common/ScrollToTop';
+import CommentList from './CommentList/CommentList';
+import ScrollToTop from '../../shared/ScrollToTop';
 import DefaultPageLayout from '../../components/DefaultPageLayout';
 
 const CommentPage: React.FC = () => {
