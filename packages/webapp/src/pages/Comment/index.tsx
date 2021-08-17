@@ -1,5 +1,5 @@
 import React from 'react';
-import CommentList from './CommentList/CommentList';
+import CommentList from './CommentList';
 import ScrollToTop from '../../shared/ScrollToTop';
 import DefaultPageLayout from '../../shared/DefaultPageLayout';
 

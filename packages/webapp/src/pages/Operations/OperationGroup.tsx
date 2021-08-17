@@ -3,7 +3,7 @@ import Box from '@material-ui/core/Box';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Pagination from '@material-ui/lab/Pagination';
 import React, { useState } from 'react';
-import { useGetOperations } from '../../../api/operation';
+import { useGetOperations } from '../../api/operation';
 import OperationProgress from './OperationProgress';
 
 interface OperationGroupProps {

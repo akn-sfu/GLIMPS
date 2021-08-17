@@ -7,7 +7,7 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import React from 'react';
-import { ApiResource } from '../../../api/base';
+import { ApiResource } from '../../api/base';
 import StageProgress from './StageProgress';
 
 interface OperationProgressProps {
