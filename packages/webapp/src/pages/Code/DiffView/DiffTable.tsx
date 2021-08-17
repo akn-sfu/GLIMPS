@@ -12,7 +12,7 @@ import { useState } from 'react';
 import Tooltip from '@material-ui/core/Tooltip';
 import { FileType } from './utils/utils';
 import highlight from 'highlight.js';
-import '../DiffView/utils/github.css';
+import './utils/github.css';
 
 const LINE_COLOR_MAP = {
   [Line.Type.add]: '#ccffd8',

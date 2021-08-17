@@ -2,7 +2,7 @@ import { ScoringConfig } from '@ceres/types';
 import Box from '@material-ui/core/Box';
 import Drawer from '@material-ui/core/Drawer';
 import React from 'react';
-import ScoringConfigForm from '../../../components/ScoringConfigForm';
+import ScoringConfigForm from '../../GlobalSettings/ScoreConfig/ScoringCofigForm';
 import { useRepositoryScoringContext } from '../RepositoryScoringContext';
 
 const ScoringConfigOverrides: React.FC = () => {

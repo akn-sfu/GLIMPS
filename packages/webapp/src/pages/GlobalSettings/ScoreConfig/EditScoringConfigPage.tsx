@@ -1,6 +1,6 @@
 import React from 'react';
-import ScoringConfigForm from '../../components/ScoringConfigForm';
-import ScoringLayout from './components/ScoringLayout';
+import ScoringConfigForm from './ScoringCofigForm';
+import ScoringLayout from './ScoringLayout';
 import { useHistory, useLocation } from 'react-router-dom';
 import { parse } from 'querystring';
 import { ScoringConfig } from '@ceres/types';
@@ -8,8 +8,8 @@ import {
   useCreateScoringConfig,
   useGetScoringConfig,
   useUpdateScoringConfig,
-} from '../../api/scoringConfig';
-import GlobHints from './components/GlobHints';
+} from '../../../api/scoringConfig';
+import GlobHints from './GlobHints';
 
 interface PreloadedFormProps {
   id: string;

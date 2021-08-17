@@ -8,7 +8,7 @@ import { ApiResource } from '../../../api/base';
 import { useInfiniteCommit } from '../../../api/commit';
 import ScoringChip from '../ScoringChip';
 import SmartDate from '../../../components/SmartDate';
-import OverridePopper from '../../../components/OverridePopper';
+import OverridePopper from '../OverridePopper';
 import { Button } from '@material-ui/core';
 
 interface CommitListProps {

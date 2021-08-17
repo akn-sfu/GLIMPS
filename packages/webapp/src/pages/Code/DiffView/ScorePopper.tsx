@@ -3,7 +3,7 @@ import Popover from '@material-ui/core/Popover';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import { Diff, Line } from '@ceres/types';
-import ScoringChip from '../../ScoringChip';
+import ScoringChip from '../ScoringChip';
 
 interface ScorePopperProps {
   hasOverride?: boolean;

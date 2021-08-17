@@ -7,7 +7,7 @@ import { ApiResource } from '../../api/base';
 import { useInfiniteMergeRequest } from '../../api/mergeRequests';
 import DefaultPageLayout from '../../shared/DefaultPageLayout';
 import Container from '@material-ui/core/Container';
-import LoadMore from '../../components/LoadMore';
+import LoadMore from './LoadMore';
 import CodeView from './CommitList/CodeView';
 import CommitOrMergeRequestRenderer from './CommitOrMergeRequestRenderer';
 import CommitList from './CommitList';

@@ -12,7 +12,7 @@ import { ApiResource } from '../../api/base';
 import ScoringChip from './ScoringChip';
 import SmartDate from '../../components/SmartDate';
 import { useFilterContext } from '../../contexts/FilterContext';
-import OverridePopper from '../../components/OverridePopper';
+import OverridePopper from './OverridePopper';
 import styled from 'styled-components';
 
 const StyledAccordionDetails = styled(AccordionDetails)`
