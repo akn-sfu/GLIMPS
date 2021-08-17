@@ -14,7 +14,6 @@ import { RepositoryMember } from '@ceres/types';
 import { useRepositoryMembers } from '../../../api/repo_members';
 import DifferentiatingIcon from './DifferentiatingIcon';
 import { Collapse, Typography } from '@material-ui/core';
-import AlternatePageTitleFormat from '../../../components/AlternatePageTitleFormat';
 import { Alert, Pagination } from '@material-ui/lab';
 import MemberDropdown from '../../../components/MemberDropdown';
 import ItemPerPageDropdown from './ItemPerPageDropdown';
@@ -153,14 +152,16 @@ const CommentList: React.FC = () => {
             </Alert>
           </Collapse>
         </Box>
-        <AlternatePageTitleFormat>
-          <Typography variant='h1' color='primary'>
-            Comments
-          </Typography>
-          <Box className={classes.formControl}>
-            <MemberDropdown repositoryId={repositoryId} />
-          </Box>
-        </AlternatePageTitleFormat>
+        <Box my={4}>
+          <Grid container justify='space-between'>
+            <Typography variant='h1' color='primary'>
+              Comments
+            </Typography>
+            <Box className={classes.formControl}>
+              <MemberDropdown repositoryId={repositoryId} />
+            </Box>
+          </Grid>
+        </Box>
         <Box my={1} className={classes.root}>
           <Grid container justify='space-between'>
             <Tabs
