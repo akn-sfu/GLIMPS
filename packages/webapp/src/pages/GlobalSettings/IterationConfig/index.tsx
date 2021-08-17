@@ -5,14 +5,14 @@ import ListItem from '@material-ui/core/ListItem';
 import Typography from '@material-ui/core/Typography';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useSearchScoringConfigs } from '../../api/scoringConfig';
-import SmartDate from '../../components/SmartDate';
-import ScoringLayout from './components/ScoringLayout';
+import { useSearchGroupConfigs } from '../../../api/groupConfig';
+import SmartDate from '../../../components/SmartDate';
+import GroupLayout from './GroupLayout';
 
-const BrowseScoringConfigsPage: React.FC = () => {
-  const { data } = useSearchScoringConfigs();
+const BrowseIterationConfigPage: React.FC = () => {
+  const { data } = useSearchGroupConfigs({}, 0, 1000);
   return (
-    <ScoringLayout showCreateButton showBackButton>
+    <GroupLayout showCreateButton showBackButton>
       <Box mx={2}>
         <Grid container>
           <Grid item xs={6}>
@@ -24,26 +24,26 @@ const BrowseScoringConfigsPage: React.FC = () => {
         </Grid>
       </Box>
       <List>
-        {data?.results?.map((scoringConfig) => (
+        {data?.results?.map((groupConfig) => (
           <ListItem
-            key={scoringConfig.meta.id}
+            key={groupConfig.meta.id}
             button
             component={Link}
-            to={`/settings/scoring/edit?id=${scoringConfig.meta.id}`}
+            to={`/settings/group/edit?id=${groupConfig.meta.id}`}
           >
             <Grid item xs={6}>
-              <Typography>{scoringConfig.name}</Typography>
+              <Typography>{groupConfig.name}</Typography>
             </Grid>
             <Grid item xs={6}>
               <Typography>
-                <SmartDate>{scoringConfig.meta.updatedAt}</SmartDate>
+                <SmartDate>{groupConfig.meta.updatedAt}</SmartDate>
               </Typography>
             </Grid>
           </ListItem>
         ))}
       </List>
-    </ScoringLayout>
+    </GroupLayout>
   );
 };
 
-export default BrowseScoringConfigsPage;
+export default BrowseIterationConfigPage;

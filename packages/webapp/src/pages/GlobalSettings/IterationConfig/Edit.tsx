@@ -1,6 +1,6 @@
 import React from 'react';
-import Form from './components/Form';
-import GroupLayout from './components/GroupLayout';
+import Form from './IterationForm';
+import GroupLayout from './GroupLayout';
 import { useHistory, useLocation } from 'react-router-dom';
 import { parse } from 'querystring';
 import { GroupConfig } from '@ceres/types';
@@ -8,7 +8,7 @@ import {
   useCreateGroupConfig,
   useGetGroupConfig,
   useUpdateGroupConfig,
-} from '../../api/groupConfig';
+} from '../../../api/groupConfig';
 
 interface PreloadedFormProps {
   id: string;

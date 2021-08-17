@@ -27,7 +27,9 @@ const GroupLayout: React.FC<GroupLayoutProps> = ({
           <Grid item>
             <Grid container alignItems='center'>
               <Grid item>
-                <DefaultPageTitleFormat>Group Config</DefaultPageTitleFormat>
+                <DefaultPageTitleFormat>
+                  Iteration Config
+                </DefaultPageTitleFormat>
               </Grid>
             </Grid>
           </Grid>

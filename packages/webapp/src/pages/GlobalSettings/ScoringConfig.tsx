@@ -5,14 +5,14 @@ import ListItem from '@material-ui/core/ListItem';
 import Typography from '@material-ui/core/Typography';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useSearchGroupConfigs } from '../../api/groupConfig';
+import { useSearchScoringConfigs } from '../../api/scoringConfig';
 import SmartDate from '../../components/SmartDate';
-import GroupLayout from './components/GroupLayout';
+import ScoringLayout from '../ScoringConfig/components/ScoringLayout';
 
-const BrowseGroupConfigPage: React.FC = () => {
-  const { data } = useSearchGroupConfigs({}, 0, 1000);
+const BrowseScoringConfigsPage: React.FC = () => {
+  const { data } = useSearchScoringConfigs();
   return (
-    <GroupLayout showCreateButton showBackButton>
+    <ScoringLayout showCreateButton showBackButton>
       <Box mx={2}>
         <Grid container>
           <Grid item xs={6}>
@@ -24,26 +24,26 @@ const BrowseGroupConfigPage: React.FC = () => {
         </Grid>
       </Box>
       <List>
-        {data?.results?.map((groupConfig) => (
+        {data?.results?.map((scoringConfig) => (
           <ListItem
-            key={groupConfig.meta.id}
+            key={scoringConfig.meta.id}
             button
             component={Link}
-            to={`/settings/group/edit?id=${groupConfig.meta.id}`}
+            to={`/settings/scoring/edit?id=${scoringConfig.meta.id}`}
           >
             <Grid item xs={6}>
-              <Typography>{groupConfig.name}</Typography>
+              <Typography>{scoringConfig.name}</Typography>
             </Grid>
             <Grid item xs={6}>
               <Typography>
-                <SmartDate>{groupConfig.meta.updatedAt}</SmartDate>
+                <SmartDate>{scoringConfig.meta.updatedAt}</SmartDate>
               </Typography>
             </Grid>
           </ListItem>
         ))}
       </List>
-    </GroupLayout>
+    </ScoringLayout>
   );
 };
 
-export default BrowseGroupConfigPage;
+export default BrowseScoringConfigsPage;

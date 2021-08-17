@@ -1,6 +1,6 @@
 import React from 'react';
-import DefaultPageLayout from '../../shared/DefaultPageLayout';
-import SettingsForm from '../../components/SettingsForm';
+import DefaultPageLayout from '../../../shared/DefaultPageLayout';
+import SettingsForm from './SettingsForm';
 
 const ApiSettingPage: React.FC = () => {
   return (
