@@ -1,9 +1,7 @@
 import React from 'react';
 import { Tooltip } from '@material-ui/core';
-
 import { createStyles, makeStyles } from '@material-ui/core/styles';
-
-import info from '../../../assets/info.svg';
+import Info from '../../../../assets/info.svg';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -54,7 +52,7 @@ const Stat: React.FC<IStatProps> = ({ name, value, description }) => {
         {name}
         {description && (
           <Tooltip title={description} placement='top' arrow>
-            <img className={classes.icon} src={info} />
+            <img className={classes.icon} src={Info} />
           </Tooltip>
         )}
       </p>

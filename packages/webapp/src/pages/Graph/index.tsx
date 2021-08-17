@@ -1,5 +1,5 @@
 import React from 'react';
-import DynamicGraph from '../../components/DynamicGraph';
+import DynamicGraph from './DynamicGraph';
 import DefaultPageLayout from '../../shared/DefaultPageLayout';
 
 const Graph: React.FC = () => {

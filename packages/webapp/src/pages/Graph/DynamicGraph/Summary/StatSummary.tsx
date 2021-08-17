@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ThemeProvider, Tooltip } from '@material-ui/core';
-import Stat, { IStatProps } from '../Summary/Stats';
+import Stat, { IStatProps } from './Stats';
 import { createMuiTheme } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
-import clipboard from '../../../assets/clipboard.svg';
-import widths from '../Summary/PixelWidthArray';
+import widths from './PixelWidthArray';
+import Clipboard from '../../../../assets/clipboard.svg';
 const useStyles = makeStyles(() =>
   createStyles({
     container: {
@@ -122,7 +122,7 @@ const StatSummary: React.FC<IStatSummaryProps> = ({ statData }) => {
         <div className={classes.statTools}>
           <Tooltip title={copyMessage} arrow>
             <button onClick={copyToClipboard} className={classes.copyButton}>
-              <img src={clipboard} />
+              <img src={Clipboard} />
             </button>
           </Tooltip>
         </div>

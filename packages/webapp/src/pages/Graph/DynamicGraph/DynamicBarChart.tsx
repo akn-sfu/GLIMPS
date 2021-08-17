@@ -11,8 +11,8 @@ import {
   ResponsiveContainer,
   CartesianGrid,
 } from 'recharts';
-import { GraphTab } from '..';
-import SmartDate from '../../SmartDate';
+import { GraphTab } from '.';
+import SmartDate from '../../../components/SmartDate';
 
 interface BarChartProps {
   graphData: any[];
