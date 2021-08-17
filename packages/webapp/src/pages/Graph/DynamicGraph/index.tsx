@@ -19,7 +19,7 @@ import { useRepositoryMembers } from '../../../api/repo_members';
 import { ApiResource } from '../../../api/base';
 import StudentDropdown from '../../../components/StudentDropdown';
 import StatSummary from './Summary/StatSummary';
-import MemberDropdown from '../../../components/MemberDropdown';
+import MemberDropdown from '../../../shared/MemberDropdown';
 import RepoAndDateAlert from '../../../components/RepoAndDateAlert';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 

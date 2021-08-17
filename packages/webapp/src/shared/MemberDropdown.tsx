@@ -4,10 +4,10 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import React, { useEffect, useState } from 'react';
-import { useRepositoryAuthors } from '../../api/author';
-import { ApiResource } from '../../api/base';
-import { useRepositoryMembers } from '../../api/repo_members';
-import { useFilterContext } from '../../contexts/FilterContext';
+import { useRepositoryAuthors } from '../api/author';
+import { ApiResource } from '../api/base';
+import { useRepositoryMembers } from '../api/repo_members';
+import { useFilterContext } from '../contexts/FilterContext';
 
 function findEmailsForMember(
   memberId: string,

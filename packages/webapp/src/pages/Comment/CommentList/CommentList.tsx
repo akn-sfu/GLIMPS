@@ -15,7 +15,7 @@ import { useRepositoryMembers } from '../../../api/repo_members';
 import DifferentiatingIcon from './DifferentiatingIcon';
 import { Collapse, Typography } from '@material-ui/core';
 import { Alert, Pagination } from '@material-ui/lab';
-import MemberDropdown from '../../../components/MemberDropdown';
+import MemberDropdown from '../../../shared/MemberDropdown';
 import ItemPerPageDropdown from './ItemPerPageDropdown';
 import { Note } from '@ceres/types';
 import RepoAndDateAlert from '../../../components/RepoAndDateAlert';
