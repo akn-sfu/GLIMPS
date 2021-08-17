@@ -20,7 +20,7 @@ import { ScoreOverrideQueueProvider } from './contexts/ScoreOverrideQueue';
 import { useInfiniteCommit } from '../../api/commit';
 import ScoreOverrideQueueInfo from './CommitList/ScoreOverrideQueueInfo';
 import { DateTime } from 'luxon';
-import RepoAndDateAlert from '../../components/RepoAndDateAlert';
+import RepoAndDateAlert from '../../shared/components/RepoAndDateAlert';
 import StudentDropdown from '../../shared/components/StudentDropdown';
 
 const IndependentScrollGrid = styled(Grid)`

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import DefaultPageLayout from '../../shared/components/DefaultPageLayout';
-import RepositoryList from '../../components/Repository';
-import APIKeyModal from '../../components/APIKeyModal';
+import RepositoryList from './RepositoryList';
+import APIKeyModal from './APIKeyModal';
 import { useRepositoryContext } from '../../contexts/RepositoryContext';
 import { useFilterContext } from '../../contexts/FilterContext';
 

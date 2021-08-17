@@ -18,7 +18,7 @@ import { Alert, Pagination } from '@material-ui/lab';
 import MemberDropdown from '../../../shared/components/MemberDropdown';
 import ItemPerPageDropdown from './ItemPerPageDropdown';
 import { Note } from '@ceres/types';
-import RepoAndDateAlert from '../../../components/RepoAndDateAlert';
+import RepoAndDateAlert from '../../../shared/components/RepoAndDateAlert';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
