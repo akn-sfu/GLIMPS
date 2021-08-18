@@ -5,7 +5,7 @@ import {
   useQuery,
   useQueryClient,
 } from 'react-query';
-import axios from '../util/axios';
+import axios from '../shared/util/axios';
 
 export function useApiQuery<T>(route: string, params?: any) {
   const client = useQueryClient();

@@ -12,26 +12,26 @@ import {
   useGetRepository,
   useRemoveCollaborator,
 } from '../../api/repository';
-import DefaultPageLayout from '../../components/DefaultPageLayout';
-import DefaultPageTitleFormat from '../../components/DefaultPageTitleFormat';
-import SmartDate from '../../components/SmartDate';
+import DefaultPageLayout from '../../shared/components/DefaultPageLayout';
+import DefaultPageTitleFormat from '../../shared/components/DefaultPageTitleFormat';
+import SmartDate from '../../shared/components/SmartDate';
 import { useAuthContext } from '../../contexts/AuthContext';
-import Collaborators from '../RepositorySetup/components/Collaborators';
-import LeaveRepository from '../RepositorySetup/components/LeaveRepository';
-import MembersWarning from '../RepositorySetup/components/MembersWarning';
-import ScoringConfigWarning from '../RepositorySetup/components/ScoringConfigWarning';
-import ScoringConfigSelector from './components/ScoringConfigSelector';
+import Collaborators from './Collaborator/Collaborators';
+import LeaveRepository from './Collaborator/LeaveRepository';
+import MembersWarning from './Members/MembersWarning';
+import ScoringConfigWarning from './ScoringConfig/ScoringConfigWarning';
+import ScoringConfigSelector from './ScoringConfig/ScoringConfigSelector';
 import { useUpdateScoring } from '../../api/scoring';
 import { ApiResource } from '../../api/base';
 import { GlobWeight, Repository, ScoringConfig } from '@ceres/types';
-import RepoFilter from '../../components/RepositoryFilter';
+import RepoFilter from './RepoFilter';
 import styled from 'styled-components';
-import AccordionMenu from './components/AccordionMenu';
-import Members from '../Members';
-import ScoringConfigOverrides from './components/ScoringConfigOverrides';
-import ScoringConfigOverrideWarning from './components/ScoringConfigOverrideWarning';
-import ScoringConfigDialog from './components/ScoringConfigDialog';
-import ScrollToTop from '../../components/Common/ScrollToTop';
+import AccordionMenu from './AccordionMenu';
+import Members from './Members';
+import ScoringConfigOverrides from './ScoringConfig/ScoringConfigOverrides';
+import ScoringConfigOverrideWarning from './ScoringConfig/ScoringConfigOverrideWarning';
+import ScoringConfigDialog from './ScoringConfig/ScoringConfigDialog';
+import ScrollToTop from '../../shared/components/ScrollToTop';
 
 const MainContainer = styled.div`
   display: grid;

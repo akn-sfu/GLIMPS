@@ -1,6 +1,6 @@
 import React from 'react';
-import DynamicGraph from '../../components/DynamicGraph';
-import DefaultPageLayout from '../../components/DefaultPageLayout';
+import DynamicGraph from './DynamicGraph';
+import DefaultPageLayout from '../../shared/components/DefaultPageLayout';
 
 const Graph: React.FC = () => {
   return (

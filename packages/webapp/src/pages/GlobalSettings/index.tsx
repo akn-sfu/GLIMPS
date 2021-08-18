@@ -1,9 +1,9 @@
 import React from 'react';
-import DefaultPageLayout from '../../components/DefaultPageLayout';
-import DefaultPageTitleFormat from '../../components/DefaultPageTitleFormat';
+import DefaultPageLayout from '../../shared/components/DefaultPageLayout';
+import DefaultPageTitleFormat from '../../shared/components/DefaultPageTitleFormat';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
-import LinkCard from '../../components/LinkCard';
+import LinkCard from './LinkCard';
 
 const SettingsPage: React.FC = () => {
   return (
