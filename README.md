@@ -12,7 +12,8 @@ GitLab Analyzer is an analysis tool to analyze user contributions to a GitLab pr
    (2) login as the admin (user: root, password: glimps123)
    (3) approve your request  
     (click the top-left 🔧 (Admin Area) -> click Overview -> click User ->click pending approval)
-   (4) sign out and login as your created user
+   (4) give your created user access to all repos 
+   (5) sign out and login as your created user
   ```  
   New developers please send a request to Dr. Brian Fraser for admin access on these two servers (-08 and -09).
 * Production site:  
