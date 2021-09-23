@@ -6,14 +6,15 @@ GitLab Analyzer is an analysis tool to analyze user contributions to a GitLab pr
 
 * Staging site:  
  `master` is continuously deployed on server <https://cmpt373-1211-08.cmpt.sfu.ca/> (aka -08 )  
-  Target on our own Gitlab Server: <https://cmpt373-1211-09.cmpt.sfu.ca/> (aka -09 )
+  Target on our own Gitlab server: <https://cmpt373-1211-09.cmpt.sfu.ca/> (aka -09 )
   ``` 
-  Gitlab Admin
-  name: root
-  password: glimps123
-  (please create yourself a user, and then use the Admin account to approve it and give repo access)
+  （1）register a user at <https://cmpt373-1211-09.cmpt.sfu.ca/>  
+   (2) login as the admin (user: root, password: glimps123)
+   (3) approve your request  
+    (click the top-left 🔧 (Admin Area) -> click Overview -> click User ->click pending approval)
+   (4) sign out and login as your created user
   ```  
-  New developers please send a request to Dr. Brian Fraser for admin access on these two Servers (-08 and -09).
+  New developers please send a request to Dr. Brian Fraser for admin access on these two servers (-08 and -09).
 * Production site:  
   <https://cmpt373-1211-07.cmpt.sfu.ca/> (Target on SFU Gitlab Server: <https://csil-git1.cs.surrey.sfu.ca/>).
  
