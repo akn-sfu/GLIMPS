@@ -11,7 +11,7 @@ GitLab Analyzer is an analysis tool to analyze user contributions to a GitLab pr
   Gitlab Admin
   name: root
   password: glimps123
-  (please create yourself a user on our gitlab server and use the Admin account to give yourself access to all the repos)
+  (please create yourself a user, and then use the Admin account to approve it and give repo access)
   ```  
   New developers please send a request to Dr. Brian Fraser for admin access on these two Servers (-08 and -09).
 * Production site:  
