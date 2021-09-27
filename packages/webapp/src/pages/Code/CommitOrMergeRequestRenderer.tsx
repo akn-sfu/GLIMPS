@@ -61,24 +61,17 @@ function getAuthorMergeSumCommitScore(
   commitScoreSum: number,
   mergeRequest: ApiResource<MergeRequest>,
 ): string {
-  let mergeScore: string | null = null;
-  if (mergeRequest) {
-    if (filteredAuthorEmails.length > 0) {
-      for (const email of filteredAuthorEmails) {
-        if (mergeRequest?.extensions?.commitScoreSums?.[email]) {
-          mergeScore = mergeRequest.extensions.commitScoreSums[
-            email
-          ].sum.toFixed(1);
-          break;
-        } else {
-          mergeScore = '0.0';
-        }
+  let mergeScore = 0;
+  if (filteredAuthorEmails.length > 0) {
+    for (const email of filteredAuthorEmails) {
+      if (mergeRequest?.extensions?.commitScoreSums?.[email]) {
+        mergeScore += mergeRequest.extensions.commitScoreSums[email].sum;
       }
-    } else {
-      mergeScore = commitScoreSum?.toFixed(1);
     }
+  } else {
+    mergeScore = commitScoreSum;
   }
-  return mergeScore;
+  return mergeScore.toFixed(1);
 }
 
 const CommitOrMergeRequestRenderer: React.FC<CommitOrMergeRequestRendererProps> = ({
@@ -120,11 +113,13 @@ const CommitOrMergeRequestRenderer: React.FC<CommitOrMergeRequestRendererProps> 
     mergeRequest?.extensions?.commitScoreSums || {},
   );
 
-  const mergeScore = getAuthorMergeSumCommitScore(
-    filteredAuthorEmails,
-    commitScoreSum,
-    mergeRequest,
-  );
+  const mergeScore = mergeRequest
+    ? getAuthorMergeSumCommitScore(
+        filteredAuthorEmails,
+        commitScoreSum,
+        mergeRequest,
+      )
+    : null;
 
   return (
     <Accordion
