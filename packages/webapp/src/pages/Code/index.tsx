@@ -198,6 +198,7 @@ const ListMergeRequestPage = () => {
                         mergeRequest={commitOrMergeRequest}
                         active={active}
                         shrink={!!showSpiltView}
+                        filteredAuthorEmails={emails}
                         onClickSummary={() => {
                           setActiveCommit(undefined);
                           setActiveMergeRequest(
