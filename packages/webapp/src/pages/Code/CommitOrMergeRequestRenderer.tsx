@@ -25,6 +25,7 @@ interface CommitOrMergeRequestRendererProps {
   mergeRequest?: ApiResource<MergeRequest>;
   commit?: ApiResource<Commit>;
   active?: boolean;
+  filteredAuthorEmails?: string[];
   onClickSummary?: () => void;
   shrink?: boolean;
 }
@@ -55,10 +56,29 @@ function getSumAndHasOverride(
   };
 }
 
+function getAuthorMergeSumCommitScore(
+  filteredAuthorEmails: string[],
+  commitScoreSum: number,
+  mergeRequest: ApiResource<MergeRequest>,
+): string {
+  let mergeScore = 0;
+  if (filteredAuthorEmails.length > 0) {
+    for (const email of filteredAuthorEmails) {
+      if (mergeRequest?.extensions?.commitScoreSums?.[email]) {
+        mergeScore += mergeRequest.extensions.commitScoreSums[email].sum;
+      }
+    }
+  } else {
+    mergeScore = commitScoreSum;
+  }
+  return mergeScore.toFixed(1);
+}
+
 const CommitOrMergeRequestRenderer: React.FC<CommitOrMergeRequestRendererProps> = ({
   active,
   mergeRequest,
   commit,
+  filteredAuthorEmails,
   onClickSummary,
   children,
   shrink,
@@ -92,6 +112,14 @@ const CommitOrMergeRequestRenderer: React.FC<CommitOrMergeRequestRendererProps> 
     emails || [],
     mergeRequest?.extensions?.commitScoreSums || {},
   );
+
+  const mergeScore = mergeRequest
+    ? getAuthorMergeSumCommitScore(
+        filteredAuthorEmails,
+        commitScoreSum,
+        mergeRequest,
+      )
+    : null;
 
   return (
     <Accordion
@@ -148,7 +176,7 @@ const CommitOrMergeRequestRenderer: React.FC<CommitOrMergeRequestRendererProps> 
               <Grid item xs={2}>
                 <Typography align='right'>
                   <ScoringChip hasOverride={commitHasOverride}>
-                    {mergeRequest ? commitScoreSum?.toFixed(1) : null}
+                    {mergeScore}
                   </ScoringChip>
                 </Typography>
               </Grid>
@@ -173,7 +201,7 @@ const CommitOrMergeRequestRenderer: React.FC<CommitOrMergeRequestRendererProps> 
               <Grid item xs={2}>
                 <Typography align='right'>
                   <ScoringChip hasOverride={commitHasOverride}>
-                    {mergeRequest ? commitScoreSum?.toFixed(1) : null}
+                    {mergeScore}
                   </ScoringChip>
                 </Typography>
               </Grid>
