@@ -35,6 +35,7 @@ services:
       TYPEORM_PASSWORD: ${DB_PASSWORD}
       JWT_SIGNING_KEY: ${JWT_SIGNING_KEY}
       GITLAB_BASE_URL: ${GITLAB_BASE_URL}
+      TZ: "America/Vancouver"
   webapp:
     container_name: glimps_webapp
     restart: always
