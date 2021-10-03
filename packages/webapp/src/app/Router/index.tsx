@@ -28,48 +28,53 @@ export function Router() {
         <Route path='/sfu' exact>
           <SfuVerify />
         </Route>
-        <Route path='/repository' exact>
+        <PrivateRoute path='/repository' exact>
           <RepositoryPage />
-        </Route>
-        <Route path='/setup/:id' exact>
+        </PrivateRoute>
+        <PrivateRoute path='/setup/:id' exact>
           <RepositoryScoringContextProvider>
             <RepoSetupPage />
           </RepositoryScoringContextProvider>
-        </Route>
-        <Route path='/graph/:id' exact>
+        </PrivateRoute>
+        <PrivateRoute path='/graph/:id' exact>
           <Graph />
-        </Route>
-        <Route path='/comment/:id' exact>
+        </PrivateRoute>
+        <PrivateRoute path='/comment/:id' exact>
           <CommentPage />
-        </Route>
-        <Route path='/settings' exact>
+        </PrivateRoute>
+        <PrivateRoute path='/settings' exact>
           <SettingsPage />
-        </Route>
-        <Route path='/settings/api' exact>
+        </PrivateRoute>
+        <PrivateRoute path='/settings/api' exact>
           <ApiSettingPage />
-        </Route>
-        <Route path='/settings/scoring' exact>
+        </PrivateRoute>
+        <PrivateRoute path='/settings/scoring' exact>
           <BrowseScoringConfigsPage />
-        </Route>
-        <Route path='/settings/group' exact>
+        </PrivateRoute>
+        <PrivateRoute path='/settings/group' exact>
           <BrowseGroupConfigPage />
-        </Route>
-        <Route path='/merge/:id' exact>
+        </PrivateRoute>
+        <PrivateRoute path='/merge/:id' exact>
           <ListMergeRequestPage />
-        </Route>
-        <Route path='/operations' exact>
+        </PrivateRoute>
+        <PrivateRoute path='/operations' exact>
           <OperationsPage />
-        </Route>
-        <Route path='/settings/scoring/edit' exact>
+        </PrivateRoute>
+        <PrivateRoute path='/settings/scoring/edit' exact>
           <EditScoringConfigPage />
-        </Route>
-        <Route path='/settings/group/edit' exact>
+        </PrivateRoute>
+        <PrivateRoute path='/settings/group/edit' exact>
           <EditGroupConfigPage />
-        </Route>
+        </PrivateRoute>
         <Route path='/logout' exact>
           <Login />
         </Route>
       </Switch>
     </BrowserRouter>
   );
+}
+
+function PrivateRoute({ children, ...rest }) {
+  const { user } = useAuthContext();
+  return <Route {...rest}>{user?.id ? children : <Login />}</Route>;
 }
