@@ -19,7 +19,6 @@ import CommentPage from '../../pages/Comment';
 
 export function Router() {
   const { user } = useAuthContext();
-  console.log(user);
   return (
     <BrowserRouter>
       <Switch>
