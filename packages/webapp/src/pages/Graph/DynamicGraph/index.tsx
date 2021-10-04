@@ -256,7 +256,9 @@ const DynamicGraph: React.FC = () => {
                   },
                   {
                     name: 'Comment words',
-                    value: totalIssueWordCount + totalmergeRequestWordCount,
+                    value:
+                      Math.abs(totalIssueWordCount) +
+                      totalmergeRequestWordCount,
                     description:
                       'Sum of words in all comments for selected date range',
                   },
