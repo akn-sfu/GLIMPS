@@ -73,13 +73,13 @@ function combineData(
       commitCounts.find((count) => isSameDay(date, new Date(count.date)))
         ?.score || 0,
     mergeRequestCount:
-      -mergeRequestCounts.find((count) => isSameDay(date, new Date(count.date)))
+      mergeRequestCounts.find((count) => isSameDay(date, new Date(count.date)))
         ?.count || 0,
     mergeRequestScore:
-      -mergeRequestCounts.find((count) => isSameDay(date, new Date(count.date)))
+      mergeRequestCounts.find((count) => isSameDay(date, new Date(count.date)))
         ?.score || 0,
     issueWordCount:
-      -issueWordCounts.find((count) => isSameDay(date, new Date(count.date)))
+      issueWordCounts.find((count) => isSameDay(date, new Date(count.date)))
         ?.wordCount || 0,
     mergeRequestWordCount:
       mergeRequestWordCounts.find((count) =>
@@ -233,7 +233,7 @@ const DynamicGraph: React.FC = () => {
                 statData={[
                   {
                     name: 'MR score',
-                    value: Math.abs(totalMrScore).toFixed(1),
+                    value: totalMrScore.toFixed(1),
                     description:
                       'Sum of merge request diff scores for mrs for selected date range.',
                   },
@@ -244,7 +244,7 @@ const DynamicGraph: React.FC = () => {
                   },
                   {
                     name: '# Merge request',
-                    value: Math.abs(totalMrCount),
+                    value: totalMrCount,
                     description:
                       'Number of merge requests made for selected date range',
                   },
@@ -256,9 +256,7 @@ const DynamicGraph: React.FC = () => {
                   },
                   {
                     name: 'Comment words',
-                    value:
-                      Math.abs(totalIssueWordCount) +
-                      totalmergeRequestWordCount,
+                    value: totalIssueWordCount + totalmergeRequestWordCount,
                     description:
                       'Sum of words in all comments for selected date range',
                   },
