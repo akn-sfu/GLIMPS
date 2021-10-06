@@ -33,6 +33,13 @@ const DateTick: React.FC<any> = (props) => {
 };
 
 const DynamicBarChart: React.FC<BarChartProps> = ({ graphData, graphTab }) => {
+  // Switch the 'mergeRequestCount', 'mergeRequestScore' and 'issueWordCount' into
+  // negative  values so they are showing as downwards bars in the contribution graph
+  for (const x in graphData) {
+    graphData[x].mergeRequestCount = -graphData[x].mergeRequestCount;
+    graphData[x].mergeRequestScore = -graphData[x].mergeRequestScore;
+    graphData[x].issueWordCount = -graphData[x].issueWordCount;
+  }
   if (graphTab === GraphTab.code) {
     return (
       <ResponsiveContainer width={900} height={600}>
