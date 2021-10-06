@@ -154,7 +154,7 @@ const CommentList: React.FC = () => {
         </Box>
         <Box my={4}>
           <Grid container justify='space-between'>
-            <Typography variant='h1' color='primary'>
+            <Typography variant='h3' color='primary'>
               Comments
             </Typography>
             <Box className={classes.formControl}>
