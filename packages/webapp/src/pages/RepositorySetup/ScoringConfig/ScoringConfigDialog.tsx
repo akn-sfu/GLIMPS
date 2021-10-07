@@ -69,9 +69,9 @@ const ScoringConfigDialog: React.FC<ScoringConfigDialogProps> = ({
       }}
     >
       <DialogContent>
-        <Typography variant='h2'>Scoring Config</Typography>
+        <Typography variant='h4'>Scoring Config</Typography>
         <GlobWeightsRenderer weights={scoringConfig} />
-        <Typography variant='h2'>Repository Overrides</Typography>
+        <Typography variant='h4'>Repository Overrides</Typography>
         <GlobWeightsRenderer weights={overrides} />
       </DialogContent>
     </Dialog>

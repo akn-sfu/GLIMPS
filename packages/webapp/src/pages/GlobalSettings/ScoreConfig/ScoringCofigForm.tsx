@@ -75,7 +75,7 @@ const ScoringConfigForm: React.FC<FormProps> = ({
           />
         </Box>
       )}
-      <Typography variant='h2'>Filetype Scaling</Typography>
+      <Typography variant='h4'>Filetype Scaling</Typography>
       {fields.map((field, index) => (
         <div key={field.id}>
           <Box my={1} p={1}>

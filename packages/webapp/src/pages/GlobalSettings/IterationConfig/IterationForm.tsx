@@ -109,7 +109,7 @@ const Form: React.FC<FormProps> = ({ defaultValues, onSubmit }) => {
           />
         </Box>
 
-        <Typography variant='h2'>Repository Selection</Typography>
+        <Typography variant='h4'>Repository Selection</Typography>
         {repoFields.map((field, index) => (
           <Box py={1} key={field.id}>
             <input
@@ -140,7 +140,7 @@ const Form: React.FC<FormProps> = ({ defaultValues, onSubmit }) => {
           onRepositoryAdd={onRepositoryAdd}
           repositoriesSelected={(repoFields || []).map((repo) => repo.id)}
         />
-        <Typography variant='h2'>Iterations</Typography>
+        <Typography variant='h4'>Iterations</Typography>
         {iterFields.map((field, index) => (
           <div key={field.id}>
             <Box my={1} p={1}>

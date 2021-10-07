@@ -14,13 +14,13 @@ const OperationsPage: React.FC = () => {
         <Container>
           <DefaultPageTitleFormat>Operations</DefaultPageTitleFormat>
           <Box my={2}>
-            <Typography variant='h2'>In progress</Typography>
+            <Typography variant='h4'>In progress</Typography>
           </Box>
           <OperationGroup
             status={[Operation.Status.PENDING, Operation.Status.PROCESSING]}
           />
           <Box my={2}>
-            <Typography variant='h2'>Completed</Typography>
+            <Typography variant='h4'>Completed</Typography>
           </Box>
           <OperationGroup status={[Operation.Status.COMPLETED]} />
         </Container>
