@@ -3,6 +3,7 @@ import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
+import { uniq } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { useRepositoryAuthors } from '../../api/author';
 import { ApiResource } from '../../api/base';
@@ -37,7 +38,7 @@ const StudentDropdown: React.FC<StudentDropdownProps> = ({
     if (value !== 'all') {
       const emails = findEmailsForMember(value, authors);
       setAuthor(value);
-      onChange(emails.length > 0 ? emails : ['doesnotexist@email.com']);
+      onChange(emails.length > 0 ? uniq(emails) : ['doesnotexist@email.com']);
     } else {
       setAuthor(value);
       onChange([]);
