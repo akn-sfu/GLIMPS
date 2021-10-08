@@ -55,7 +55,7 @@ export class CommitService extends BaseService<
 
     if (filters.start_date) {
       query.andWhere(
-        "(commit.resource #>> '{authored_date}')::timestamptz AT time zone '" +filters.timezone +"'  >= (:startDate)",
+        "(commit.resource #>> '{authored_date}') >= (:startDate)",
         {
           startDate: filters.start_date,
         },
@@ -63,7 +63,7 @@ export class CommitService extends BaseService<
     }
 
     if (filters.end_date) {
-      query.andWhere("(commit.resource #>> '{authored_date}')::timestamptz AT time zone '" +filters.timezone +"'  <= (:endDate)", {
+      query.andWhere("(commit.resource #>> '{authored_date}') <= (:endDate)", {
         endDate: filters.end_date,
       });
     }
