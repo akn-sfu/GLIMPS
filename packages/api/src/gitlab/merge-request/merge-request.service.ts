@@ -63,7 +63,7 @@ export class MergeRequestService extends BaseService<
 
     if (filters.merged_start_date) {
       query.andWhere(
-        "(merge_request.resource #>> '{merged_at}')::timestamptz AT time zone '" +filters.timezone +"'  >= (:startDate)",
+        "(merge_request.resource #>> '{merged_at}') >= (:startDate)",
         {
           startDate: filters.merged_start_date,
         },
@@ -72,7 +72,7 @@ export class MergeRequestService extends BaseService<
 
     if (filters.merged_end_date) {
       query.andWhere(
-        "(merge_request.resource #>> '{merged_at}')::timestamptz AT time zone '" +filters.timezone +"'  <= (:endDate)",
+        "(merge_request.resource #>> '{merged_at}') <= (:endDate)",
         {
           endDate: filters.merged_end_date,
         },

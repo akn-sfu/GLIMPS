@@ -45,13 +45,13 @@ export class NoteService extends BaseService<Note, NoteEntity, NoteQueryDto> {
     }
 
     if (filters.created_start_date) {
-      query.andWhere("(note.resource #>> '{created_at}')::timestamptz AT time zone '" +filters.timezone +"'  >= (:startDate)", {
+      query.andWhere("(note.resource #>> '{created_at}') >= (:startDate)", {
         startDate: filters.created_start_date,
       });
     }
 
     if (filters.created_end_date) {
-      query.andWhere("(note.resource #>> '{created_at}')::timestamptz AT time zone '" +filters.timezone +"'  <= (:endDate)", {
+      query.andWhere("(note.resource #>> '{created_at}') <= (:endDate)", {
         endDate: filters.created_end_date,
       });
     }
