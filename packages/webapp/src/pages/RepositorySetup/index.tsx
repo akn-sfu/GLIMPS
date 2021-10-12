@@ -32,6 +32,7 @@ import ScoringConfigOverrides from './ScoringConfig/ScoringConfigOverrides';
 import ScoringConfigOverrideWarning from './ScoringConfig/ScoringConfigOverrideWarning';
 import ScoringConfigDialog from './ScoringConfig/ScoringConfigDialog';
 import ScrollToTop from '../../shared/components/ScrollToTop';
+import ScoringConfigOutdatedWarning from './ScoringConfig/ScoringConfigOutdatedWarning';
 
 const MainContainer = styled.div`
   display: grid;
@@ -144,6 +145,7 @@ const RepoSetupPage: React.FC = () => {
           <MembersWarning repositoryId={id} />
           <ScoringConfigWarning repository={data} repositoryId={id} />
           <ScoringConfigOverrideWarning repository={data} />
+          <ScoringConfigOutdatedWarning repository={data} />
           <AccordionMenu title='Filter Config' color='#e4f5ba'>
             <Grid item xs={12}>
               <RepoFilter />
