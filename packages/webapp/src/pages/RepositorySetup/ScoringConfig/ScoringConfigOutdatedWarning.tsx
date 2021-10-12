@@ -22,7 +22,7 @@ const ScoringConfigOutdatedWarning: React.FC<ScoringConfigOutdatedWarningProps> 
   }
   return (
     <Alert severity='warning'>
-      This repository has not been re-evaluated since the last sync.
+      This repository has not been evaluated since the last sync.
     </Alert>
   );
 };
