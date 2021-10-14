@@ -12,6 +12,7 @@ import SmartDate from '../../../shared/components/SmartDate';
 import UndecoratedLink from '../../../shared/components/UndecoratedLink';
 import WarningIcon from '@material-ui/icons/Warning';
 import ShareIcon from '@material-ui/icons/Share';
+import Tooltip from '@material-ui/core/Tooltip';
 
 interface RepositoryCardProps {
   repository: ApiResource<Repository>;
@@ -38,14 +39,16 @@ const SyncButton = (props: { syncing: boolean; onClick: () => void }) => (
 const DeleteButton = (props: { syncing: boolean; onClick: () => void }) => (
   <Box position='absolute' right='4rem' top='3rem'>
     {!props.syncing && (
-      <Button
-        variant='contained'
-        color='secondary'
-        disabled={props.syncing}
-        onClick={props.onClick}
-      >
-        Delete
-      </Button>
+      <Tooltip title='Remove Repository from Glimps'>
+        <Button
+          variant='contained'
+          color='secondary'
+          disabled={props.syncing}
+          onClick={props.onClick}
+        >
+          Delete
+        </Button>
+      </Tooltip>
     )}
   </Box>
 );
