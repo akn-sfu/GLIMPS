@@ -42,39 +42,39 @@ export function useFilterContext() {
 }
 
 function useFilterState(): FilterContextState {
-  const startDateValue = localStorage.getItem(START_DATE_LOCAL_STORAGE_KEY);
+  const startDateValue = sessionStorage.getItem(START_DATE_LOCAL_STORAGE_KEY);
   if (!startDateValue) {
-    localStorage.setItem(
+    sessionStorage.setItem(
       START_DATE_LOCAL_STORAGE_KEY,
       DateTime.now().minus({ days: 7 }).toISO(),
     );
   }
-  const endDateValue = localStorage.getItem(END_DATE_LOCAL_STORAGE_KEY);
+  const endDateValue = sessionStorage.getItem(END_DATE_LOCAL_STORAGE_KEY);
   if (!endDateValue) {
-    localStorage.setItem(END_DATE_LOCAL_STORAGE_KEY, DateTime.now().toISO());
+    sessionStorage.setItem(END_DATE_LOCAL_STORAGE_KEY, DateTime.now().toISO());
   }
-  const authorValue = localStorage.getItem(AUTHOR_LOCAL_STORAGE_KEY);
+  const authorValue = sessionStorage.getItem(AUTHOR_LOCAL_STORAGE_KEY);
   if (!authorValue) {
-    localStorage.setItem(AUTHOR_LOCAL_STORAGE_KEY, 'all');
+    sessionStorage.setItem(AUTHOR_LOCAL_STORAGE_KEY, 'all');
   }
-  const iterationValue = localStorage.getItem(ITERATION_LOCAL_STORAGE_KEY);
+  const iterationValue = sessionStorage.getItem(ITERATION_LOCAL_STORAGE_KEY);
   if (!iterationValue) {
-    localStorage.setItem(ITERATION_LOCAL_STORAGE_KEY, 'none');
+    sessionStorage.setItem(ITERATION_LOCAL_STORAGE_KEY, 'none');
   }
   const [startDate, setStartDate] = useState<string>(
-    localStorage.getItem(START_DATE_LOCAL_STORAGE_KEY),
+    sessionStorage.getItem(START_DATE_LOCAL_STORAGE_KEY),
   );
   const [endDate, setEndDate] = useState<string>(
-    localStorage.getItem(END_DATE_LOCAL_STORAGE_KEY),
+    sessionStorage.getItem(END_DATE_LOCAL_STORAGE_KEY),
   );
   const [author, setAuthor] = useState<string>(
-    localStorage.getItem(AUTHOR_LOCAL_STORAGE_KEY),
+    sessionStorage.getItem(AUTHOR_LOCAL_STORAGE_KEY),
   );
   const [emails, setEmail] = useState<string[]>(
-    JSON.parse(localStorage.getItem(EMAIL_LOCAL_STORAGE_KEY) || '[]'),
+    JSON.parse(sessionStorage.getItem(EMAIL_LOCAL_STORAGE_KEY) || '[]'),
   );
   const [iteration, setIteration] = useState<string>(
-    localStorage.getItem(ITERATION_LOCAL_STORAGE_KEY),
+    sessionStorage.getItem(ITERATION_LOCAL_STORAGE_KEY),
   );
 
   return {
@@ -94,19 +94,22 @@ function useFilterState(): FilterContextState {
 export const FilterContextProvider: React.FC = ({ children }) => {
   const value = useFilterState();
   useEffect(() => {
-    localStorage.setItem(START_DATE_LOCAL_STORAGE_KEY, value.startDate);
+    sessionStorage.setItem(START_DATE_LOCAL_STORAGE_KEY, value.startDate);
   }, [value.startDate]);
   useEffect(() => {
-    localStorage.setItem(END_DATE_LOCAL_STORAGE_KEY, value.endDate);
+    sessionStorage.setItem(END_DATE_LOCAL_STORAGE_KEY, value.endDate);
   }, [value.endDate]);
   useEffect(() => {
-    localStorage.setItem(AUTHOR_LOCAL_STORAGE_KEY, value.author);
+    sessionStorage.setItem(AUTHOR_LOCAL_STORAGE_KEY, value.author);
   }, [value.author]);
   useEffect(() => {
-    localStorage.setItem(EMAIL_LOCAL_STORAGE_KEY, JSON.stringify(value.emails));
+    sessionStorage.setItem(
+      EMAIL_LOCAL_STORAGE_KEY,
+      JSON.stringify(value.emails),
+    );
   }, [value.emails]);
   useEffect(() => {
-    localStorage.setItem(ITERATION_LOCAL_STORAGE_KEY, value.iteration);
+    sessionStorage.setItem(ITERATION_LOCAL_STORAGE_KEY, value.iteration);
   }, [value.iteration]);
   return (
     <FilterContext.Provider value={value}>{children}</FilterContext.Provider>
@@ -114,11 +117,11 @@ export const FilterContextProvider: React.FC = ({ children }) => {
 };
 
 export function resetFilterStorage() {
-  localStorage.setItem(
+  sessionStorage.setItem(
     START_DATE_LOCAL_STORAGE_KEY,
     DateTime.now().minus({ days: 7 }).toISO(),
   );
-  localStorage.setItem(END_DATE_LOCAL_STORAGE_KEY, DateTime.now().toISO());
-  localStorage.setItem(AUTHOR_LOCAL_STORAGE_KEY, 'all');
-  localStorage.setItem(ITERATION_LOCAL_STORAGE_KEY, 'none');
+  sessionStorage.setItem(END_DATE_LOCAL_STORAGE_KEY, DateTime.now().toISO());
+  sessionStorage.setItem(AUTHOR_LOCAL_STORAGE_KEY, 'all');
+  sessionStorage.setItem(ITERATION_LOCAL_STORAGE_KEY, 'none');
 }
