@@ -21,7 +21,9 @@ export abstract class Fetch {
             params: params,
           })
           .toPromise();
-      } catch {}
+      } catch (err) {
+        console.error(`Fetch Attempt ${attemptsCount+1}`, err);
+      }
       attemptsCount++;
     }
     if (!data) {
@@ -48,7 +50,9 @@ export abstract class Fetch {
             params: params,
           })
           .toPromise();
-      } catch {}
+      } catch (err) {
+        console.error(`Fetch Attempt ${attemptsCount+1}`, err);
+      }
       attemptsCount++;
     }
     if (!data) {
