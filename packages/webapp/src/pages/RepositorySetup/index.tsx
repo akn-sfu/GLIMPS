@@ -32,6 +32,7 @@ import ScoringConfigOverrides from './ScoringConfig/ScoringConfigOverrides';
 import ScoringConfigOverrideWarning from './ScoringConfig/ScoringConfigOverrideWarning';
 import ScoringConfigDialog from './ScoringConfig/ScoringConfigDialog';
 import ScrollToTop from '../../shared/components/ScrollToTop';
+import { useRepositoryContext } from '../../contexts/RepositoryContext';
 
 const MainContainer = styled.div`
   display: grid;
@@ -48,6 +49,7 @@ const RepoSetupPage: React.FC = () => {
     isLoading: updateScoreLoading,
   } = useUpdateScoring();
   const { user } = useAuthContext();
+  const { setRepositoryId } = useRepositoryContext();
   const { data, invalidate } = useGetRepository(id);
   const { mutate: addCollaborator } = useAddCollaborator(id);
   const { mutate: removeCollaborator } = useRemoveCollaborator(id);
@@ -106,6 +108,10 @@ const RepoSetupPage: React.FC = () => {
       },
     );
   };
+
+  useEffect(() => {
+    setRepositoryId(id);
+  }, []);
 
   useEffect(() => {
     setRubricCompleted(data?.extensions?.scoringConfig?.config ? true : false);
