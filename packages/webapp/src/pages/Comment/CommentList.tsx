@@ -148,7 +148,7 @@ const CommentList: React.FC = () => {
               severity='info'
               onClose={() => setOpen(!alertOpen)}
             >
-              Comments can only be filtered for users in the repository
+              Comments can only be filtered for current users in the repository
             </Alert>
           </Collapse>
         </Box>
