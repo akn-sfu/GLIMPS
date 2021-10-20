@@ -24,7 +24,6 @@ const ScoringConfigOutdatedWarning: React.FC<ScoringConfigOutdatedWarningProps> 
   return (
     <div>
       <Prompt
-        //when={!lastSynced}
         message={
           'You have not evaluated this repository since the last sync. Click Ok if you want to proceed.'
         }
