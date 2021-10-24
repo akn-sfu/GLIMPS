@@ -324,6 +324,13 @@ const CodeView: React.FC<CodeViewProps> = ({ mergeRequest, commit }) => {
               </Grid>
             )}
           </Grid>
+        </Grid>
+        <Grid
+          container
+          justify='space-between'
+          alignItems='flex-start'
+          spacing={4}
+        >
           <Grid item>
             <Paper variant='outlined'>
               <Box p={2}>
