@@ -20,6 +20,7 @@ function countOrphanAuthors(authors: Commit.Author[]) {
 
 function makeAlert(Severity: any, Title: string, Msg: string) {
   return (
+    // Box mt={1} make a small space between the warning messages
     <Box mt={1}>
       <Alert severity={Severity} variant='standard'>
         <AlertTitle>
