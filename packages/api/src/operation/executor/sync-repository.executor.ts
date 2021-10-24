@@ -52,16 +52,19 @@ export class SyncRepositoryExecutor extends BaseExecutor<Stage> {
 
   async run() {
     await this.startStage(Stage.sync);
-    try{
+    try {
       await this.init();
-    await Promise.all([
-      this.syncResource(Stage.syncCommits, this.commitService),
-      this.syncResource(Stage.syncMergeRequests, this.mergeRequestService),
-      this.syncResource(Stage.syncIssues, this.issueService),
-    ]);
-    await Promise.all([this.linkCommitsAndMergeRequests(), this.linkAuthors()]);
-    }catch(err){
-      console.error(err);
+      await Promise.all([
+        this.syncResource(Stage.syncCommits, this.commitService),
+        this.syncResource(Stage.syncMergeRequests, this.mergeRequestService),
+        this.syncResource(Stage.syncIssues, this.issueService),
+      ]);
+      await Promise.all([
+        this.linkCommitsAndMergeRequests(),
+        this.linkAuthors(),
+      ]);
+    } catch (err) {
+      console.error('Error running Sync Repository Exectuor', err);
       await this.terminateStage(Stage.sync);
       await this.terminateStage(Stage.syncCommits);
       await this.terminateStage(Stage.syncMergeRequests);
@@ -83,7 +86,7 @@ export class SyncRepositoryExecutor extends BaseExecutor<Stage> {
     const { token } = await this.tokenService.findOneByUserId(
       this.operation.user.id,
     );
-    
+
     this.repository = repository;
     this.token = token;
 
@@ -92,29 +95,29 @@ export class SyncRepositoryExecutor extends BaseExecutor<Stage> {
     );
     const actualDefaultBranch = await this.repositoryService.getDefaultBranch(
       repository.resource.id,
-      token
+      token,
     );
 
-    if (repository.resource.default_branch != actualDefaultBranch){
-      //update resource.default_branch in database  
-      try{
+    if (repository.resource.default_branch != actualDefaultBranch) {
+      //update resource.default_branch in database
+      try {
         await this.repositoryService.updateDefaultBranch(
           actualDefaultBranch,
           this.repository,
-        )
-      } catch(err){
-        console.error(err);
+        );
+      } catch (err) {
+        console.error('Error updating default branch', err);
       }
-        //delete all branch related entries
-        try{
-          await Promise.all([
-            this.deleteMergeRequestsResources(this.mergeRequestService),
-            this.deleteCommitResources(this.commitService),
-            this.deleteIssueResources(this.issueService),
-          ])
-        }catch(err){
-          console.error(err);
-        };
+      //delete all branch related entries
+      try {
+        await Promise.all([
+          this.deleteMergeRequestsResources(this.mergeRequestService),
+          this.deleteCommitResources(this.commitService),
+          this.deleteIssueResources(this.issueService),
+        ]);
+      } catch (err) {
+        console.error('Error deleting merge, commit, or issue', err);
+      }
     }
     await this.updateLastSync();
   }
@@ -144,7 +147,9 @@ export class SyncRepositoryExecutor extends BaseExecutor<Stage> {
           this.repository,
           resources,
         );
-      } catch {}
+      } catch (e) {
+        console.error('Error Syncing Resources', e);
+      }
       page++;
     } while (resources.length > 0);
     await this.completeStage(name);
@@ -157,7 +162,9 @@ export class SyncRepositoryExecutor extends BaseExecutor<Stage> {
         this.token,
         this.repository,
       );
-    } catch {}
+    } catch (e) {
+      console.error('Error linking commits and merge requests', e);
+    }
 
     await this.completeStage(Stage.linkCommitsAndMergeRequests);
   }
@@ -195,45 +202,56 @@ export class SyncRepositoryExecutor extends BaseExecutor<Stage> {
     await this.completeStage(Stage.linkAuthors);
   }
 
-  private async deleteCommitResources(
-    service: CommitService
-  ): Promise<void>{
-    const valuesWithCount = await service.findByRepositoryId(this.repository.id,'commit');
-    const commits = valuesWithCount[0]
+  private async deleteCommitResources(service: CommitService): Promise<void> {
+    const valuesWithCount = await service.findByRepositoryId(
+      this.repository.id,
+      'commit',
+    );
+    const commits = valuesWithCount[0];
     let i = 0;
-    while ( i < valuesWithCount[1]) {
+    while (i < valuesWithCount[1]) {
       try {
         await service.deleteCommitEntity(commits[i]);
-      } catch{}
+      } catch (e) {
+        console.error('Error deleting commit resource', e);
+      }
       i++;
-    } 
+    }
   }
 
   private async deleteMergeRequestsResources(
-    service: MergeRequestService
-  ): Promise<void>{
-    const valuesWithCount = await service.findByRepositoryId(this.repository.id, 'merge_request');
-    const merge_requests = valuesWithCount[0]
+    service: MergeRequestService,
+  ): Promise<void> {
+    const valuesWithCount = await service.findByRepositoryId(
+      this.repository.id,
+      'merge_request',
+    );
+    const merge_requests = valuesWithCount[0];
     let i = 0;
-    while ( i < valuesWithCount[1]) {
+    while (i < valuesWithCount[1]) {
       try {
         await service.deleteMergeRequestEntity(merge_requests[i]);
-      } catch{}
+      } catch (e) {
+        console.error('Error deleting merge request resources', e);
+      }
       i++;
-    } 
+    }
   }
 
-  private async deleteIssueResources(
-    service: IssueService
-  ): Promise<void>{
-    const valuesWithCount = await service.findByRepositoryId(this.repository.id, 'issue');
-    const issues = valuesWithCount[0]
+  private async deleteIssueResources(service: IssueService): Promise<void> {
+    const valuesWithCount = await service.findByRepositoryId(
+      this.repository.id,
+      'issue',
+    );
+    const issues = valuesWithCount[0];
     let i = 0;
-    while ( i < valuesWithCount[1]) {
+    while (i < valuesWithCount[1]) {
       try {
         await service.deleteIssueEntity(issues[i]);
-      } catch{}
+      } catch (e) {
+        console.error('Error deleting issue resource', e);
+      }
       i++;
-    } 
+    }
   }
 }

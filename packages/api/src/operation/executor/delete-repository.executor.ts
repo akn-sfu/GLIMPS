@@ -23,11 +23,11 @@ export class DeleteRepositoryExecutor extends BaseExecutor<Stage> {
 
   async run() {
     await this.startStage(Stage.deleteRepo);
-    try{
+    try {
       await this.init();
-      await this.deleteRepository(this.repositoryService)
-    } catch(err){
-      console.error(err);
+      await this.deleteRepository(this.repositoryService);
+    } catch (err) {
+      console.error('Error running delete repository executor', err);
       await this.terminateStage(Stage.deleteRepo);
       return;
     }
@@ -44,11 +44,11 @@ export class DeleteRepositoryExecutor extends BaseExecutor<Stage> {
     this.repository = repository;
   }
 
-  private async deleteRepository(
-    service: RepositoryService
-  ): Promise<void>{
-      try {
-        await service.deleteRepositoryEntity(this.repository);
-      } catch{}
+  private async deleteRepository(service: RepositoryService): Promise<void> {
+    try {
+      await service.deleteRepositoryEntity(this.repository);
+    } catch (e) {
+      console.error('Error Deleting Repository', e);
+    }
   }
 }

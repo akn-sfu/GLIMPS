@@ -122,7 +122,7 @@ const CommitList: React.FC<CommitListProps> = ({
               void fetchNextPageCommit();
             }}
           >
-            Load More
+            Load More Commits
           </Button>
         )}
       </Box>

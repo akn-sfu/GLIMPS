@@ -7,7 +7,6 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import React from 'react';
 import { ApiResource } from '../../../api/base';
-import { useRepositoryContext } from '../../../contexts/RepositoryContext';
 import SmartDate from '../../../shared/components/SmartDate';
 import UndecoratedLink from '../../../shared/components/UndecoratedLink';
 import WarningIcon from '@material-ui/icons/Warning';
@@ -70,16 +69,11 @@ const RepositoryCard: React.FC<RepositoryCardProps> = ({
   syncRepository,
   deleteRepository,
 }) => {
-  const { setRepositoryId } = useRepositoryContext();
   const hasBeenSynced = !!repository?.extensions?.lastSync;
-  const handleClick = () => {
-    setRepositoryId(repository.meta.id);
-  };
   const collaboratorsCount = repository?.extensions?.collaborators?.length || 0;
   return (
     <Box my={3} position='relative'>
       <UndecoratedLink
-        onClick={handleClick}
         to={hasBeenSynced ? `/setup/${repository.meta.id}` : undefined}
       >
         <Box component={Paper} p={3} bgcolor='#F3FCFF'>

@@ -38,7 +38,9 @@ export class GitlabTokenService {
           })
           .toPromise();
         return axiosResponse.status === 200;
-      } catch (e) {}
+      } catch (e) {
+        console.error(`Authentication attempt ${attemptsCount + 1}`, e);
+      }
       attemptsCount++;
     }
 
@@ -65,7 +67,7 @@ export class GitlabTokenService {
     return this.gitlabTokenRepository.save(gitlabToken);
   }
 
-  async grabTargetURL(){
+  async grabTargetURL() {
     return this.configService.get<string>('gitlabBaseUrl');
   }
 }
