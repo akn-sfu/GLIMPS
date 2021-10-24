@@ -7,6 +7,7 @@ import AlertTitle from '@material-ui/lab/AlertTitle';
 import { Prompt } from 'react-router-dom';
 import { useRepositoryScoringContext } from './ScoringConfig/RepositoryScoringContext';
 import { isEqual } from 'lodash';
+import Box from '@material-ui/core/Box';
 
 interface MakeWarningProps {
   repository: Repository;
@@ -19,12 +20,14 @@ function countOrphanAuthors(authors: Commit.Author[]) {
 
 function makeAlert(Severity: any, Title: string, Msg: string) {
   return (
-    <Alert severity={Severity} variant='standard'>
-      <AlertTitle>
-        <strong>{Title}</strong>
-      </AlertTitle>
-      {Msg}
-    </Alert>
+    <Box mt={1}>
+      <Alert severity={Severity} variant='standard'>
+        <AlertTitle>
+          <strong>{Title}</strong>
+        </AlertTitle>
+        {Msg}
+      </Alert>
+    </Box>
   );
 }
 
@@ -36,13 +39,15 @@ const MakeWarning: React.FC<MakeWarningProps> = ({
     return null;
   }
 
+  // make warning messages showing in the repository setup page
+  let Alert_missAuthors = null;
+  let Alert_missRubric = null;
+  let Alert_outdatedScore = null;
+  let Alert_pendingScore = null;
+
+  // construct a prompt showing all the warning message
   let needsPrompt = false;
   let prompt_msg = '****Warnings****\n';
-
-  let UnauthoredWarning = null;
-  let NoScoringConfig = null;
-  let OutdatedScore = null;
-  let OverridedScore = null;
 
   // check for unauthored commits
   const { data } = useRepositoryAuthors(repositoryId);
@@ -54,7 +59,7 @@ const MakeWarning: React.FC<MakeWarningProps> = ({
       'There are ' +
       orphanCount +
       ' commit authors that are not linked to a repository member.';
-    UnauthoredWarning = makeAlert('warning', 'Unauthored commits', warning);
+    Alert_missAuthors = makeAlert('warning', 'Unauthored commits', warning);
   }
 
   // check scoring config
@@ -64,7 +69,7 @@ const MakeWarning: React.FC<MakeWarningProps> = ({
     prompt_msg += '\n-->The scoring config is missing.';
     const warning =
       'This repository has no scoring rubric. Without a rubric, all files will have a weight of 1 when calculating scores.';
-    NoScoringConfig = makeAlert('warning', 'Missing scoring config', warning);
+    Alert_missRubric = makeAlert('warning', 'Missing scoring config', warning);
   }
 
   // remind for recalculating the score
@@ -75,7 +80,7 @@ const MakeWarning: React.FC<MakeWarningProps> = ({
     prompt_msg += '\n-->You have not evaluated the score since the last sync';
     const warning =
       'This repository has not been evaluated since the last sync.';
-    OutdatedScore = makeAlert('error', 'Outdated scores', warning);
+    Alert_outdatedScore = makeAlert('error', 'Outdated scores', warning);
   }
 
   // check for pending scoring override
@@ -86,7 +91,7 @@ const MakeWarning: React.FC<MakeWarningProps> = ({
     const warning =
       'You have pending scoring config override changes. These changes will not' +
       'be saved until you re-evaluate this repository snapshot.';
-    OverridedScore = makeAlert('error', 'Pending scoring config', warning);
+    Alert_pendingScore = makeAlert('error', 'Pending scoring config', warning);
   }
 
   prompt_msg += '\n\nClick OK if you want to proceed.';
@@ -94,10 +99,10 @@ const MakeWarning: React.FC<MakeWarningProps> = ({
   return (
     <div>
       <Prompt when={needsPrompt} message={prompt_msg} />
-      {UnauthoredWarning}
-      {NoScoringConfig}
-      {OutdatedScore}
-      {OverridedScore}
+      {Alert_missAuthors}
+      {Alert_missRubric}
+      {Alert_outdatedScore}
+      {Alert_pendingScore}
     </div>
   );
 };
