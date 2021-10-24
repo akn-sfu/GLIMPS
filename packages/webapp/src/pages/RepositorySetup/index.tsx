@@ -3,8 +3,8 @@ import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { useSnackbar } from 'notistack';
-import React, { useState, useEffect } from 'react';
-import { Prompt, useHistory, useParams } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
 import {
   AddCollaboratorPayload,
   RemoveCollaboratorPayload,
@@ -18,8 +18,6 @@ import SmartDate from '../../shared/components/SmartDate';
 import { useAuthContext } from '../../contexts/AuthContext';
 import Collaborators from './Collaborator/Collaborators';
 import LeaveRepository from './Collaborator/LeaveRepository';
-import MembersWarning from './Members/MembersWarning';
-import ScoringConfigWarning from './ScoringConfig/ScoringConfigWarning';
 import ScoringConfigSelector from './ScoringConfig/ScoringConfigSelector';
 import { useUpdateScoring } from '../../api/scoring';
 import { ApiResource } from '../../api/base';
@@ -29,9 +27,10 @@ import styled from 'styled-components';
 import AccordionMenu from './AccordionMenu';
 import Members from './Members';
 import ScoringConfigOverrides from './ScoringConfig/ScoringConfigOverrides';
-import ScoringConfigOverrideWarning from './ScoringConfig/ScoringConfigOverrideWarning';
 import ScoringConfigDialog from './ScoringConfig/ScoringConfigDialog';
 import ScrollToTop from '../../shared/components/ScrollToTop';
+import { useRepositoryContext } from '../../contexts/RepositoryContext';
+import MakeWarning from './MakeWarning';
 
 const MainContainer = styled.div`
   display: grid;
@@ -42,12 +41,12 @@ const MainContainer = styled.div`
 const RepoSetupPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { push } = useHistory();
-  const [rubricCompleted, setRubricCompleted] = useState(true);
   const {
     mutate: updateScoring,
     isLoading: updateScoreLoading,
   } = useUpdateScoring();
   const { user } = useAuthContext();
+  const { setRepositoryId } = useRepositoryContext();
   const { data, invalidate } = useGetRepository(id);
   const { mutate: addCollaborator } = useAddCollaborator(id);
   const { mutate: removeCollaborator } = useRemoveCollaborator(id);
@@ -65,7 +64,6 @@ const RepoSetupPage: React.FC = () => {
     scoringConfig: ApiResource<ScoringConfig>,
     overrides: GlobWeight[],
   ) => {
-    setRubricCompleted(false);
     updateScoring(
       {
         repositoryId: id,
@@ -108,15 +106,11 @@ const RepoSetupPage: React.FC = () => {
   };
 
   useEffect(() => {
-    setRubricCompleted(data?.extensions?.scoringConfig?.config ? true : false);
-  }, [data]);
+    setRepositoryId(id);
+  }, []);
 
   return (
     <DefaultPageLayout>
-      <Prompt
-        when={!rubricCompleted}
-        message='Scoring rubric has not been selected. Click Ok if you want to proceed.'
-      />
       <Container>
         <ScrollToTop />
         <Grid container justify='space-between' alignItems='center'>
@@ -141,9 +135,7 @@ const RepoSetupPage: React.FC = () => {
           </Grid>
         </Grid>
         <MainContainer>
-          <MembersWarning repositoryId={id} />
-          <ScoringConfigWarning repository={data} repositoryId={id} />
-          <ScoringConfigOverrideWarning repository={data} />
+          <MakeWarning repository={data} repositoryId={id} />
           <AccordionMenu title='Filter Config' color='#e4f5ba'>
             <Grid item xs={12}>
               <RepoFilter />
