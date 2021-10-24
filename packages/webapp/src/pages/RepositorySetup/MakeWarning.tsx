@@ -59,7 +59,7 @@ const MakeWarning: React.FC<MakeWarningProps> = ({
     const warning =
       'There are ' +
       orphanCount +
-      ' commit authors that are not linked to a repository member.';
+      ' commits whose authors are not linked to any repository member.';
     Alert_missAuthors = makeAlert('warning', 'Unauthored commits', warning);
   }
 

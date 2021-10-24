@@ -3,7 +3,7 @@ import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { useSnackbar } from 'notistack';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import {
   AddCollaboratorPayload,
@@ -29,6 +29,7 @@ import Members from './Members';
 import ScoringConfigOverrides from './ScoringConfig/ScoringConfigOverrides';
 import ScoringConfigDialog from './ScoringConfig/ScoringConfigDialog';
 import ScrollToTop from '../../shared/components/ScrollToTop';
+import { useRepositoryContext } from '../../contexts/RepositoryContext';
 import MakeWarning from './MakeWarning';
 
 const MainContainer = styled.div`
@@ -45,6 +46,7 @@ const RepoSetupPage: React.FC = () => {
     isLoading: updateScoreLoading,
   } = useUpdateScoring();
   const { user } = useAuthContext();
+  const { setRepositoryId } = useRepositoryContext();
   const { data, invalidate } = useGetRepository(id);
   const { mutate: addCollaborator } = useAddCollaborator(id);
   const { mutate: removeCollaborator } = useRemoveCollaborator(id);
@@ -102,6 +104,10 @@ const RepoSetupPage: React.FC = () => {
       },
     );
   };
+
+  useEffect(() => {
+    setRepositoryId(id);
+  }, []);
 
   return (
     <DefaultPageLayout>
