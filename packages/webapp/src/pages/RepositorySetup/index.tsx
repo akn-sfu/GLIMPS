@@ -109,10 +109,6 @@ const RepoSetupPage: React.FC = () => {
     setRepositoryId(id);
   }, []);
 
-  useEffect(() => {
-    setRubricCompleted(data?.extensions?.scoringConfig?.config ? true : false);
-  }, [data]);
-
   return (
     <DefaultPageLayout>
       <Container>
