@@ -305,7 +305,7 @@ const CodeView: React.FC<CodeViewProps> = ({ mergeRequest, commit }) => {
         >
           <Grid item>
             <Typography variant='h2'>
-              {commit?.title || mergeRequest?.title}
+              {commit?.title || `${mergeRequest?.title} #${mergeRequest?.iid}`}
             </Typography>
           </Grid>
           <Grid item>
