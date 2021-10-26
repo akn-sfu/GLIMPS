@@ -305,10 +305,15 @@ const CodeView: React.FC<CodeViewProps> = ({ mergeRequest, commit }) => {
         >
           <Grid item>
             <Typography variant='h2'>
-              {commit?.title || `${mergeRequest?.title} #${mergeRequest?.iid}`}
+              {commit?.title || mergeRequest?.title}
             </Typography>
           </Grid>
           <Grid item>
+            {mergeRequest?.iid && (
+              <Grid item>
+                <Typography variant='h6'>{`MR${mergeRequest.iid}`}</Typography>
+              </Grid>
+            )}
             {allowEdit && (
               <Grid item>
                 <IconButton onClick={onScoreEdit as any}>
