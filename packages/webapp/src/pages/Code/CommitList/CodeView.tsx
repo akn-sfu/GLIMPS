@@ -303,12 +303,15 @@ const CodeView: React.FC<CodeViewProps> = ({ mergeRequest, commit }) => {
           alignItems='flex-start'
           spacing={4}
         >
-          <Grid item>
+          <Grid item xs={10}>
             <Typography variant='h2'>
               {commit?.title || mergeRequest?.title}
             </Typography>
           </Grid>
-          <Grid item>
+          <Grid container spacing={1} xs={2}>
+            <Box mt={2}>
+              {mergeRequest?.iid && <Grid item>{`MR${mergeRequest.iid}`}</Grid>}
+            </Box>
             {allowEdit && (
               <Grid item>
                 <IconButton onClick={onScoreEdit as any}>
