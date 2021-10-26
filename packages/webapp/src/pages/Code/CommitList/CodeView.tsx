@@ -310,10 +310,12 @@ const CodeView: React.FC<CodeViewProps> = ({ mergeRequest, commit }) => {
           </Grid>
           <Grid container spacing={1} xs={2}>
             <Box mt={2}>
-              {mergeRequest?.iid && <Grid item>{`MR${mergeRequest.iid}`}</Grid>}
+              {mergeRequest?.iid && (
+                <Grid item xs={1}>{`MR${mergeRequest.iid}`}</Grid>
+              )}
             </Box>
             {allowEdit && (
-              <Grid item>
+              <Grid item xs={1}>
                 <IconButton onClick={onScoreEdit as any}>
                   <EditIcon />
                 </IconButton>
