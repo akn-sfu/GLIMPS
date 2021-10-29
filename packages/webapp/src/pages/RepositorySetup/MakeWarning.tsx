@@ -45,6 +45,7 @@ const MakeWarning: React.FC<MakeWarningProps> = ({
   let Alert_missRubric = null;
   let Alert_outdatedScore = null;
   let Alert_pendingScore = null;
+  let successful_message = null;
 
   // construct a prompt showing all the warning message
   let needsPrompt = false;
@@ -95,6 +96,17 @@ const MakeWarning: React.FC<MakeWarningProps> = ({
     Alert_pendingScore = makeAlert('error', 'Pending scoring config', warning);
   }
 
+  // if everything goes well, show a successfull message
+  if (!needsPrompt) {
+    const warning =
+      'Everything seems to work well! You can go with the mark now.';
+    successful_message = makeAlert(
+      'success',
+      'Evaluation is successful!',
+      warning,
+    );
+  }
+
   prompt_msg += '\n\nClick OK if you want to proceed.';
 
   return (
@@ -104,6 +116,7 @@ const MakeWarning: React.FC<MakeWarningProps> = ({
       {Alert_missRubric}
       {Alert_outdatedScore}
       {Alert_pendingScore}
+      {successful_message}
     </div>
   );
 };
