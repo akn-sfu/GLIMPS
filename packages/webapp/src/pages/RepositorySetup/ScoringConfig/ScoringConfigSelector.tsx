@@ -1,4 +1,5 @@
 import { GlobWeight, Repository, ScoringConfig } from '@ceres/types';
+import { Box, CircularProgress } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
 import Grid from '@material-ui/core/Grid';
@@ -128,14 +129,21 @@ const ScoringConfigSelector: React.FC<ScoringConfigSelectorProps> = ({
               </Button>
             </Grid>
             <Grid item>
-              <Button
-                color='primary'
-                variant='contained'
-                onClick={handleSubmit}
-                disabled={isLoading}
-              >
-                Evaluate
-              </Button>
+              <Box position='Relative'>
+                <Button
+                  color='primary'
+                  variant='contained'
+                  onClick={handleSubmit}
+                  disabled={isLoading}
+                >
+                  Evaluate
+                </Button>
+                {isLoading && (
+                  <Box position='absolute' top='.25rem' left='1.5rem'>
+                    <CircularProgress color='secondary' />
+                  </Box>
+                )}
+              </Box>
             </Grid>
           </Grid>
         </Grid>
