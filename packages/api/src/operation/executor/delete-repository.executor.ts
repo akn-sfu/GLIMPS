@@ -47,6 +47,9 @@ export class DeleteRepositoryExecutor extends BaseExecutor<Stage> {
   private async deleteRepository(service: RepositoryService): Promise<void> {
     try {
       await service.deleteRepositoryEntity(this.repository);
+      // somewhat hacky approach to prevent the repository from being deleted from the repository list
+      this.repository.resource.extensions.lastSync = undefined;
+      await service.addRepositoryEntity(this.repository, this.operation.user);
     } catch (e) {
       console.error('Error Deleting Repository', e);
     }

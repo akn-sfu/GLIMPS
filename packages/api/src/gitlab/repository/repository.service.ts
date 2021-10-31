@@ -189,7 +189,7 @@ export class RepositoryService extends BaseService<
     );
     return axiosResponse.data;
   }
-
+  
   async getDefaultBranch(
     project_id: number,
     token: string,
@@ -220,5 +220,12 @@ export class RepositoryService extends BaseService<
     repo: RepositoryEntity
   ){
     return this.delete(repo);
+  }
+
+  async addRepositoryEntity(
+    repo: RepositoryEntity,
+    user: User
+  ){
+    return this.createOrUpdate(user, [repo.resource]);
   }
 }
