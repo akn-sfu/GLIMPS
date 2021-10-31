@@ -38,7 +38,7 @@ const SyncButton = (props: { syncing: boolean; onClick: () => void }) => (
 const DeleteButton = (props: { syncing: boolean; onClick: () => void }) => (
   <Box position='absolute' right='4rem' top='3rem'>
     {!props.syncing && (
-      <Tooltip title='Remove Repository from Glimps'>
+      <Tooltip title='Remove Synced Data from Glimps'>
         <Button
           variant='contained'
           color='secondary'
