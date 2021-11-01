@@ -298,8 +298,8 @@ export class MergeRequestService extends BaseService<
       // first request gets us the first page and lets us know if there are more to fetch
       // if there are, enter the for loop and fetch the remaining pages
       let remainingPagePromises = [];
-      for (let i=2; i <= pages; i++) {
-        const pageUrl = `projects/${repository.resource.id}/merge_requests/${mergeRequest.iid}/commits?page=${i}`;
+      for (let curPage = 2; curPage <= pages; curPage++) {
+        const pageUrl = `projects/${repository.resource.id}/merge_requests/${mergeRequest.iid}/commits?page=${curPage}`;
         const pagePromise = this.fetchWithRetries<Commit>(
           token,
           pageUrl,
