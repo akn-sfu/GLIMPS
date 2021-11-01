@@ -292,7 +292,23 @@ export class MergeRequestService extends BaseService<
       url,
       undefined,
     );
-    return axiosResponse.data;
+    let commitData = axiosResponse.data;
+    if (axiosResponse.headers?.['x-total-pages']) {
+      const pages = parseInt(axiosResponse.headers['x-total-pages']);
+      if (pages > 1) {
+        for (let i=2; i <= pages; i++) {
+          const url = `projects/${repository.resource.id}/merge_requests/${mergeRequest.iid}/commits?page=${i}`;
+          const axiosResponse = await this.fetchWithRetries<Commit>(
+            token,
+            url,
+            undefined,
+          );
+          commitData = commitData.concat(axiosResponse.data);
+        }
+      }
+      
+    }
+    return commitData;
   }
 
   private async fetchFromGitlab(
