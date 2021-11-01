@@ -295,18 +295,22 @@ export class MergeRequestService extends BaseService<
     let commitData = axiosResponse.data;
     if (axiosResponse.headers?.['x-total-pages']) {
       const pages = parseInt(axiosResponse.headers['x-total-pages']);
-      if (pages > 1) {
-        for (let i=2; i <= pages; i++) {
-          const url = `projects/${repository.resource.id}/merge_requests/${mergeRequest.iid}/commits?page=${i}`;
-          const axiosResponse = await this.fetchWithRetries<Commit>(
-            token,
-            url,
-            undefined,
-          );
-          commitData = commitData.concat(axiosResponse.data);
-        }
+      // first request gets us the first page and lets us know if there are more to fetch
+      // if there are, enter the for loop and fetch the remaining pages
+      let remainingPagePromises = [];
+      for (let i=2; i <= pages; i++) {
+        const pageUrl = `projects/${repository.resource.id}/merge_requests/${mergeRequest.iid}/commits?page=${i}`;
+        const pagePromise = this.fetchWithRetries<Commit>(
+          token,
+          pageUrl,
+          undefined,
+        );
+        remainingPagePromises.push(pagePromise);
       }
-      
+      const remainingPages = await Promise.all(remainingPagePromises);
+      remainingPages.forEach((page) => {
+        commitData = commitData.concat(page.data);
+      })
     }
     return commitData;
   }
