@@ -112,13 +112,8 @@ const MakeWarning: React.FC<MakeWarningProps> = ({
 
   // if everything goes well, show a successfull message
   if (!needsPrompt) {
-    const warning =
-      'Everything seems to work well! You can go with the mark now.';
-    successful_message = makeAlert(
-      'success',
-      'Evaluation is successful!',
-      warning,
-    );
+    const warning = 'You can start marking!';
+    successful_message = makeAlert('success', 'Setup Successful!', warning);
   }
 
   prompt_msg += '\n\nClick OK if you want to proceed.';
