@@ -33,7 +33,6 @@ const Author: React.FC<AuthorProps> = ({ author, member, allMembers }) => {
       mutate(newMember);
     }
   }, [value]);
-  console.log(author.author_email);
   return (
     <Box my={4}>
       <Grid justify='space-between' xs={12} alignItems='flex-start' container>
