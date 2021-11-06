@@ -6,7 +6,6 @@ import Grid from '@material-ui/core/Grid';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
-import Typography from '@material-ui/core/Typography';
 import React, { useEffect, useState } from 'react';
 import { useLinkAuthorToMember } from '../../../api/author';
 import { ApiResource } from '../../../api/base';
@@ -36,11 +35,11 @@ const Author: React.FC<AuthorProps> = ({ author, member, allMembers }) => {
   return (
     <Box my={4}>
       <Grid justify='space-between' alignItems='center' container>
-        <Grid item>
-          <Typography variant='h4'>{author.author_name}</Typography>
-          <Typography variant='body1'>{author.author_email}</Typography>
+        <Grid item xs={8}>
+          <div>{author.author_name}</div>
+          <div>{author.author_email}</div>
         </Grid>
-        <Grid item>
+        <Grid item xs={4}>
           {isLoading ? (
             <CircularProgress />
           ) : (
