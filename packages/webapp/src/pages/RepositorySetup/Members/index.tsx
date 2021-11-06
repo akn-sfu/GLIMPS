@@ -41,7 +41,6 @@ const Members: React.FC<MembersProps> = ({ id }) => {
         {members &&
           authors?.sort(compareCommitAuthors)?.map((author) => {
             const member = findSelectedMember(author, members);
-            console.log('--------------');
             return (
               <Author
                 key={author.meta.id}
