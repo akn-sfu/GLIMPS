@@ -93,6 +93,8 @@ export class OperationExecutorService {
       operation,
       this.operationRepository,
       this.repositoryService,
+      this.tokenService,
+      this.repositoryMemberService,
     );
     return executor.run();
   }

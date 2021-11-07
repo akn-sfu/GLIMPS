@@ -1,4 +1,6 @@
 import { Operation } from '@ceres/types';
+import { RepositoryMemberService } from 'src/gitlab/repository/repository-member/repository-member.service';
+import { GitlabTokenService } from 'src/gitlab/services/gitlab-token.service';
 import { Repository as TypeORMRepository } from 'typeorm';
 import { Repository } from '../../gitlab/repository/repository.entity';
 import { RepositoryService } from '../../gitlab/repository/repository.service';
@@ -14,12 +16,15 @@ export class DeleteRepositoryExecutor extends BaseExecutor<Stage> {
     operation: OperationEntity,
     operationRepository: TypeORMRepository<OperationEntity>,
     private readonly repositoryService: RepositoryService,
+    private readonly tokenService: GitlabTokenService,
+    private readonly repositoryMemberService: RepositoryMemberService,
   ) {
     super(operation, operationRepository);
     this.addStage(Stage.deleteRepo, 'Deleting Repository');
   }
 
   private repository: Repository;
+  private token: string;
 
   async run() {
     await this.startStage(Stage.deleteRepo);
@@ -42,6 +47,11 @@ export class DeleteRepositoryExecutor extends BaseExecutor<Stage> {
       payload.repository_id,
     );
     this.repository = repository;
+
+    const { token } = await this.tokenService.findOneByUserId(
+      this.operation.user.id,
+    );
+    this.token = token;
   }
 
   private async deleteRepository(service: RepositoryService): Promise<void> {
@@ -49,7 +59,18 @@ export class DeleteRepositoryExecutor extends BaseExecutor<Stage> {
       await service.deleteRepositoryEntity(this.repository);
       // somewhat hacky approach to prevent the repository from being deleted from the repository list
       this.repository.resource.extensions.lastSync = undefined;
-      await service.addRepositoryEntity(this.repository, this.operation.user);
+      const repo = await service.addRepositoryEntity(
+        this.repository,
+        this.operation.user,
+      );
+      if (repo?.[0]) {
+        await this.repositoryMemberService.syncForRepository(
+          repo[0],
+          this.token,
+        );
+      } else {
+        throw 'Unable to re-add repository after deleting';
+      }
     } catch (e) {
       console.error('Error Deleting Repository', e);
     }
