@@ -245,6 +245,7 @@ export class CommitService extends BaseService<
         commit: commit.id,
       },
       weights,
+      false
     );
     commit.resource = Extensions.updateExtensions(commit.resource, {
       score,

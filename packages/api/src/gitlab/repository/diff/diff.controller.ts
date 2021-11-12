@@ -13,7 +13,7 @@ export class DiffController {
     if (!merge_request && !commit) {
       throw new BadRequestException('repository or commit must be provided');
     }
-    return paginatedToResponse(this.diffService.search(query));
+    return paginatedToResponse(this.diffService.search(query, false));
   }
 
   @Get('/score')

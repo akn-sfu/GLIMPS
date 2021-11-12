@@ -353,6 +353,7 @@ export class MergeRequestService extends BaseService<
             commit: commit.id,
           },
           weights,
+          false
         );
         const override = commit.resource?.extensions?.override;
         score.score = ScoreOverride.computeScore(override, score.score);
@@ -390,6 +391,7 @@ export class MergeRequestService extends BaseService<
         merge_request: mergeRequest.id,
       },
       weights,
+      false
     );
     const commitScoreSums = await this.getSumScoreForMergeRequest(
       mergeRequest,
