@@ -50,7 +50,6 @@ export class DiffService extends BaseService<Diff, DiffEntity, DiffQueryDto> {
       });
     }
 
-    paginate(query, filters);
     return query;
   }
 
@@ -84,8 +83,8 @@ export class DiffService extends BaseService<Diff, DiffEntity, DiffQueryDto> {
     } while (diffs.length > 0);
   }
 
-  async calculateDiffScore(filters: DiffQueryDto, weights: GlobWeight[] = []) {
-    const [diffs] = await this.search(filters);
+  async calculateDiffScore(filters: DiffQueryDto, weights: GlobWeight[] = [], paginate?: boolean) {
+    const [diffs] = await this.search(filters, paginate);
     const updatedDiffs = diffs.map((diff) => {
       const summary = diff.resource?.summary;
       let score = 0;
