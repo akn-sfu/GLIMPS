@@ -97,8 +97,6 @@ const MakeWarning: React.FC<MakeWarningProps> = ({
 
   prompt_msg += '\n\nClick OK if you want to proceed.';
 
-  console.log(overrides);
-
   return (
     <div>
       <Prompt when={needsPrompt} message={prompt_msg} />
