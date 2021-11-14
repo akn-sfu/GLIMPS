@@ -51,6 +51,6 @@ export class FetchRepositoriesExecutor extends BaseExecutor<Stage> {
       this.token = token;
     } catch (e){
       console.error('Error finding token', e);
+    }
   }
-}
 }
