@@ -23,6 +23,10 @@ export class FetchRepositoriesExecutor extends BaseExecutor<Stage> {
 
   async run() {
     await this.init();
+    if(!this.token){
+      console.error("Gitlab token is missed");
+      return;
+    }
     await this.startStage(Stage.fetch);
 
     try {
@@ -46,7 +50,7 @@ export class FetchRepositoriesExecutor extends BaseExecutor<Stage> {
       );
       this.token = token;
     } catch (e){
-      console.error('Error finding token, probably there is no token', e);
+      console.error('Error finding token', e);
   }
 }
 }
