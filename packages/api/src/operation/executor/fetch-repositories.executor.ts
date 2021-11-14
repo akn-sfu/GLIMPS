@@ -40,9 +40,13 @@ export class FetchRepositoriesExecutor extends BaseExecutor<Stage> {
   }
 
   async init() {
-    const { token } = await this.tokenService.findOneByUserId(
-      this.operation.user.id,
-    );
-    this.token = token;
+    try {
+      const { token } = await this.tokenService.findOneByUserId(
+        this.operation.user.id,
+      );
+      this.token = token;
+    } catch (e){
+      console.error('Error finding token, probably there is no token', e);
   }
+}
 }
