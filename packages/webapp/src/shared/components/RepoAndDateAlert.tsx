@@ -8,16 +8,16 @@ const RepoAndDateAlert: React.FC = () => {
   const { repositoryId } = useRepositoryContext();
   const { data } = useGetRepository(repositoryId);
   const { startDate, endDate, iteration } = useFilterContext();
-
   return (
     <>
       <div>
         <Alert severity='info'>
-          {data?.name}
-          {' | '}
-          {startDate?.split('T')[0]} to {endDate?.split('T')[0]}
-          {' | '}
+          {data?.name_with_namespace}
+          {': Iteration : "'}
           {iteration == 'none' ? '' : iteration}
+          {'" ('}
+          {startDate?.split('T')[0]} to {endDate?.split('T')[0]}
+          {')'}
         </Alert>
       </div>
     </>
