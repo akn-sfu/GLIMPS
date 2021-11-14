@@ -24,7 +24,7 @@ export class FetchRepositoriesExecutor extends BaseExecutor<Stage> {
   async run() {
     await this.init();
     if(!this.token){
-      console.error("Gitlab token is missed");
+      console.error("Gitlab token is missing");
       return;
     }
     await this.startStage(Stage.fetch);
