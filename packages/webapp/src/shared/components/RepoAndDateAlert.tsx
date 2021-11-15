@@ -12,7 +12,7 @@ const RepoAndDateAlert: React.FC = () => {
   return (
     <>
       <div>
-        <Alert variant='filled' severity='info'>
+        <Alert variant='outlined' severity='info'>
           <AlertTitle>
             <strong>{data?.name_with_namespace}</strong>
           </AlertTitle>
