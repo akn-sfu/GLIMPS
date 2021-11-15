@@ -312,7 +312,7 @@ const CodeView: React.FC<CodeViewProps> = ({ mergeRequest, commit }) => {
   };
 
   return (
-    <Container>
+    <Container maxWidth={false}>
       <Box my={2}>
         <Grid
           container
