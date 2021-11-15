@@ -1,5 +1,6 @@
 import React from 'react';
 import Alert from '@material-ui/lab/Alert';
+import AlertTitle from '@material-ui/lab/AlertTitle';
 import { useRepositoryContext } from '../../contexts/RepositoryContext';
 import { useGetRepository } from '../../api/repository';
 import { useFilterContext } from '../../contexts/FilterContext';
@@ -7,15 +8,17 @@ import { useFilterContext } from '../../contexts/FilterContext';
 const RepoAndDateAlert: React.FC = () => {
   const { repositoryId } = useRepositoryContext();
   const { data } = useGetRepository(repositoryId);
-  const { startDate, endDate, iteration } = useFilterContext();
+  const { startDate, endDate } = useFilterContext();
   return (
     <>
       <div>
-        <Alert severity='info'>
+        <Alert variant='filled' severity='info'>
+          <AlertTitle>
+            <strong>{data?.name_with_namespace}</strong>
+          </AlertTitle>
+          {'Iteration: "'}
           {data?.name_with_namespace}
-          {': Iteration : "'}
-          {iteration == 'none' ? '' : iteration}
-          {'" ('}
+          {'"  ('}
           {startDate?.split('T')[0]} to {endDate?.split('T')[0]}
           {')'}
         </Alert>
