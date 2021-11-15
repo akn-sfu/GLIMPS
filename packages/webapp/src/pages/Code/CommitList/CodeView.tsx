@@ -36,7 +36,6 @@ const useStyles = makeStyles((theme: Theme) =>
       ...theme.typography.body1,
       color: theme.palette.text.primary,
       wordBreak: 'break-word',
-      maxWidth: '61.5em',
       '& .anchor-link': {
         marginTop: -(96 + 36), // Offset for the anchor.
         position: 'absolute',
@@ -312,7 +311,7 @@ const CodeView: React.FC<CodeViewProps> = ({ mergeRequest, commit }) => {
   };
 
   return (
-    <Container>
+    <Container maxWidth={false}>
       <Box my={2}>
         <Grid
           container

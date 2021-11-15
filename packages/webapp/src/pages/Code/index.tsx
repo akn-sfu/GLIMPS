@@ -157,7 +157,7 @@ const ListMergeRequestPage = () => {
         <ScoreOverrideQueueProvider>
           <IndependentScrollGrid container spacing={3}>
             <Grid item xs={5}>
-              <Container>
+              <Container maxWidth={false}>
                 <ScoreOverrideQueueInfo />
                 <Box my={2}>
                   <RepoAndDateAlert />
