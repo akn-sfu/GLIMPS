@@ -11,7 +11,7 @@ import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import React, { useState } from 'react';
 import { ApiResource } from '../../../api/base';
-import { useGetDiffs } from '../../../api/diff';
+import { useInfiniteDiffs } from '../../../api/diff';
 import DiffView from '../DiffView';
 import CallMadeIcon from '@material-ui/icons/CallMade';
 import Grid from '@material-ui/core/Grid';
@@ -27,6 +27,8 @@ import Paper from '@material-ui/core/Paper';
 import ReactMarkdown from 'react-markdown';
 import gfm from 'remark-gfm';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import LoadMore from '../LoadMore';
+import { useInView } from 'react-intersection-observer';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -34,7 +36,6 @@ const useStyles = makeStyles((theme: Theme) =>
       ...theme.typography.body1,
       color: theme.palette.text.primary,
       wordBreak: 'break-word',
-      maxWidth: '61.5em',
       '& .anchor-link': {
         marginTop: -(96 + 36), // Offset for the anchor.
         position: 'absolute',
@@ -229,11 +230,18 @@ interface CodeViewProps {
 
 const CodeView: React.FC<CodeViewProps> = ({ mergeRequest, commit }) => {
   const classes = useStyles();
-  const { data: diffs } = useGetDiffs(
+  // using infinite diffs to prevent performance slow down of loading all commits at once
+  const { data: diffs, fetchNextPage, hasNextPage } = useInfiniteDiffs(
     commit
       ? { commit: commit.meta.id }
       : { merge_request: mergeRequest.meta.id },
   );
+  // need to reduce to work with useInfiniteDiffs
+  const reducedDiffs =
+    diffs?.pages?.reduce(
+      (accumulated, current) => [...accumulated, ...current.results],
+      [],
+    ) || [];
   const { repositoryId } = useRepositoryContext();
   const { data: repository } = useGetRepository(repositoryId);
   const { user } = useAuthContext();
@@ -256,6 +264,14 @@ const CodeView: React.FC<CodeViewProps> = ({ mergeRequest, commit }) => {
     (commit || mergeRequest)?.extensions?.override,
     defaultScore,
   );
+  // allos us to load more files when we scroll to the bottom of the page
+  const { ref: loadMoreRef, inView: loadMoreInView } = useInView();
+
+  useEffect(() => {
+    if (loadMoreInView) {
+      void fetchNextPage();
+    }
+  }, [loadMoreInView]);
 
   const onScoreEdit = (e: MouseEvent) => {
     // prevent the accordion from toggling
@@ -270,7 +286,7 @@ const CodeView: React.FC<CodeViewProps> = ({ mergeRequest, commit }) => {
   };
 
   useEffect(() => {
-    const defaultExpanded = diffs?.results.filter(
+    const defaultExpanded = reducedDiffs?.filter(
       (diff) => diff?.lines.length < 500,
     );
     setExpandedDiffs(defaultExpanded || []);
@@ -295,7 +311,7 @@ const CodeView: React.FC<CodeViewProps> = ({ mergeRequest, commit }) => {
   };
 
   return (
-    <Container>
+    <Container maxWidth={false}>
       <Box my={2}>
         <Grid
           container
@@ -346,7 +362,7 @@ const CodeView: React.FC<CodeViewProps> = ({ mergeRequest, commit }) => {
         </Grid>
       </Box>
       <Box my={2}>
-        <Button onClick={() => setExpandedDiffs(diffs?.results || [])}>
+        <Button onClick={() => setExpandedDiffs(reducedDiffs || [])}>
           Expand All
         </Button>
         <Button onClick={() => setExpandedDiffs([])}>Collapse All</Button>
@@ -364,7 +380,7 @@ const CodeView: React.FC<CodeViewProps> = ({ mergeRequest, commit }) => {
         </Button>
       </Box>
       <Box>
-        {diffs?.results.map((diff) => {
+        {reducedDiffs?.map((diff) => {
           const expanded = expandedDiffs.includes(diff);
           return (
             <DiffView
@@ -389,6 +405,14 @@ const CodeView: React.FC<CodeViewProps> = ({ mergeRequest, commit }) => {
           );
         })}
       </Box>
+      {hasNextPage && (
+        <LoadMore
+          onClick={() => {
+            void fetchNextPage();
+          }}
+          ref={loadMoreRef}
+        />
+      )}
     </Container>
   );
 };

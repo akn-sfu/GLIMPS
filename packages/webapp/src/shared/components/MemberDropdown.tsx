@@ -63,7 +63,7 @@ const MemberDropdown: React.FC<MemberDropdownProps> = ({ repositoryId }) => {
         <MenuItem value='all'>All students</MenuItem>
         {(members || [])?.map((m) => (
           <MenuItem key={m.meta.id} value={m.meta.id}>
-            {m.name}
+            {m.username}
           </MenuItem>
         ))}
       </Select>

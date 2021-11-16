@@ -1,15 +1,17 @@
 import { Diff } from '@ceres/types';
-import { usePaginatedQuery } from './base';
+import { useApiInfiniteQuery } from './base';
 
 interface DiffSearchParams {
   commit?: string;
   merge_request?: string;
 }
 
-export function useGetDiffs(
-  params: DiffSearchParams,
-  page?: number,
-  pageSize?: number,
-) {
-  return usePaginatedQuery<Diff>(`/diff`, params, page, pageSize);
+// Following naming convention of useInfinite____
+// get ${pageSize} files while returning function fetchNextPage and value hasNextPage
+// to load subsequent pages
+export function useInfiniteDiffs(params: DiffSearchParams, pageSize = 15) {
+  return useApiInfiniteQuery<Diff>('/diff', params, pageSize);
 }
+
+// if in the future you need to get a single page of file diffs
+// create a similar function with `usePaginatedQuery`

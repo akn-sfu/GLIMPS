@@ -35,12 +35,14 @@ const Author: React.FC<AuthorProps> = ({ author, member, allMembers }) => {
   }, [value]);
   return (
     <Box my={4}>
-      <Grid justify='space-between' alignItems='center' container>
-        <Grid item>
+      <Grid justify='space-between' xs={12} alignItems='flex-start' container>
+        <Grid item xs={6}>
           <Typography variant='h4'>{author.author_name}</Typography>
-          <Typography variant='body1'>{author.author_email}</Typography>
+          <Typography variant='body1' style={{ wordWrap: 'break-word' }}>
+            {author.author_email}
+          </Typography>
         </Grid>
-        <Grid item>
+        <Grid item xs={6}>
           {isLoading ? (
             <CircularProgress />
           ) : (

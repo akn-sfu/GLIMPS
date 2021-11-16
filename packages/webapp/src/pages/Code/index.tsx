@@ -13,7 +13,6 @@ import CommitOrMergeRequestRenderer from './CommitOrMergeRequestRenderer';
 import CommitList from './CommitList';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
-import DefaultPageTitleFormat from '../../shared/components/DefaultPageTitleFormat';
 import styled from 'styled-components';
 import { useFilterContext } from '../../contexts/FilterContext';
 import { ScoreOverrideQueueProvider } from './contexts/ScoreOverrideQueue';
@@ -158,28 +157,24 @@ const ListMergeRequestPage = () => {
         <ScoreOverrideQueueProvider>
           <IndependentScrollGrid container spacing={3}>
             <Grid item xs={5}>
-              <Container>
+              <Container maxWidth={false}>
                 <ScoreOverrideQueueInfo />
                 <Box my={2}>
                   <RepoAndDateAlert />
                 </Box>
                 <Box my={2}>
-                  <DefaultPageTitleFormat>
-                    Merge Requests
-                  </DefaultPageTitleFormat>
+                  <Grid container justify='space-between'>
+                    <Typography variant='h3' color='primary'>
+                      Merge Requests
+                    </Typography>
+                    <StudentDropdown
+                      repositoryId={id}
+                      onChange={(newEmails) => {
+                        setEmails(newEmails);
+                      }}
+                    />
+                  </Grid>
                 </Box>
-                <Grid item>
-                  <Container maxWidth='md'>
-                    <Grid container justify='flex-end'>
-                      <StudentDropdown
-                        repositoryId={id}
-                        onChange={(newEmails) => {
-                          setEmails(newEmails);
-                        }}
-                      />
-                    </Grid>
-                  </Container>
-                </Grid>
                 {!showSpiltView ? (
                   <RegularTableHeaders />
                 ) : (

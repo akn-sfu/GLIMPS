@@ -8,6 +8,7 @@ import { Prompt } from 'react-router-dom';
 import { useRepositoryScoringContext } from './ScoringConfig/RepositoryScoringContext';
 import { isEqual } from 'lodash';
 import Box from '@material-ui/core/Box';
+import { useFilterContext } from '../../contexts/FilterContext';
 
 interface MakeWarningProps {
   repository: Repository;
@@ -45,6 +46,8 @@ const MakeWarning: React.FC<MakeWarningProps> = ({
   let Alert_missRubric = null;
   let Alert_outdatedScore = null;
   let Alert_pendingScore = null;
+  let Alert_endDate = null;
+  let successful_message = null;
 
   // construct a prompt showing all the warning message
   let needsPrompt = false;
@@ -78,7 +81,7 @@ const MakeWarning: React.FC<MakeWarningProps> = ({
   const lastEvaluated = repository?.extensions?.scoringConfig?.lastRan;
   if (!lastEvaluated || new Date(lastSynced) > new Date(lastEvaluated)) {
     needsPrompt = true;
-    prompt_msg += '\n-->You have not evaluated the score since the last sync';
+    prompt_msg += '\n-->You have not evaluated the score since the last sync.';
     const warning =
       'This repository has not been evaluated since the last sync.';
     Alert_outdatedScore = makeAlert('error', 'Outdated scores', warning);
@@ -95,6 +98,24 @@ const MakeWarning: React.FC<MakeWarningProps> = ({
     Alert_pendingScore = makeAlert('error', 'Pending scoring config', warning);
   }
 
+  // check whether the filter's endDate is later than the sync time
+  const { endDate } = useFilterContext();
+  if (lastSynced && endDate) {
+    if (new Date(lastSynced) < new Date(endDate)) {
+      needsPrompt = true;
+      prompt_msg += '\n-->The sync is done before the filter end date.';
+      const warning =
+        'Project sync needed: Last sync done before analysis end date.';
+      Alert_endDate = makeAlert('warning', 'Sync before end date', warning);
+    }
+  }
+
+  // if everything goes well, show a successfull message
+  if (!needsPrompt) {
+    const warning = 'You can start marking!';
+    successful_message = makeAlert('success', 'Setup Successful!', warning);
+  }
+
   prompt_msg += '\n\nClick OK if you want to proceed.';
 
   return (
@@ -104,6 +125,8 @@ const MakeWarning: React.FC<MakeWarningProps> = ({
       {Alert_missRubric}
       {Alert_outdatedScore}
       {Alert_pendingScore}
+      {Alert_endDate}
+      {successful_message}
     </div>
   );
 };
