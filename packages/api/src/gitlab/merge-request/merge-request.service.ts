@@ -18,7 +18,7 @@ import { MergeRequest as MergeRequestEntity } from './merge-request.entity';
 import { NoteService } from '../repository/note/note.service';
 import { BaseService } from 'src/common/base.service';
 import { groupBy, mapValues } from 'lodash';
-import { Commit } from '../repository/commit/commit.entity';
+import { Commit } from '../../../../types/src/Commit';
 
 @Injectable()
 export class MergeRequestService extends BaseService<
@@ -203,6 +203,9 @@ export class MergeRequestService extends BaseService<
       repository,
       mergeRequest.resource,
     );
+    if (mergeRequest.resource.squash) {
+      await this.commitService.syncForRepositoryPage(token, repository, commits);
+    }
     mergeRequest.commits = await Promise.all(
       commits.map((commit) =>
         this.commitService.findByGitlabId(repository, commit.id),
@@ -297,8 +300,8 @@ export class MergeRequestService extends BaseService<
       const pages = parseInt(axiosResponse.headers['x-total-pages']);
       // first request gets us the first page and lets us know if there are more to fetch
       // if there are, enter the for loop and fetch the remaining pages
-      let remainingPagePromises = [];
       if (pages > 1) {
+        let remainingPagePromises = [];
         for (let curPage = 2; curPage <= pages; curPage++) {
           const params = {
             page: curPage,

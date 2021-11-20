@@ -158,6 +158,7 @@ export class CommitService extends BaseService<
     repository: Repository,
     commits: Commit[],
   ): Promise<void> {
+    console.log(commits);
     const { created } = await this.createIfNotExists(repository, commits);
     await Promise.all(
       created
