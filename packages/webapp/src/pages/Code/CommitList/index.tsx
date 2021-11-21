@@ -94,7 +94,9 @@ const CommitList: React.FC<CommitListProps> = ({
                   )}
                   <Grid item>
                     <Typography style={{ textDecoration: nameTextDecoration }}>
-                      {commit.title}
+                      {extensions.squashed
+                        ? `[Squashed] ${commit.title}`
+                        : commit.title}
                     </Typography>
                   </Grid>
                 </Grid>

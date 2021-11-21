@@ -216,6 +216,10 @@ export class CommitService extends BaseService<
           })
           .getOne();
         if (found) {
+          if (!found.resource.extensions?.squashed && areSquashedCommits) {
+            found.resource.extensions = {...commit.extensions, squashed: true};
+            await this.serviceRepository.save(found);
+          }
           return { commit: found, created: false };
         }
         if (areSquashedCommits) {
