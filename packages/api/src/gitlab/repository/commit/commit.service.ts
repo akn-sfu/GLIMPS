@@ -157,9 +157,9 @@ export class CommitService extends BaseService<
     token: string,
     repository: Repository,
     commits: Commit[],
+    areSquashedCommits?: boolean,
   ): Promise<void> {
-    console.log(commits);
-    const { created } = await this.createIfNotExists(repository, commits);
+    const { created } = await this.createIfNotExists(repository, commits, areSquashedCommits);
     await Promise.all(
       created
         .map((commit) => ({ ...commit, repository }))
@@ -201,7 +201,7 @@ export class CommitService extends BaseService<
     return await this.fetchWithRetries<Commit>(token, url, params);
   }
 
-  private async createIfNotExists(repository: Repository, commits: Commit[]) {
+  private async createIfNotExists(repository: Repository, commits: Commit[], areSquashedCommits?: boolean) {
     const entities = await Promise.all(
       commits.map(async (commit) => {
         const found = await this.serviceRepository
@@ -217,6 +217,9 @@ export class CommitService extends BaseService<
           .getOne();
         if (found) {
           return { commit: found, created: false };
+        }
+        if (areSquashedCommits) {
+          commit.extensions = {...commit.extensions, squashed: true};
         }
         return {
           commit: this.serviceRepository.create({

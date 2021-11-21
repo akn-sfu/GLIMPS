@@ -1,4 +1,5 @@
 import {
+  Commit,
   Extensions,
   GlobWeight,
   MergeRequest,
@@ -18,7 +19,6 @@ import { MergeRequest as MergeRequestEntity } from './merge-request.entity';
 import { NoteService } from '../repository/note/note.service';
 import { BaseService } from 'src/common/base.service';
 import { groupBy, mapValues } from 'lodash';
-import { Commit } from '../../../../types/src/Commit';
 
 @Injectable()
 export class MergeRequestService extends BaseService<
@@ -198,13 +198,19 @@ export class MergeRequestService extends BaseService<
     repository: Repository,
     mergeRequest: MergeRequestEntity,
   ) {
-    const commits = await this.fetchCommitsFromGitlab(
+    let commits = await this.fetchCommitsFromGitlab(
       token,
       repository,
       mergeRequest.resource,
     );
     if (mergeRequest.resource.squash) {
-      await this.commitService.syncForRepositoryPage(token, repository, commits);
+      // commits = commits.map((commit) => {
+      //   commit.resource.extensions.squashed = true;
+      //   return commit;
+      // })
+      await this.commitService.syncForRepositoryPage(token, repository, commits, true);
+      let squashCommit = await this.commitService.findByGitlabId(repository, mergeRequest.resource.squash_commit_sha);
+      await this.commitService.deleteCommitEntity(squashCommit);
     }
     mergeRequest.commits = await Promise.all(
       commits.map((commit) =>
