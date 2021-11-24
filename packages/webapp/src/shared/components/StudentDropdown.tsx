@@ -64,7 +64,7 @@ const StudentDropdown: React.FC<StudentDropdownProps> = ({
         <MenuItem value='all'>All students</MenuItem>
         {(members || [])
           ?.sort((a, b) => a.username.localeCompare(b.username))
-          ?.map((m) => (
+          .map((m) => (
             <MenuItem key={m.meta.id} value={m.meta.id}>
               {m.username}
             </MenuItem>
