@@ -61,11 +61,13 @@ const MemberDropdown: React.FC<MemberDropdownProps> = ({ repositoryId }) => {
         }}
       >
         <MenuItem value='all'>All students</MenuItem>
-        {(members || [])?.map((m) => (
-          <MenuItem key={m.meta.id} value={m.meta.id}>
-            {m.username}
-          </MenuItem>
-        ))}
+        {(members || [])
+          ?.sort((a, b) => a.username.localeCompare(b.username))
+          .map((m) => (
+            <MenuItem key={m.meta.id} value={m.meta.id}>
+              {m.username}
+            </MenuItem>
+          ))}
       </Select>
     </FormControl>
   );
