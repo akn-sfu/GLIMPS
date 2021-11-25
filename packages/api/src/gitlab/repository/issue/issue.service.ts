@@ -114,7 +114,7 @@ export class IssueService extends BaseService<
   private async createIssueIfNotExists(repository: Repository, issue: Issue) {
     const found = await this.queryIssueFromRepository(repository, issue);
     if (found) {
-      return { issue: found, created: false };
+      return { issue: found, created: true };
     }
     return {
       issue: this.createNewIssue(repository, issue),
