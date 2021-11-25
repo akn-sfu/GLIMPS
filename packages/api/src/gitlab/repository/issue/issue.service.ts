@@ -77,8 +77,9 @@ export class IssueService extends BaseService<
     repository: Repository,
     issues: Issue[],
   ): Promise<void> {
-    const { created } = await this.createAndSaveIssues(repository, issues);
+    const { existing,created } = await this.createAndSaveIssues(repository, issues);
     await Promise.all(created.map((issue) => ({ ...issue, repository })));
+    await Promise.all(existing.map((issue) => ({ ...issue, repository })));
     await Promise.all(
       created.map((issue) => this.noteService.syncForIssue(issue, token)),
     );
@@ -114,7 +115,7 @@ export class IssueService extends BaseService<
   private async createIssueIfNotExists(repository: Repository, issue: Issue) {
     const found = await this.queryIssueFromRepository(repository, issue);
     if (found) {
-      return { issue: found, created: true };
+      return { issue: found, created: false };
     }
     return {
       issue: this.createNewIssue(repository, issue),
