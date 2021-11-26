@@ -22,6 +22,14 @@ const OverridePopper: React.FC<OverridePopperProps> = ({ override }) => {
     setAnchor(null);
   };
 
+  const customScore = (() => {
+    if (override.score || override.score === 0) {
+      // because 0 is a falsy value but we want to display it
+      return override.score;
+    }
+    return 'No custom score';
+  })();
+
   const open = !!anchor;
 
   return (
@@ -38,9 +46,7 @@ const OverridePopper: React.FC<OverridePopperProps> = ({ override }) => {
             <Grid container>
               <Grid item>
                 <Typography>Last changed by {override.user.display}</Typography>
-                <Typography>
-                  Custom score: {override.score || 'No custom score'}
-                </Typography>
+                <Typography>Custom score: {customScore}</Typography>
                 <Typography>
                   Comment: {override.comment || 'No comment provided'}
                 </Typography>

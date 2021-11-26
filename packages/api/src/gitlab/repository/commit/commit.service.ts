@@ -260,6 +260,7 @@ export class CommitService extends BaseService<
           commit.extensions = {
             ...commit.extensions,
             squashed: true,
+            diffHasOverride: true,
             override: {
                 score: 0,
                 exclude: true,
