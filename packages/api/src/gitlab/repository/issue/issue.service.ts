@@ -80,11 +80,7 @@ export class IssueService extends BaseService<
     const { existing,created } = await this.createAndSaveIssues(repository, issues);
     await Promise.all(created.map((issue) => ({ ...issue, repository })));
     await Promise.all(
-      created.map((issue) => this.noteService.syncForIssue(issue, token)),
-    );
-    // sync notes for existing issues too
-    await Promise.all(
-      existing.map((issue) => this.noteService.syncForIssue(issue, token)),
+      created.concat(existing).map((issue) => this.noteService.syncForIssue(issue, token)),
     );
   }
 
