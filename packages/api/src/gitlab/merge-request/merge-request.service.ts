@@ -204,7 +204,11 @@ export class MergeRequestService extends BaseService<
       mergeRequest.resource,
     );
     if (mergeRequest.resource.squash) {
+      // if commits of a MR have been squashed they won't show up when we fetch the repo commits so fetch here instead
       await this.commitService.syncForRepositoryPage(token, repository, commits, true);
+      
+      // when you squash a MR, git replaces them all with a single squash commit
+      // we actually want to display the squashed commits instead of the single one so we delete the single one
       let squashCommit = await this.commitService.findByGitlabId(repository, mergeRequest.resource.squash_commit_sha);
       if (squashCommit) {
         await this.commitService.deleteCommitEntity(squashCommit);

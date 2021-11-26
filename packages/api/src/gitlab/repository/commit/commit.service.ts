@@ -223,6 +223,21 @@ export class CommitService extends BaseService<
     commits: Commit[],
     areSquashedCommits?: boolean,
   ) {
+    // we want to ignore squashed commits in scoring as the MR author likely squashed for some intentional purpose
+    const squashedCommitExtension = {
+      squashed: true,
+      diffHasOverride: true,
+      override: {
+        score: 0,
+        exclude: true,
+        comment: 'Ignoring due to squash',
+        user: {
+          id: 'system_made_this_change',
+          display: 'default squash handling',
+        },
+      },
+    };
+
     const entities = await Promise.all(
       commits.map(async (commit) => {
         const found = await this.serviceRepository
@@ -237,20 +252,14 @@ export class CommitService extends BaseService<
           })
           .getOne();
         if (found) {
-          if (!found.resource.extensions?.squashed && areSquashedCommits) {
+          if (
+            !found.resource?.extensions?.squashed &&
+            areSquashedCommits &&
+            !found.resource?.extensions?.diffHasOverride
+          ) {
             found.resource.extensions = {
               ...found.resource.extensions,
-              squashed: true,
-              diffHasOverride: true,
-              override: {
-                score: 0,
-                exclude: true,
-                comment: 'Ignoring due to squash',
-                user: {
-                  id: 'admin',
-                  display: 'default'
-                }
-              },
+              ...squashedCommitExtension,
             };
             await this.serviceRepository.save(found);
           }
@@ -259,17 +268,7 @@ export class CommitService extends BaseService<
         if (areSquashedCommits) {
           commit.extensions = {
             ...commit.extensions,
-            squashed: true,
-            diffHasOverride: true,
-            override: {
-                score: 0,
-                exclude: true,
-                comment: 'Ignoring due to squash',
-                user: {
-                  id: 'admin',
-                  display: 'default'
-                }
-            },
+            ...squashedCommitExtension,
           };
         }
         return {
