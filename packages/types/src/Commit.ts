@@ -6,6 +6,8 @@ interface CommitExtensions {
   // Indicates a diff in this commit has a score override
   diffHasOverride?: boolean;
   override?: ScoreOverride;
+  // Indicate if this commit was part of a squash MR
+  squashed?: boolean;
 }
 
 export interface Commit extends WithExtensions<CommitExtensions> {

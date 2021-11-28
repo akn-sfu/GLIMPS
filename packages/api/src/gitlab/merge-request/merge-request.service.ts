@@ -1,4 +1,5 @@
 import {
+  Commit,
   Extensions,
   GlobWeight,
   MergeRequest,
@@ -18,7 +19,6 @@ import { MergeRequest as MergeRequestEntity } from './merge-request.entity';
 import { NoteService } from '../repository/note/note.service';
 import { BaseService } from 'src/common/base.service';
 import { groupBy, mapValues } from 'lodash';
-import { Commit } from '../repository/commit/commit.entity';
 
 @Injectable()
 export class MergeRequestService extends BaseService<
@@ -203,6 +203,17 @@ export class MergeRequestService extends BaseService<
       repository,
       mergeRequest.resource,
     );
+    if (mergeRequest.resource.squash) {
+      // if commits of a MR have been squashed they won't show up when we fetch the repo commits so fetch here instead
+      await this.commitService.syncForRepositoryPage(token, repository, commits, true);
+      
+      // when you squash a MR, git replaces them all with a single squash commit
+      // we actually want to display the squashed commits instead of the single one so we delete the single one
+      let squashCommit = await this.commitService.findByGitlabId(repository, mergeRequest.resource.squash_commit_sha);
+      if (squashCommit) {
+        await this.commitService.deleteCommitEntity(squashCommit);
+      }
+    }
     mergeRequest.commits = await Promise.all(
       commits.map((commit) =>
         this.commitService.findByGitlabId(repository, commit.id),
@@ -297,8 +308,8 @@ export class MergeRequestService extends BaseService<
       const pages = parseInt(axiosResponse.headers['x-total-pages']);
       // first request gets us the first page and lets us know if there are more to fetch
       // if there are, enter the for loop and fetch the remaining pages
-      let remainingPagePromises = [];
       if (pages > 1) {
+        let remainingPagePromises = [];
         for (let curPage = 2; curPage <= pages; curPage++) {
           const params = {
             page: curPage,

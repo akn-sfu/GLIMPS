@@ -67,6 +67,13 @@ const CommitList: React.FC<CommitListProps> = ({
           extensions?.override,
           commit?.extensions?.score,
         );
+
+        const backgroundColour = (() => {
+          if (activeCommit?.meta.id === commit.meta.id) return '#D3D3D3';
+          if (extensions.squashed) return '#C2BAAE';
+          return '';
+        })();
+
         return (
           <Root
             key={commit.meta.id}
@@ -74,7 +81,7 @@ const CommitList: React.FC<CommitListProps> = ({
             pr={3}
             py={1}
             onClick={() => setActiveCommit(commit)}
-            bgcolor={activeCommit?.meta.id === commit.meta.id ? '#D3D3D3' : ''}
+            bgcolor={backgroundColour}
             disabled={!isActive}
           >
             <Grid container>
@@ -87,7 +94,9 @@ const CommitList: React.FC<CommitListProps> = ({
                   )}
                   <Grid item>
                     <Typography style={{ textDecoration: nameTextDecoration }}>
-                      {commit.title}
+                      {extensions.squashed
+                        ? `[Squashed] ${commit.title}`
+                        : commit.title}
                     </Typography>
                   </Grid>
                 </Grid>

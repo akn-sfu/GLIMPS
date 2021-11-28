@@ -63,9 +63,12 @@ export class CommitService extends BaseService<
     }
 
     if (filters.end_date) {
-      query.andWhere("(commit.resource #>> '{authored_date}')::timestamptz <= ((:endDate)::timestamptz)", {
-        endDate: filters.end_date,
-      });
+      query.andWhere(
+        "(commit.resource #>> '{authored_date}')::timestamptz <= ((:endDate)::timestamptz)",
+        {
+          endDate: filters.end_date,
+        },
+      );
     }
 
     if (filters.not_associated_with_any_mr && filters.repository) {
@@ -96,8 +99,14 @@ export class CommitService extends BaseService<
   ): Promise<Commit.DailyCount[]> {
     let query = this.serviceRepository.createQueryBuilder('commit');
     query = this.buildFilters(query, filters);
-    query.select("DATE((commit.resource #>>'{authored_date}')::timestamptz AT time zone" + " '" + filters.timezone + "' " +
-     "AT time zone 'utc')", 'date');
+    query.select(
+      "DATE((commit.resource #>>'{authored_date}')::timestamptz AT time zone" +
+        " '" +
+        filters.timezone +
+        "' " +
+        "AT time zone 'utc')",
+      'date',
+    );
     query.addSelect('count(*)::integer', 'count');
     query.addSelect(
       `sum(
@@ -157,8 +166,13 @@ export class CommitService extends BaseService<
     token: string,
     repository: Repository,
     commits: Commit[],
+    areSquashedCommits?: boolean,
   ): Promise<void> {
-    const { created } = await this.createIfNotExists(repository, commits);
+    const { created } = await this.createIfNotExists(
+      repository,
+      commits,
+      areSquashedCommits,
+    );
     await Promise.all(
       created
         .map((commit) => ({ ...commit, repository }))
@@ -196,11 +210,34 @@ export class CommitService extends BaseService<
     pageSize = 10,
   ): Promise<AxiosResponse<Commit[]>> {
     const url = `projects/${repo.resource.id}/repository/commits`;
-    const params = { page: page, per_page: pageSize, target_branch: repo.resource.default_branch };
+    const params = {
+      page: page,
+      per_page: pageSize,
+      target_branch: repo.resource.default_branch,
+    };
     return await this.fetchWithRetries<Commit>(token, url, params);
   }
 
-  private async createIfNotExists(repository: Repository, commits: Commit[]) {
+  private async createIfNotExists(
+    repository: Repository,
+    commits: Commit[],
+    areSquashedCommits?: boolean,
+  ) {
+    // we want to ignore squashed commits in scoring as the MR author likely squashed for some intentional purpose
+    const squashedCommitExtension = {
+      squashed: true,
+      diffHasOverride: true,
+      override: {
+        score: 0,
+        exclude: true,
+        comment: 'Ignoring due to squash',
+        user: {
+          id: 'system_made_this_change',
+          display: 'default squash handling',
+        },
+      },
+    };
+
     const entities = await Promise.all(
       commits.map(async (commit) => {
         const found = await this.serviceRepository
@@ -215,7 +252,24 @@ export class CommitService extends BaseService<
           })
           .getOne();
         if (found) {
+          if (
+            !found.resource?.extensions?.squashed &&
+            areSquashedCommits &&
+            !found.resource?.extensions?.diffHasOverride
+          ) {
+            found.resource.extensions = {
+              ...found.resource.extensions,
+              ...squashedCommitExtension,
+            };
+            await this.serviceRepository.save(found);
+          }
           return { commit: found, created: false };
+        }
+        if (areSquashedCommits) {
+          commit.extensions = {
+            ...commit.extensions,
+            ...squashedCommitExtension,
+          };
         }
         return {
           commit: this.serviceRepository.create({
@@ -245,7 +299,7 @@ export class CommitService extends BaseService<
         commit: commit.id,
       },
       weights,
-      false
+      false,
     );
     commit.resource = Extensions.updateExtensions(commit.resource, {
       score,
@@ -270,9 +324,7 @@ export class CommitService extends BaseService<
     );
   }
 
-  async deleteCommitEntity(
-    commit: CommitEntity
-  ){
+  async deleteCommitEntity(commit: CommitEntity) {
     return this.delete(commit);
   }
 }
