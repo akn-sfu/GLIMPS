@@ -70,7 +70,7 @@ const CommitList: React.FC<CommitListProps> = ({
 
         const backgroundColour = (() => {
           if (activeCommit?.meta.id === commit.meta.id) return '#D3D3D3';
-          if (extensions.squashed) return '#C2BAAE';
+          if (extensions?.squashed) return '#C2BAAE';
           return '';
         })();
 
@@ -94,7 +94,7 @@ const CommitList: React.FC<CommitListProps> = ({
                   )}
                   <Grid item>
                     <Typography style={{ textDecoration: nameTextDecoration }}>
-                      {extensions.squashed
+                      {extensions?.squashed
                         ? `[Squashed] ${commit.title}`
                         : commit.title}
                     </Typography>
