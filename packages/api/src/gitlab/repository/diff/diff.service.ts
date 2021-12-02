@@ -100,19 +100,14 @@ export class DiffService extends BaseService<Diff, DiffEntity, DiffQueryDto> {
           )
           .reduce((accumulator, currentValue) => accumulator + currentValue, 0);
       }
-      if (
-        diff.resource?.diff === '' &&
-        !diff.resource?.new_file &&
-        !diff.resource?.deleted_file &&
-        !diff.resource?.renamed_file
-      ) {
+      if (diff.resource?.diff === '') {
         // as of 2021-12-02 when the diff is too big,
         // the Gitlab API returns an empty diff so we just raise a warning for user
         diff.resource = Extensions.updateExtensions(diff.resource, {
           override: {
-            score: 0,
-            comment: 'Unable to fetch diff from Gitlab; Likely too large',
-            exclude: true,
+            score: score,
+            comment: 'Empty diff; Diff may be too large to display',
+            exclude: score === 0,
             user: {
               id: 'system_made_this_change',
               display: 'default error handler',
