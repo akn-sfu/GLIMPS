@@ -6,7 +6,8 @@ export class SysinfoController {
   @Get('diskusage')
   async getDiskUsage() {
     const manager = getManager();
-    const spaceUsed = await manager.query(`SELECT total_bytes AS total
+    // Query adapted from: https://wiki.postgresql.org/wiki/Disk_Usage
+    const spaceUsed = await manager.query(`SELECT SUM(total_bytes::Integer) AS total
     FROM (
     SELECT *, total_bytes-index_bytes-coalesce(toast_bytes,0) AS table_bytes FROM (
         SELECT c.oid,nspname AS table_schema, relname AS table_name
@@ -19,6 +20,7 @@ export class SysinfoController {
             WHERE relkind = 'r'
     ) a
     ) a WHERE "table_schema"='public';`);
-    return { used: spaceUsed };
+    // const totalSpaceUsed = spaceUsed.reduce((a, b) => a + parseInt(b.total), 0);
+    return { used: spaceUsed.total };
   }
 }
