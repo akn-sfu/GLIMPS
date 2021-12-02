@@ -106,7 +106,9 @@ export class DiffService extends BaseService<Diff, DiffEntity, DiffQueryDto> {
         diff.resource = Extensions.updateExtensions(diff.resource, {
           override: {
             score: score,
-            comment: 'Empty diff; Diff may be too large to display',
+            comment: `WARNING: Empty diff. Diff may be too big for GitLab's API to send.
+              
+              View MR on GitLab to see diff contents`,
             exclude: score === 0,
             user: {
               id: 'system_made_this_change',
