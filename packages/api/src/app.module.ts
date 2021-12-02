@@ -13,6 +13,7 @@ import { GitlabModule } from './gitlab/gitlab.module';
 import { OperationModule } from './operation/operation.module';
 import { ScoringModule } from './scoring/scoring.module';
 import { GroupModule } from './group/group.module';
+import { SysinfoController } from './sysinfo/sysinfo.controller';
 import config from './config';
 
 @Module({
@@ -36,7 +37,7 @@ import config from './config';
     ScoringModule,
     GroupModule,
   ],
-  controllers: [AppController],
+  controllers: [AppController, SysinfoController],
   providers: [
     AppService,
     {
