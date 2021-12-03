@@ -209,7 +209,7 @@ export class CommitService extends BaseService<
     page: number,
     pageSize = 10,
   ): Promise<AxiosResponse<Commit[]>> {
-    const url = `projects/${repo.resource.id}/repository/commits`;
+    const url = `projects/${repo.resource.id}/repository/commits?with_stats=True`;
     const params = {
       page: page,
       per_page: pageSize,
@@ -257,10 +257,9 @@ export class CommitService extends BaseService<
             areSquashedCommits &&
             !found.resource?.extensions?.diffHasOverride
           ) {
-            found.resource.extensions = {
-              ...found.resource.extensions,
+            found.resource = Extensions.updateExtensions(found.resource, {
               ...squashedCommitExtension,
-            };
+            });
             await this.serviceRepository.save(found);
           }
           return { commit: found, created: false };

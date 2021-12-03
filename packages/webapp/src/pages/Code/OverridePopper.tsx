@@ -47,7 +47,7 @@ const OverridePopper: React.FC<OverridePopperProps> = ({ override }) => {
               <Grid item>
                 <Typography>Last changed by {override.user.display}</Typography>
                 <Typography>Custom score: {customScore}</Typography>
-                <Typography>
+                <Typography style={{ whiteSpace: 'pre-line' }}>
                   Comment: {override.comment || 'No comment provided'}
                 </Typography>
               </Grid>

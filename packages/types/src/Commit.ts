@@ -24,6 +24,7 @@ export interface Commit extends WithExtensions<CommitExtensions> {
   committer_email: string;
   committed_date: string;
   web_url: string;
+  stats: number[];
 }
 
 export namespace Commit {
