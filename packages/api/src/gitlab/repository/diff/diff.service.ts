@@ -100,7 +100,10 @@ export class DiffService extends BaseService<Diff, DiffEntity, DiffQueryDto> {
           )
           .reduce((accumulator, currentValue) => accumulator + currentValue, 0);
       }
-      if (diff.resource?.diff === '') {
+      if (
+        diff.resource?.diff === '' &&
+        !ScoreOverride.hasOverride(diff?.resource?.extensions?.override)
+      ) {
         // as of 2021-12-02 when the diff is too big,
         // the Gitlab API returns an empty diff so we just raise a warning for user
         diff.resource = Extensions.updateExtensions(diff.resource, {
