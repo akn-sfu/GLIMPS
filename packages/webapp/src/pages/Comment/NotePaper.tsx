@@ -11,9 +11,11 @@ import { useGetMergeRequestByNoteId } from '../../api/mergeRequests';
 import { useGetIssueByNoteId } from '../../api/issue';
 import { useRepositoryContext } from '../../contexts/RepositoryContext';
 import DifferentiatingIcon from './DifferentiatingIcon';
+import { TabOption } from './CommentList';
 
 interface NoteProps {
   noteData: any;
+  tab: TabOption;
 }
 
 const useStyles = makeStyles(() =>
@@ -33,6 +35,10 @@ const useStyles = makeStyles(() =>
       backgroundColor: '#f3eef8',
       padding: 10,
     },
+    created_issue_header_row: {
+      backgroundColor: '#f8cecb',
+      padding: 10,
+    },
     clickable_text_hyperlink: {
       color: '#0f4c81',
       textDecoration: 'underline',
@@ -49,32 +55,65 @@ const extractNoteContent = (noteBody: string) => {
 };
 
 const NotePaper: React.FC<NoteProps> = (NoteProps) => {
-  console.log(NoteProps);
   const { repositoryId } = useRepositoryContext();
   const classes = useStyles();
 
-  const { data: mergeRequest } = useGetMergeRequestByNoteId({
-    repository: repositoryId,
-    note_id: NoteProps.noteData.meta.id,
-  });
+  let onMyOwn: boolean,
+    wordCount: number,
+    createdDate: string,
+    cssClass: any,
+    startWords: string,
+    webUrl: string,
+    title: string,
+    body: string;
+  switch (NoteProps.tab) {
+    case TabOption.codeReview: {
+      // check whether it is on my own MR or other members' MR
+      const { data: mergeRequest } = useGetMergeRequestByNoteId({
+        repository: repositoryId,
+        note_id: NoteProps.noteData.meta.id,
+      });
+      onMyOwn =
+        mergeRequest?.results.length != 0 &&
+        NoteProps.noteData.author.id ===
+          mergeRequest?.results.find((element) => element).author.id;
+      // meta data
+      cssClass = classes.merge_request_note_header_row;
+      startWords = 'On merge request ';
+      webUrl = mergeRequest?.results.find((element) => element).web_url;
+      title = mergeRequest?.results.find((element) => element).title;
+      createdDate = NoteProps.noteData.created_at;
+      body = extractNoteContent(NoteProps.noteData.body);
+      wordCount = NoteProps.noteData.extensions?.wordCount;
+      break;
+    }
 
-  const { data: issue } = useGetIssueByNoteId({
-    repository: repositoryId,
-    note_id: NoteProps.noteData.meta.id,
-  });
+    case TabOption.issueNotes: {
+      const { data: issue } = useGetIssueByNoteId({
+        repository: repositoryId,
+        note_id: NoteProps.noteData.meta.id,
+      });
+      onMyOwn =
+        issue?.results.length != 0 &&
+        NoteProps.noteData.author.id ===
+          issue?.results.find((element) => element).author.id;
+      //meta data
+      cssClass = classes.issue_note_header_row;
+      startWords = 'On issue ';
+      webUrl = issue?.results.find((element) => element).web_url;
+      title = issue?.results.find((element) => element).title;
+      createdDate = NoteProps.noteData.created_at;
+      body = extractNoteContent(NoteProps.noteData.body);
+      wordCount = NoteProps.noteData.extensions?.wordCount;
+      break;
+    }
 
-  const isMergeRequestNote =
-    NoteProps.noteData.noteable_type === 'MergeRequest';
-
-  const onMyOwnMergeRequest =
-    mergeRequest?.results.length != 0 &&
-    NoteProps.noteData.author.id ===
-      mergeRequest?.results.find((element) => element).author.id;
-
-  const onMyOwnIssue =
-    issue?.results.length != 0 &&
-    NoteProps.noteData.author.id ===
-      issue?.results.find((element) => element).author.id;
+    case TabOption.createdIssues: {
+      onMyOwn = true;
+      console.log(NoteProps);
+      return null;
+    }
+  }
 
   return (
     <Paper elevation={3} className={classes.paper} key={NoteProps.noteData.id}>
@@ -84,55 +123,27 @@ const NotePaper: React.FC<NoteProps> = (NoteProps) => {
         alignItems={'center'}
         direction={'row'}
         container
-        className={
-          isMergeRequestNote
-            ? classes.merge_request_note_header_row
-            : classes.issue_note_header_row
-        }
+        className={cssClass}
       >
         <Grid item>
-          {isMergeRequestNote && (
-            <Typography>
-              <Box fontSize={18}>
-                On merge request{' '}
-                <Box fontWeight='fontWeightBold' display='inline'>
-                  <a
-                    className={classes.clickable_text_hyperlink}
-                    onClick={() => {
-                      window.open(
-                        mergeRequest?.results.find((element) => element)
-                          .web_url,
-                      );
-                    }}
-                  >
-                    {mergeRequest?.results.find((element) => element).title}
-                  </a>
-                </Box>
+          <Typography>
+            <Box fontSize={18}>
+              {startWords}
+              <Box fontWeight='fontWeightBold' display='inline'>
+                <a
+                  className={classes.clickable_text_hyperlink}
+                  onClick={() => {
+                    window.open(webUrl);
+                  }}
+                >
+                  {title}
+                </a>
               </Box>
-            </Typography>
-          )}
-          {!isMergeRequestNote && (
-            <Typography>
-              <Box fontSize={18}>
-                On issue{'3 '}
-                <Box fontWeight='fontWeightBold' display='inline'>
-                  <a
-                    className={classes.clickable_text_hyperlink}
-                    onClick={() => {
-                      window.open(
-                        issue?.results.find((element) => element).web_url,
-                      );
-                    }}
-                  >
-                    {issue?.results.find((element) => element).title}
-                  </a>
-                </Box>
-              </Box>
-            </Typography>
-          )}
+            </Box>
+          </Typography>
         </Grid>
         <Grid item>
-          <DifferentiatingIcon isMine={onMyOwnMergeRequest || onMyOwnIssue} />
+          <DifferentiatingIcon isMine={onMyOwn} />
         </Grid>
       </Grid>
 
@@ -162,17 +173,17 @@ const NotePaper: React.FC<NoteProps> = (NoteProps) => {
           </Typography>
         </Grid>
         <Grid item xs={8}>
-          <Typography>{extractNoteContent(NoteProps.noteData.body)}</Typography>
+          <Typography>{body}</Typography>
           <Typography variant={'body2'} align={'right'}>
             <Box fontSize={16} fontStyle={'italic'} marginTop={2}>
-              <SmartDate>{NoteProps.noteData.created_at}</SmartDate>
+              <SmartDate>{createdDate}</SmartDate>
             </Box>
           </Typography>
         </Grid>
         <Grid item xs={2}>
           <Typography align={'right'}>
             <Box fontWeight={'fontWeightBold'} fontSize={20} marginRight={2}>
-              {NoteProps.noteData.extensions?.wordCount} words
+              {wordCount} words
             </Box>
           </Typography>
         </Grid>

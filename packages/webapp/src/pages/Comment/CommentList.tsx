@@ -128,17 +128,15 @@ const CommentList: React.FC = () => {
   const { data: totalIssues } = useGetIssueByRepo({
     repository_id: repositoryId,
   });
-  const creatingIssues =
+  const createdIssuesNotes =
     author == 'all'
       ? totalIssues?.results
-      : totalIssues?.results.filter((issue) =>
-          authorIds.includes(issue.author.id),
+      : totalIssues?.results.filter(
+          (issue) =>
+            authorIds.includes(issue.author.id) &&
+            Date.parse(startDate) <= Date.parse(issue.created_at) &&
+            Date.parse(endDate) >= Date.parse(issue.created_at),
         );
-  const createdIssuesNotes = creatingIssues?.filter(
-    (issue) =>
-      Date.parse(startDate) <= Date.parse(issue.created_at) &&
-      Date.parse(endDate) >= Date.parse(issue.created_at),
-  );
   console.log(createdIssuesNotes);
 
   // collect all the comments on MR
@@ -153,6 +151,7 @@ const CommentList: React.FC = () => {
 
   const [alertOpen, setOpen] = useState(true);
   const [tab, setTab] = useState(TabOption.codeReview);
+
   let notes;
   switch (tab) {
     case TabOption.codeReview:
@@ -251,7 +250,7 @@ const CommentList: React.FC = () => {
           spacing={1}
         >
           {notes?.map((note) => {
-            return <NotePaper key={note.meta.id} noteData={note} />;
+            return <NotePaper key={note.meta.id} noteData={note} tab={tab} />;
           })}
         </Grid>
         {Math.ceil(totalNotes / itemsPerPage) > 0 && (
