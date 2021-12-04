@@ -12,7 +12,6 @@ import { useFilterContext } from '../../contexts/FilterContext';
 import { ApiResource } from '../../api/base';
 import { RepositoryMember } from '@ceres/types';
 import { useRepositoryMembers } from '../../api/repo_members';
-import DifferentiatingIcon from './DifferentiatingIcon';
 import { Collapse, Typography } from '@material-ui/core';
 import { Alert, Pagination } from '@material-ui/lab';
 import MemberDropdown from '../../shared/components/MemberDropdown';
@@ -20,6 +19,7 @@ import ItemPerPageDropdown from './ItemPerPageDropdown';
 import { Note } from '@ceres/types';
 import RepoAndDateAlert from '../../shared/components/RepoAndDateAlert';
 import { useGetIssueByRepo } from '../../api/issue';
+import MakeIconTitle from './iconTitle';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -80,7 +80,7 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-enum TabOption {
+export enum TabOption {
   codeReview = 'code reviews',
   issueNotes = 'issue notes',
   createdIssues = 'issuse created',
@@ -134,7 +134,7 @@ const CommentList: React.FC = () => {
       : totalIssues?.results.filter((issue) =>
           authorIds.includes(issue.author.id),
         );
-  const createdIssues = creatingIssues.filter(
+  const createdIssues = creatingIssues?.filter(
     (issue) =>
       Date.parse(startDate) <= Date.parse(issue.created_at) &&
       Date.parse(endDate) >= Date.parse(issue.created_at),
@@ -232,70 +232,8 @@ const CommentList: React.FC = () => {
             </Tabs>
             <ItemPerPageDropdown updateItemsPerPage={handleItemChange} />
           </Grid>
-
-          <Grid
-            container
-            direction={'row'}
-            alignItems={'center'}
-            style={{ marginTop: 15 }}
-          >
-            {tab === TabOption.codeReview ? (
-              <>
-                <Grid
-                  container
-                  item
-                  xs={6}
-                  alignItems={'center'}
-                  direction={'row'}
-                >
-                  <DifferentiatingIcon isMine={true} />
-                  <Typography style={{ marginLeft: 10, marginRight: 10 }}>
-                    Notes on my own merge request(s)
-                  </Typography>
-                </Grid>
-                <Grid
-                  container
-                  item
-                  xs={6}
-                  alignItems={'center'}
-                  direction={'row'}
-                >
-                  <DifferentiatingIcon isMine={false} />
-                  <Typography style={{ marginLeft: 10, marginRight: 10 }}>
-                    Notes on other members&apos; merge request(s)
-                  </Typography>
-                </Grid>
-              </>
-            ) : (
-              <>
-                <Grid
-                  container
-                  item
-                  xs={6}
-                  alignItems={'center'}
-                  direction={'row'}
-                >
-                  <DifferentiatingIcon isMine={true} />
-                  <Typography style={{ marginLeft: 10, marginRight: 10 }}>
-                    Notes on my own issue(s)
-                  </Typography>
-                </Grid>
-                <Grid
-                  container
-                  item
-                  xs={6}
-                  alignItems={'center'}
-                  direction={'row'}
-                >
-                  <DifferentiatingIcon isMine={false} />
-                  <Typography style={{ marginLeft: 10, marginRight: 10 }}>
-                    Notes on other members&apos; issue(s)
-                  </Typography>
-                </Grid>
-              </>
-            )}
-          </Grid>
         </Box>
+        <MakeIconTitle tab={tab} css={classes.root} />
         <Grid
           justify={'center'}
           container
