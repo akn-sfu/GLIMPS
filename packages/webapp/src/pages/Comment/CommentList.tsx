@@ -52,6 +52,18 @@ const useStyles = makeStyles((theme: Theme) =>
       borderTopLeftRadius: 10,
       fontWeight: 'bold',
     },
+    active_creating_issue_tab: {
+      backgroundColor: '#ea8f88',
+      borderTopRightRadius: 10,
+      borderTopLeftRadius: 10,
+      fontWeight: 'bold',
+    },
+    inactive_creating_issue_tab: {
+      backgroundColor: '#f8cecb',
+      borderTopRightRadius: 10,
+      borderTopLeftRadius: 10,
+      fontWeight: 'bold',
+    },
     pagination: {
       margin: 'auto',
       padding: '30px',
@@ -71,6 +83,7 @@ const useStyles = makeStyles((theme: Theme) =>
 enum TabOption {
   codeReview = 'code reviews',
   issueNotes = 'issue notes',
+  createdIssues = 'issuse created',
 }
 
 function findRepoMemberId(
@@ -80,7 +93,6 @@ function findRepoMemberId(
   const filtered = (members || []).filter(
     (member) => member.meta.id === filtered_id,
   );
-
   return filtered.map((member) => member.id);
 }
 
@@ -206,6 +218,15 @@ const CommentList: React.FC = () => {
                   tab === TabOption.issueNotes
                     ? classes.active_issue_note_tab
                     : classes.inactive_issue_note_tab
+                }
+              />
+              <Tab
+                value={TabOption.createdIssues}
+                label='Created Issues'
+                className={
+                  tab === TabOption.createdIssues
+                    ? classes.active_creating_issue_tab
+                    : classes.inactive_creating_issue_tab
                 }
               />
             </Tabs>
