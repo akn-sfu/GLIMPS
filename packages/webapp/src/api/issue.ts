@@ -12,7 +12,7 @@ export function useGetIssueById(issueId) {
 
 export function useGetIssueByRepo(params) {
   return useApiQuery<SearchResults<Issue>>(
-    `/issue?repository=${params.repositoryId}`,
+    `/issue?repository=${params.repository_id}`,
   );
 }
 
@@ -20,16 +20,4 @@ export function useGetIssueByNoteId(params: IssueSearchParams) {
   return useApiQuery<SearchResults<Issue>>(
     `/issue?repository=${params.repository}&note_id=${params.note_id}`,
   );
-}
-
-interface test {
-  repository?: string;
-  author_id?: number[];
-  //created_start_date?: string;
-  //created_end_date?: string;
-}
-
-export function useGetTotalIssues(params: test) {
-  console.log(params);
-  return useApiQuery<number>('/issue', params);
 }

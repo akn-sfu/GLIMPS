@@ -19,8 +19,7 @@ import MemberDropdown from '../../shared/components/MemberDropdown';
 import ItemPerPageDropdown from './ItemPerPageDropdown';
 import { Note } from '@ceres/types';
 import RepoAndDateAlert from '../../shared/components/RepoAndDateAlert';
-//import { useGetIssueByRepo } from '../../api/issue';
-import { useGetTotalIssues } from '../../api/issue';
+import { useGetIssueByRepo } from '../../api/issue';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -113,25 +112,29 @@ const CommentList: React.FC = () => {
     type: noteType,
   });
 
-  const { data: totalIssues } = useGetTotalIssues({
-    repository: repositoryId,
-    author_id: authorIds,
+  // collect all the created issues
+  const { data: totalIssues } = useGetIssueByRepo({
+    repository_id: repositoryId,
   });
-  console.log(totalIssues);
-  //console.log(totalIssues);
-  //console.log(authorIds);
-  //const { data: totalIssues } = useGetTotalIssues({
-  //  repository_id: repositoryId,
-  //  created_start_date: startDate,
-  //  created_end_date: endDate,
-  //  author_id: authorIds,
-  //});
-  //console.log(totalIssues);
+  const creatingIssues =
+    author == 'all'
+      ? totalIssues?.results
+      : totalIssues?.results.filter((issue) =>
+          authorIds.includes(issue.author.id),
+        );
+  const createdIssues = creatingIssues.filter(
+    (issue) =>
+      Date.parse(startDate) <= Date.parse(issue.created_at) &&
+      Date.parse(endDate) >= Date.parse(issue.created_at),
+  );
+  console.log(createdIssues);
 
+  // collect all the comments on MR
   const mergeRequestNotes = allNotes?.results.filter(
     (comment) => comment.noteable_type == 'MergeRequest',
   );
 
+  // collect all the comments on issues
   const issueNotes = allNotes?.results.filter(
     (comment) => comment.noteable_type == 'Issue',
   );
