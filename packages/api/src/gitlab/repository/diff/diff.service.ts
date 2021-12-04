@@ -83,7 +83,11 @@ export class DiffService extends BaseService<Diff, DiffEntity, DiffQueryDto> {
     } while (diffs.length > 0);
   }
 
-  async calculateDiffScore(filters: DiffQueryDto, weights: GlobWeight[] = [], paginate?: boolean) {
+  async calculateDiffScore(
+    filters: DiffQueryDto,
+    weights: GlobWeight[] = [],
+    paginate?: boolean,
+  ) {
     const [diffs] = await this.search(filters, paginate);
     const updatedDiffs = diffs.map((diff) => {
       const summary = diff.resource?.summary;
@@ -95,6 +99,26 @@ export class DiffService extends BaseService<Diff, DiffEntity, DiffQueryDto> {
               (LINE_SCORING[lineType] || 0) * (summary[lineType] || 0),
           )
           .reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+      }
+      if (
+        diff.resource?.diff === '' &&
+        !ScoreOverride.hasOverride(diff?.resource?.extensions?.override)
+      ) {
+        // as of 2021-12-02 when the diff is too big,
+        // the Gitlab API returns an empty diff so we just raise a warning for user
+        diff.resource = Extensions.updateExtensions(diff.resource, {
+          override: {
+            score: score,
+            comment: `WARNING: Empty diff. Diff may be too big for GitLab's API to send.
+              
+              View MR on GitLab to see diff contents`,
+            exclude: score === 0,
+            user: {
+              id: 'system_made_this_change',
+              display: 'default error handler',
+            },
+          },
+        });
       }
       const weight = this.getWeight(diff.resource.new_path, weights);
       diff.resource = Extensions.updateExtensions(diff.resource, {
