@@ -19,6 +19,7 @@ import MemberDropdown from '../../shared/components/MemberDropdown';
 import ItemPerPageDropdown from './ItemPerPageDropdown';
 import { Note } from '@ceres/types';
 import RepoAndDateAlert from '../../shared/components/RepoAndDateAlert';
+import { useGetIssueByRepo } from '../../api/issue';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -110,6 +111,11 @@ const CommentList: React.FC = () => {
     author_id: authorIds,
     type: noteType,
   });
+
+  const { data: totalIssues } = useGetIssueByRepo({
+    repositoryId,
+  });
+  console.log(totalIssues);
 
   const mergeRequestNotes = allNotes?.results.filter(
     (comment) => comment.noteable_type == 'MergeRequest',
