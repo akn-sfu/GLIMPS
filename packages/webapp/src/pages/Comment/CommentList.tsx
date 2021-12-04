@@ -19,7 +19,8 @@ import MemberDropdown from '../../shared/components/MemberDropdown';
 import ItemPerPageDropdown from './ItemPerPageDropdown';
 import { Note } from '@ceres/types';
 import RepoAndDateAlert from '../../shared/components/RepoAndDateAlert';
-import { useGetIssueByRepo } from '../../api/issue';
+//import { useGetIssueByRepo } from '../../api/issue';
+import { useGetTotalIssues } from '../../api/issue';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -112,10 +113,20 @@ const CommentList: React.FC = () => {
     type: noteType,
   });
 
-  const { data: totalIssues } = useGetIssueByRepo({
-    repositoryId,
+  const { data: totalIssues } = useGetTotalIssues({
+    repository: repositoryId,
+    author_id: authorIds,
   });
   console.log(totalIssues);
+  //console.log(totalIssues);
+  //console.log(authorIds);
+  //const { data: totalIssues } = useGetTotalIssues({
+  //  repository_id: repositoryId,
+  //  created_start_date: startDate,
+  //  created_end_date: endDate,
+  //  author_id: authorIds,
+  //});
+  //console.log(totalIssues);
 
   const mergeRequestNotes = allNotes?.results.filter(
     (comment) => comment.noteable_type == 'MergeRequest',

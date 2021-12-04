@@ -62,7 +62,6 @@ const NotePaper: React.FC<NoteProps> = (NoteProps) => {
     note_id: NoteProps.noteData.meta.id,
   });
 
-  //console.log(issue);
   const isMergeRequestNote =
     NoteProps.noteData.noteable_type === 'MergeRequest';
 
