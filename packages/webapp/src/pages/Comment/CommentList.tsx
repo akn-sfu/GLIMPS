@@ -134,12 +134,12 @@ const CommentList: React.FC = () => {
       : totalIssues?.results.filter((issue) =>
           authorIds.includes(issue.author.id),
         );
-  const createdIssues = creatingIssues?.filter(
+  const createdIssuesNotes = creatingIssues?.filter(
     (issue) =>
       Date.parse(startDate) <= Date.parse(issue.created_at) &&
       Date.parse(endDate) >= Date.parse(issue.created_at),
   );
-  console.log(createdIssues);
+  console.log(createdIssuesNotes);
 
   // collect all the comments on MR
   const mergeRequestNotes = allNotes?.results.filter(
@@ -153,8 +153,17 @@ const CommentList: React.FC = () => {
 
   const [alertOpen, setOpen] = useState(true);
   const [tab, setTab] = useState(TabOption.codeReview);
-  const notes =
-    tab === TabOption.codeReview ? mergeRequestNotes || [] : issueNotes || [];
+  let notes;
+  switch (tab) {
+    case TabOption.codeReview:
+      notes = mergeRequestNotes || [];
+      break;
+    case TabOption.createdIssues:
+      notes = createdIssuesNotes || [];
+      break;
+    case TabOption.issueNotes:
+      notes = issueNotes || [];
+  }
 
   const handleTabs = (event: React.ChangeEvent<unknown>, newTab: any) => {
     const type =

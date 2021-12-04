@@ -4,8 +4,8 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import { Paper } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
-import { ApiResource } from '../../api/base';
-import { /*Issue,*/ /*MergeRequest*/ Note } from '@ceres/types';
+//import { ApiResource } from '../../api/base';
+//import { /*Issue,*/ /*MergeRequest*/ Note } from '@ceres/types';
 import SmartDate from '../../shared/components/SmartDate';
 import { useGetMergeRequestByNoteId } from '../../api/mergeRequests';
 import { useGetIssueByNoteId } from '../../api/issue';
@@ -13,7 +13,7 @@ import { useRepositoryContext } from '../../contexts/RepositoryContext';
 import DifferentiatingIcon from './DifferentiatingIcon';
 
 interface NoteProps {
-  noteData: ApiResource<Note>;
+  noteData: any;
 }
 
 const useStyles = makeStyles(() =>
@@ -49,6 +49,7 @@ const extractNoteContent = (noteBody: string) => {
 };
 
 const NotePaper: React.FC<NoteProps> = (NoteProps) => {
+  console.log(NoteProps);
   const { repositoryId } = useRepositoryContext();
   const classes = useStyles();
 
@@ -113,7 +114,7 @@ const NotePaper: React.FC<NoteProps> = (NoteProps) => {
           {!isMergeRequestNote && (
             <Typography>
               <Box fontSize={18}>
-                On issue{' '}
+                On issue{'3 '}
                 <Box fontWeight='fontWeightBold' display='inline'>
                   <a
                     className={classes.clickable_text_hyperlink}
