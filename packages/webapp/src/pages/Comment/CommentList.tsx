@@ -128,15 +128,18 @@ const CommentList: React.FC = () => {
   const { data: totalIssues } = useGetIssueByRepo({
     repository_id: repositoryId,
   });
-  const createdIssuesNotes =
+  const allIssuesNotes =
     author == 'all'
       ? totalIssues?.results
-      : totalIssues?.results.filter(
-          (issue) =>
-            authorIds.includes(issue.author.id) &&
-            Date.parse(startDate) <= Date.parse(issue.created_at) &&
-            Date.parse(endDate) >= Date.parse(issue.created_at),
+      : totalIssues?.results.filter((issue) =>
+          authorIds.includes(issue.author.id),
         );
+  const createdIssuesNotes = allIssuesNotes?.filter(
+    (issue) =>
+      Date.parse(startDate) <= Date.parse(issue.created_at) &&
+      Date.parse(endDate) >= Date.parse(issue.created_at),
+  );
+  console.log(createdIssuesNotes);
 
   // collect all the comments on MR
   const mergeRequestNotes = allNotes?.results.filter(
@@ -237,7 +240,9 @@ const CommentList: React.FC = () => {
                 }
               />
             </Tabs>
-            <ItemPerPageDropdown updateItemsPerPage={handleItemChange} />
+            {tab != TabOption.createdIssues && (
+              <ItemPerPageDropdown updateItemsPerPage={handleItemChange} />
+            )}
           </Grid>
         </Box>
         <MakeIconTitle tab={tab} css={classes.root} />
@@ -252,19 +257,20 @@ const CommentList: React.FC = () => {
             return <NotePaper key={note.meta.id} noteData={note} tab={tab} />;
           })}
         </Grid>
-        {Math.ceil(totalNotes / itemsPerPage) > 0 && (
-          <Pagination
-            className={classes.pagination}
-            page={page + 1}
-            count={Math.ceil(totalNotes / itemsPerPage)}
-            onChange={(e, page) => {
-              setPage(page - 1);
-              window.scrollTo(0, 0);
-            }}
-            color='primary'
-            size='large'
-          />
-        )}
+        {tab != TabOption.createdIssues &&
+          Math.ceil(totalNotes / itemsPerPage) > 0 && (
+            <Pagination
+              className={classes.pagination}
+              page={page + 1}
+              count={Math.ceil(totalNotes / itemsPerPage)}
+              onChange={(e, page) => {
+                setPage(page - 1);
+                window.scrollTo(0, 0);
+              }}
+              color='primary'
+              size='large'
+            />
+          )}
       </Container>
     </>
   );

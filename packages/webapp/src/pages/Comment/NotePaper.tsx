@@ -115,6 +115,8 @@ const NotePaper: React.FC<NoteProps> = (NoteProps) => {
       webUrl = NoteProps.noteData.web_url;
       title = NoteProps.noteData.title;
       createdDate = NoteProps.noteData.created_at;
+      //console.log(title);
+      console.log(NoteProps.noteData);
       body = extractNoteContent(NoteProps.noteData.description);
       wordCount = NoteProps.noteData.description.trim().split(' ').length;
       break;

@@ -13,6 +13,9 @@ export function useGetIssueById(issueId) {
 export function useGetIssueByRepo(params) {
   return useApiQuery<SearchResults<Issue>>(
     `/issue?repository=${params.repository_id}`,
+    {
+      pageSize: 5000,
+    },
   );
 }
 
