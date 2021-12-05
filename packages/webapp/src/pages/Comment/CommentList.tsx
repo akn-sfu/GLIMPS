@@ -137,7 +137,6 @@ const CommentList: React.FC = () => {
             Date.parse(startDate) <= Date.parse(issue.created_at) &&
             Date.parse(endDate) >= Date.parse(issue.created_at),
         );
-  console.log(createdIssuesNotes);
 
   // collect all the comments on MR
   const mergeRequestNotes = allNotes?.results.filter(
@@ -230,7 +229,7 @@ const CommentList: React.FC = () => {
               />
               <Tab
                 value={TabOption.createdIssues}
-                label='Created Issues'
+                label='New Issues'
                 className={
                   tab === TabOption.createdIssues
                     ? classes.active_creating_issue_tab

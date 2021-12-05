@@ -110,8 +110,14 @@ const NotePaper: React.FC<NoteProps> = (NoteProps) => {
 
     case TabOption.createdIssues: {
       onMyOwn = true;
-      console.log(NoteProps);
-      return null;
+      cssClass = classes.created_issue_header_row;
+      startWords = 'New issue ';
+      webUrl = NoteProps.noteData.web_url;
+      title = NoteProps.noteData.title;
+      createdDate = NoteProps.noteData.created_at;
+      body = extractNoteContent(NoteProps.noteData.description);
+      wordCount = NoteProps.noteData.description.trim().split(' ').length;
+      break;
     }
   }
 
