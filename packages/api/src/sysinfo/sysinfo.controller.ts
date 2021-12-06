@@ -1,4 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
+import { DiskUsage } from '@ceres/types'
 import { getManager } from 'typeorm';
 
 @Controller('sysinfo')
@@ -7,7 +8,7 @@ export class SysinfoController {
   async getDiskUsage() {
     const manager = getManager();
     // Query adapted from: https://wiki.postgresql.org/wiki/Disk_Usage
-    const spaceUsed = await manager.query(`SELECT SUM(total_bytes::Integer) AS total
+    const spaceUsed = await manager.query(`SELECT pg_size_pretty(SUM(total_bytes::Integer)) AS total
     FROM (
     SELECT *, total_bytes-index_bytes-coalesce(toast_bytes,0) AS table_bytes FROM (
         SELECT c.oid,nspname AS table_schema, relname AS table_name
@@ -20,7 +21,6 @@ export class SysinfoController {
             WHERE relkind = 'r'
     ) a
     ) a WHERE "table_schema"='public';`);
-    // const totalSpaceUsed = spaceUsed.reduce((a, b) => a + parseInt(b.total), 0);
-    return { used: spaceUsed.total };
+    return { used: spaceUsed[0].total };
   }
 }
