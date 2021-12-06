@@ -28,6 +28,7 @@ import Tab from '@material-ui/core/Tab/Tab';
 import { useInterval } from '../../../shared/util/useInterval';
 import { Snackbar } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
+import { getDiskSpace } from '../../../api/sysinfo';
 
 function hasPendingSync(operations: Operation[], id: string) {
   return (
@@ -104,6 +105,14 @@ const RepositoryList: React.FC = () => {
       },
     });
   };
+  const [spaceUsed, setSpaceUsed] = useState('');
+  // potentially turn into a useEffect hook
+  (async () => {
+    const space = await getDiskSpace();
+    if (space.data) {
+      setSpaceUsed(`${space.data.used} used`);
+    }
+  })();
 
   useInterval(
     () => {
@@ -154,6 +163,7 @@ const RepositoryList: React.FC = () => {
               </Box>
             )}
           </Box>
+          {spaceUsed}
         </Grid>
       </Grid>
       <Grid container spacing={2}>

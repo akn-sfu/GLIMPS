@@ -15,3 +15,4 @@ export * from './ScoringConfig';
 export * from './User';
 export * from './WithExtensions';
 export * from './Group';
+export * from './Sysinfo';
