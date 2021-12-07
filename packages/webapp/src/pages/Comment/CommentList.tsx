@@ -124,6 +124,16 @@ const CommentList: React.FC = () => {
     type: noteType,
   });
 
+  // collect all the comments on MR
+  const mergeRequestNotes = allNotes?.results.filter(
+    (comment) => comment.noteable_type == 'MergeRequest',
+  );
+
+  // collect all the comments on issues
+  const issueNotes = allNotes?.results.filter(
+    (comment) => comment.noteable_type == 'Issue',
+  );
+
   // collect all the created issues
   const { data: totalIssues } = useGetIssueByRepo({
     repository_id: repositoryId,
@@ -139,16 +149,16 @@ const CommentList: React.FC = () => {
       Date.parse(startDate) <= Date.parse(issue.created_at) &&
       Date.parse(endDate) >= Date.parse(issue.created_at),
   );
-
-  // collect all the comments on MR
-  const mergeRequestNotes = allNotes?.results.filter(
-    (comment) => comment.noteable_type == 'MergeRequest',
-  );
-
-  // collect all the comments on issues
-  const issueNotes = allNotes?.results.filter(
-    (comment) => comment.noteable_type == 'Issue',
-  );
+  let newIssues = 0;
+  let wordsInDescriptions = 0;
+  createdIssuesNotes.forEach(function (issue) {
+    newIssues += 1;
+    if (issue.description)
+      wordsInDescriptions += issue.description
+        .replace(/\*([^*]+)\*$/g, '')
+        .trim()
+        .split(' ').length;
+  });
 
   const [alertOpen, setOpen] = useState(true);
   const [tab, setTab] = useState(TabOption.codeReview);
@@ -156,13 +166,13 @@ const CommentList: React.FC = () => {
   let notes;
   switch (tab) {
     case TabOption.codeReview:
-      notes = mergeRequestNotes || [];
+      notes = mergeRequestNotes;
       break;
     case TabOption.createdIssues:
-      notes = createdIssuesNotes || [];
+      notes = createdIssuesNotes;
       break;
     case TabOption.issueNotes:
-      notes = issueNotes || [];
+      notes = issueNotes;
   }
 
   const handleTabs = (event: React.ChangeEvent<unknown>, newTab: any) => {
@@ -245,6 +255,15 @@ const CommentList: React.FC = () => {
           </Grid>
         </Box>
         <MakeIconTitle tab={tab} css={classes.root} />
+        {tab == TabOption.createdIssues && (
+          <Box mt={1} mb={1}>
+            <Alert severity='warning'>
+              There are <strong> {newIssues} </strong> new issues with{' '}
+              <strong> {wordsInDescriptions} </strong>words in their
+              descriptions.
+            </Alert>
+          </Box>
+        )}
         <Grid
           justify={'center'}
           container
