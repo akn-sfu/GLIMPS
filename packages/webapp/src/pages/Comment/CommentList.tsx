@@ -83,7 +83,7 @@ const useStyles = makeStyles((theme: Theme) =>
 export enum TabOption {
   codeReview = 'code reviews',
   issueNotes = 'issue notes',
-  createdIssues = 'issuse created',
+  createdIssues = 'issue created',
 }
 
 function findRepoMemberId(

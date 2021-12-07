@@ -4,8 +4,6 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import { Paper } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
-//import { ApiResource } from '../../api/base';
-//import { /*Issue,*/ /*MergeRequest*/ Note } from '@ceres/types';
 import SmartDate from '../../shared/components/SmartDate';
 import { useGetMergeRequestByNoteId } from '../../api/mergeRequests';
 import { useGetIssueByNoteId } from '../../api/issue';
@@ -59,7 +57,7 @@ const NotePaper: React.FC<NoteProps> = (NoteProps) => {
   const { repositoryId } = useRepositoryContext();
   const classes = useStyles();
 
-  let onMyOwn: boolean,
+  let on_my_own_issue_or_MR: boolean,
     wordCount: number,
     createdDate: string,
     cssClass: any,
@@ -74,7 +72,7 @@ const NotePaper: React.FC<NoteProps> = (NoteProps) => {
         repository: repositoryId,
         note_id: NoteProps.noteData.meta.id,
       });
-      onMyOwn =
+      on_my_own_issue_or_MR =
         mergeRequest?.results.length != 0 &&
         NoteProps.noteData.author.id ===
           mergeRequest?.results.find((element) => element).author.id;
@@ -94,7 +92,7 @@ const NotePaper: React.FC<NoteProps> = (NoteProps) => {
         repository: repositoryId,
         note_id: NoteProps.noteData.meta.id,
       });
-      onMyOwn =
+      on_my_own_issue_or_MR =
         issue?.results.length != 0 &&
         NoteProps.noteData.author.id ===
           issue?.results.find((element) => element).author.id;
@@ -110,7 +108,7 @@ const NotePaper: React.FC<NoteProps> = (NoteProps) => {
     }
 
     case TabOption.createdIssues: {
-      onMyOwn = true;
+      on_my_own_issue_or_MR = true;
       cssClass = classes.created_issue_header_row;
       startWords = 'New issue ';
       webUrl = NoteProps.noteData.web_url;
@@ -151,7 +149,7 @@ const NotePaper: React.FC<NoteProps> = (NoteProps) => {
           </Typography>
         </Grid>
         <Grid item>
-          <DifferentiatingIcon isMine={onMyOwn} />
+          <DifferentiatingIcon isMine={on_my_own_issue_or_MR} />
         </Grid>
       </Grid>
 
