@@ -139,7 +139,6 @@ const CommentList: React.FC = () => {
       Date.parse(startDate) <= Date.parse(issue.created_at) &&
       Date.parse(endDate) >= Date.parse(issue.created_at),
   );
-  console.log(createdIssuesNotes);
 
   // collect all the comments on MR
   const mergeRequestNotes = allNotes?.results.filter(
