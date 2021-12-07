@@ -151,7 +151,7 @@ const CommentList: React.FC = () => {
   );
   let newIssues = 0;
   let wordsInDescriptions = 0;
-  createdIssuesNotes.forEach(function (issue) {
+  createdIssuesNotes?.forEach(function (issue) {
     newIssues += 1;
     if (issue.description)
       wordsInDescriptions += issue.description
