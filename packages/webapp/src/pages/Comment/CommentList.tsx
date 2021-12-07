@@ -12,13 +12,14 @@ import { useFilterContext } from '../../contexts/FilterContext';
 import { ApiResource } from '../../api/base';
 import { RepositoryMember } from '@ceres/types';
 import { useRepositoryMembers } from '../../api/repo_members';
-import DifferentiatingIcon from './DifferentiatingIcon';
 import { Collapse, Typography } from '@material-ui/core';
 import { Alert, Pagination } from '@material-ui/lab';
 import MemberDropdown from '../../shared/components/MemberDropdown';
 import ItemPerPageDropdown from './ItemPerPageDropdown';
 import { Note } from '@ceres/types';
 import RepoAndDateAlert from '../../shared/components/RepoAndDateAlert';
+import { useGetIssueByRepo } from '../../api/issue';
+import MakeIconTitle from './iconTitle';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -51,6 +52,18 @@ const useStyles = makeStyles((theme: Theme) =>
       borderTopLeftRadius: 10,
       fontWeight: 'bold',
     },
+    active_creating_issue_tab: {
+      backgroundColor: '#ea8f88',
+      borderTopRightRadius: 10,
+      borderTopLeftRadius: 10,
+      fontWeight: 'bold',
+    },
+    inactive_creating_issue_tab: {
+      backgroundColor: '#f8cecb',
+      borderTopRightRadius: 10,
+      borderTopLeftRadius: 10,
+      fontWeight: 'bold',
+    },
     pagination: {
       margin: 'auto',
       padding: '30px',
@@ -67,9 +80,10 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-enum TabOption {
+export enum TabOption {
   codeReview = 'code reviews',
   issueNotes = 'issue notes',
+  createdIssues = 'issue created',
 }
 
 function findRepoMemberId(
@@ -79,7 +93,6 @@ function findRepoMemberId(
   const filtered = (members || []).filter(
     (member) => member.meta.id === filtered_id,
   );
-
   return filtered.map((member) => member.id);
 }
 
@@ -111,18 +124,56 @@ const CommentList: React.FC = () => {
     type: noteType,
   });
 
+  // collect all the comments on MR
   const mergeRequestNotes = allNotes?.results.filter(
     (comment) => comment.noteable_type == 'MergeRequest',
   );
 
+  // collect all the comments on issues
   const issueNotes = allNotes?.results.filter(
     (comment) => comment.noteable_type == 'Issue',
   );
 
+  // collect all the created issues
+  const { data: totalIssues } = useGetIssueByRepo({
+    repository_id: repositoryId,
+  });
+  const allIssuesNotes =
+    author == 'all'
+      ? totalIssues?.results
+      : totalIssues?.results.filter((issue) =>
+          authorIds.includes(issue.author.id),
+        );
+  const createdIssuesNotes = allIssuesNotes?.filter(
+    (issue) =>
+      Date.parse(startDate) <= Date.parse(issue.created_at) &&
+      Date.parse(endDate) >= Date.parse(issue.created_at),
+  );
+  let newIssues = 0;
+  let wordsInDescriptions = 0;
+  createdIssuesNotes?.forEach(function (issue) {
+    newIssues += 1;
+    if (issue.description)
+      wordsInDescriptions += issue.description
+        .replace(/\*([^*]+)\*$/g, '')
+        .trim()
+        .split(' ').length;
+  });
+
   const [alertOpen, setOpen] = useState(true);
   const [tab, setTab] = useState(TabOption.codeReview);
-  const notes =
-    tab === TabOption.codeReview ? mergeRequestNotes || [] : issueNotes || [];
+
+  let notes;
+  switch (tab) {
+    case TabOption.codeReview:
+      notes = mergeRequestNotes;
+      break;
+    case TabOption.createdIssues:
+      notes = createdIssuesNotes;
+      break;
+    case TabOption.issueNotes:
+      notes = issueNotes;
+  }
 
   const handleTabs = (event: React.ChangeEvent<unknown>, newTab: any) => {
     const type =
@@ -188,73 +239,31 @@ const CommentList: React.FC = () => {
                     : classes.inactive_issue_note_tab
                 }
               />
+              <Tab
+                value={TabOption.createdIssues}
+                label='New Issues'
+                className={
+                  tab === TabOption.createdIssues
+                    ? classes.active_creating_issue_tab
+                    : classes.inactive_creating_issue_tab
+                }
+              />
             </Tabs>
-            <ItemPerPageDropdown updateItemsPerPage={handleItemChange} />
-          </Grid>
-
-          <Grid
-            container
-            direction={'row'}
-            alignItems={'center'}
-            style={{ marginTop: 15 }}
-          >
-            {tab === TabOption.codeReview ? (
-              <>
-                <Grid
-                  container
-                  item
-                  xs={6}
-                  alignItems={'center'}
-                  direction={'row'}
-                >
-                  <DifferentiatingIcon isMine={true} />
-                  <Typography style={{ marginLeft: 10, marginRight: 10 }}>
-                    Notes on my own merge request(s)
-                  </Typography>
-                </Grid>
-                <Grid
-                  container
-                  item
-                  xs={6}
-                  alignItems={'center'}
-                  direction={'row'}
-                >
-                  <DifferentiatingIcon isMine={false} />
-                  <Typography style={{ marginLeft: 10, marginRight: 10 }}>
-                    Notes on other members&apos; merge request(s)
-                  </Typography>
-                </Grid>
-              </>
-            ) : (
-              <>
-                <Grid
-                  container
-                  item
-                  xs={6}
-                  alignItems={'center'}
-                  direction={'row'}
-                >
-                  <DifferentiatingIcon isMine={true} />
-                  <Typography style={{ marginLeft: 10, marginRight: 10 }}>
-                    Notes on my own issue(s)
-                  </Typography>
-                </Grid>
-                <Grid
-                  container
-                  item
-                  xs={6}
-                  alignItems={'center'}
-                  direction={'row'}
-                >
-                  <DifferentiatingIcon isMine={false} />
-                  <Typography style={{ marginLeft: 10, marginRight: 10 }}>
-                    Notes on other members&apos; issue(s)
-                  </Typography>
-                </Grid>
-              </>
+            {tab != TabOption.createdIssues && (
+              <ItemPerPageDropdown updateItemsPerPage={handleItemChange} />
             )}
           </Grid>
         </Box>
+        <MakeIconTitle tab={tab} css={classes.root} />
+        {tab == TabOption.createdIssues && (
+          <Box mt={1} mb={1}>
+            <Alert severity='warning'>
+              There are <strong> {newIssues} </strong> new issues with{' '}
+              <strong> {wordsInDescriptions} </strong>words in their
+              descriptions.
+            </Alert>
+          </Box>
+        )}
         <Grid
           justify={'center'}
           container
@@ -263,22 +272,23 @@ const CommentList: React.FC = () => {
           spacing={1}
         >
           {notes?.map((note) => {
-            return <NotePaper key={note.meta.id} noteData={note} />;
+            return <NotePaper key={note.meta.id} noteData={note} tab={tab} />;
           })}
         </Grid>
-        {Math.ceil(totalNotes / itemsPerPage) > 0 && (
-          <Pagination
-            className={classes.pagination}
-            page={page + 1}
-            count={Math.ceil(totalNotes / itemsPerPage)}
-            onChange={(e, page) => {
-              setPage(page - 1);
-              window.scrollTo(0, 0);
-            }}
-            color='primary'
-            size='large'
-          />
-        )}
+        {tab != TabOption.createdIssues &&
+          Math.ceil(totalNotes / itemsPerPage) > 0 && (
+            <Pagination
+              className={classes.pagination}
+              page={page + 1}
+              count={Math.ceil(totalNotes / itemsPerPage)}
+              onChange={(e, page) => {
+                setPage(page - 1);
+                window.scrollTo(0, 0);
+              }}
+              color='primary'
+              size='large'
+            />
+          )}
       </Container>
     </>
   );
