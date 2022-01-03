@@ -35,3 +35,7 @@ See [docs/development.md](docs/development.md).
 ## Deployments
 
 See [docs/deployment.md](docs/deployment.md).
+
+## Contributors
+
+See [docs/contributors.md](docs/contributors.md).
