@@ -74,7 +74,9 @@ function getAuthorMergeSumCommitScore(
   return mergeScore.toFixed(1);
 }
 
-const CommitOrMergeRequestRenderer: React.FC<CommitOrMergeRequestRendererProps> = ({
+const CommitOrMergeRequestRenderer: React.FC<
+  CommitOrMergeRequestRendererProps
+> = ({
   active,
   mergeRequest,
   commit,
@@ -105,13 +107,11 @@ const CommitOrMergeRequestRenderer: React.FC<CommitOrMergeRequestRendererProps> 
 
   const accordionColor = mergeRequest ? '' : '#f7ebef';
   const { emails } = useFilterContext();
-  const {
-    hasOverride: commitHasOverride,
-    score: commitScoreSum,
-  } = getSumAndHasOverride(
-    emails || [],
-    mergeRequest?.extensions?.commitScoreSums || {},
-  );
+  const { hasOverride: commitHasOverride, score: commitScoreSum } =
+    getSumAndHasOverride(
+      emails || [],
+      mergeRequest?.extensions?.commitScoreSums || {},
+    );
 
   const mergeScore = mergeRequest
     ? getAuthorMergeSumCommitScore(

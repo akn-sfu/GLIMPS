@@ -231,7 +231,11 @@ interface CodeViewProps {
 const CodeView: React.FC<CodeViewProps> = ({ mergeRequest, commit }) => {
   const classes = useStyles();
   // using infinite diffs to prevent performance slow down of loading all commits at once
-  const { data: diffs, fetchNextPage, hasNextPage } = useInfiniteDiffs(
+  const {
+    data: diffs,
+    fetchNextPage,
+    hasNextPage,
+  } = useInfiniteDiffs(
     commit
       ? { commit: commit.meta.id }
       : { merge_request: mergeRequest.meta.id },

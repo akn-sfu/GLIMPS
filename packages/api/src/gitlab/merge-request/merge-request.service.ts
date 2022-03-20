@@ -100,8 +100,14 @@ export class MergeRequestService extends BaseService<
   ): Promise<MergeRequest.DailyCount[]> {
     let query = this.serviceRepository.createQueryBuilder('merge_request');
     query = this.buildFilters(query, filters);
-    query.select("DATE((merge_request.resource #>>'{merged_at}')::timestamptz AT time zone" + " '" + filters.timezone + "' " +
-     "AT time zone 'utc')", 'date');
+    query.select(
+      "DATE((merge_request.resource #>>'{merged_at}')::timestamptz AT time zone" +
+        " '" +
+        filters.timezone +
+        "' " +
+        "AT time zone 'utc')",
+      'date',
+    );
     query.addSelect('count(*)::integer', 'count');
     query.addSelect(
       `sum(
@@ -205,11 +211,19 @@ export class MergeRequestService extends BaseService<
     );
     if (mergeRequest.resource.squash) {
       // if commits of a MR have been squashed they won't show up when we fetch the repo commits so fetch here instead
-      await this.commitService.syncForRepositoryPage(token, repository, commits, true);
-      
+      await this.commitService.syncForRepositoryPage(
+        token,
+        repository,
+        commits,
+        true,
+      );
+
       // when you squash a MR, git replaces them all with a single squash commit
       // we actually want to display the squashed commits instead of the single one so we delete the single one
-      let squashCommit = await this.commitService.findByGitlabId(repository, mergeRequest.resource.squash_commit_sha);
+      let squashCommit = await this.commitService.findByGitlabId(
+        repository,
+        mergeRequest.resource.squash_commit_sha,
+      );
       if (squashCommit) {
         await this.commitService.deleteCommitEntity(squashCommit);
       }
@@ -313,7 +327,7 @@ export class MergeRequestService extends BaseService<
         for (let curPage = 2; curPage <= pages; curPage++) {
           const params = {
             page: curPage,
-          }
+          };
           const pageUrl = `projects/${repository.resource.id}/merge_requests/${mergeRequest.iid}/commits`;
           const pagePromise = this.fetchWithRetries<Commit>(
             token,
@@ -364,7 +378,7 @@ export class MergeRequestService extends BaseService<
             commit: commit.id,
           },
           weights,
-          false
+          false,
         );
         const override = commit.resource?.extensions?.override;
         score.score = ScoreOverride.computeScore(override, score.score);
@@ -394,16 +408,14 @@ export class MergeRequestService extends BaseService<
   }
 
   async storeScore(mergeRequest: MergeRequestEntity, weights?: GlobWeight[]) {
-    const {
-      score: diffScore,
-      hasOverride: diffHasOverride,
-    } = await this.diffService.calculateDiffScore(
-      {
-        merge_request: mergeRequest.id,
-      },
-      weights,
-      false
-    );
+    const { score: diffScore, hasOverride: diffHasOverride } =
+      await this.diffService.calculateDiffScore(
+        {
+          merge_request: mergeRequest.id,
+        },
+        weights,
+        false,
+      );
     const commitScoreSums = await this.getSumScoreForMergeRequest(
       mergeRequest,
       weights,
@@ -432,9 +444,7 @@ export class MergeRequestService extends BaseService<
     );
   }
 
-  async deleteMergeRequestEntity(
-    merge_request: MergeRequestEntity
-  ){
+  async deleteMergeRequestEntity(merge_request: MergeRequestEntity) {
     return this.delete(merge_request);
   }
 }

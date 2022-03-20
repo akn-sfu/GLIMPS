@@ -8,7 +8,7 @@ import { Fetch } from './fetchWithRetry';
 export abstract class BaseService<
   TResource,
   TEntity extends BaseEntity<TResource>,
-  TFilters extends QueryDto
+  TFilters extends QueryDto,
 > extends Fetch {
   protected constructor(
     protected readonly serviceRepository: Repository<TEntity>,

@@ -6,12 +6,8 @@ import ScoringConfigForm from '../../GlobalSettings/ScoreConfig/ScoringCofigForm
 import { useRepositoryScoringContext } from './RepositoryScoringContext';
 
 const ScoringConfigOverrides: React.FC = () => {
-  const {
-    showDrawer,
-    setShowDrawer,
-    overrides,
-    setOverrides,
-  } = useRepositoryScoringContext();
+  const { showDrawer, setShowDrawer, overrides, setOverrides } =
+    useRepositoryScoringContext();
 
   function onSubmit(values: ScoringConfig) {
     const newOverrides = values?.weights || [];

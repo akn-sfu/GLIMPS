@@ -88,9 +88,8 @@ const ListMergeRequestPage = () => {
   const { id } = useParams<{ id: string }>();
   const { startDate, endDate } = useFilterContext();
   const [emails, setEmails] = useState<string[]>([]);
-  const [activeMergeRequest, setActiveMergeRequest] = useState<
-    ApiResource<MergeRequest>
-  >();
+  const [activeMergeRequest, setActiveMergeRequest] =
+    useState<ApiResource<MergeRequest>>();
   const [activeCommit, setActiveCommit] = useState<ApiResource<Commit>>();
   const { ref: loadMoreRef, inView: loadMoreInView } = useInView();
   const {

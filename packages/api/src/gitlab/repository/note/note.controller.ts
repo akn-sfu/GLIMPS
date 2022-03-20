@@ -28,7 +28,9 @@ export class NoteController {
         'merge request or issue or repository id must be provided',
       );
     }
-    return paginatedToResponse(this.noteService.search({...query, sort:"+updated_at"}));
+    return paginatedToResponse(
+      this.noteService.search({ ...query, sort: '+updated_at' }),
+    );
   }
 
   @Get('total')

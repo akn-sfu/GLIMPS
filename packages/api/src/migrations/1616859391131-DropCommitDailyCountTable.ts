@@ -1,7 +1,8 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class DropCommitDailyCountTable1616859391131
-  implements MigrationInterface {
+  implements MigrationInterface
+{
   name = 'DropCommitDailyCountTable1616859391131';
 
   public async up(queryRunner: QueryRunner): Promise<void> {

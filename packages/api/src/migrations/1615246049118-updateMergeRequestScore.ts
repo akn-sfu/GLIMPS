@@ -1,7 +1,8 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class updateMergeRequestScore1615246049118
-  implements MigrationInterface {
+  implements MigrationInterface
+{
   name = 'updateMergeRequestScore1615246049118';
 
   public async up(queryRunner: QueryRunner): Promise<void> {

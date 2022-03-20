@@ -1,7 +1,8 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class CreateMergeRequestNotesTable1615018508663
-  implements MigrationInterface {
+  implements MigrationInterface
+{
   name = 'CreateMergeRequestNotesTable1615018508663';
 
   public async up(queryRunner: QueryRunner): Promise<void> {

@@ -53,10 +53,8 @@ const GlobWeightsRenderer: React.FC<{ weights: GlobWeight[] }> = ({
 const ScoringConfigDialog: React.FC<ScoringConfigDialogProps> = ({
   repository,
 }) => {
-  const {
-    showCurrentConfig,
-    setShowCurrentConfig,
-  } = useRepositoryScoringContext();
+  const { showCurrentConfig, setShowCurrentConfig } =
+    useRepositoryScoringContext();
   const scoringConfig =
     repository?.extensions?.scoringConfig?.config?.weights || [];
   const overrides = repository?.extensions?.scoringConfig?.overrides || [];

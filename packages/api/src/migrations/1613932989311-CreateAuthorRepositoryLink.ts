@@ -1,7 +1,8 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class CreateAuthorRepositoryLink1613932989311
-  implements MigrationInterface {
+  implements MigrationInterface
+{
   name = 'CreateAuthorRepositoryLink1613932989311';
 
   public async up(queryRunner: QueryRunner): Promise<void> {

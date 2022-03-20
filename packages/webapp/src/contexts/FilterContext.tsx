@@ -33,9 +33,8 @@ const FilterContextDefault: FilterContextState = {
   setIteration: () => null,
 };
 
-const FilterContext = React.createContext<FilterContextState>(
-  FilterContextDefault,
-);
+const FilterContext =
+  React.createContext<FilterContextState>(FilterContextDefault);
 
 export function useFilterContext() {
   return useContext(FilterContext);

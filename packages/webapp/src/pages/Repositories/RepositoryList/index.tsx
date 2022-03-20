@@ -60,20 +60,16 @@ const RepositoryList: React.FC = () => {
     role: tabToRoleMappings[tab],
   });
   const { user } = useAuthContext();
-  const {
-    data: operationsData,
-    invalidate: invalidateOperations,
-  } = useGetOperations({
-    status: [Operation.Status.PROCESSING, Operation.Status.PENDING],
-    type: [Operation.Type.SYNC_REPOSITORY, Operation.Type.DELETE_REPOSITORY],
-  });
-  const {
-    data: pendingFetches,
-    invalidate: invalidatePendingFetches,
-  } = useGetOperations({
-    status: [Operation.Status.PROCESSING, Operation.Status.PENDING],
-    type: [Operation.Type.FETCH_REPOSITORIES],
-  });
+  const { data: operationsData, invalidate: invalidateOperations } =
+    useGetOperations({
+      status: [Operation.Status.PROCESSING, Operation.Status.PENDING],
+      type: [Operation.Type.SYNC_REPOSITORY, Operation.Type.DELETE_REPOSITORY],
+    });
+  const { data: pendingFetches, invalidate: invalidatePendingFetches } =
+    useGetOperations({
+      status: [Operation.Status.PROCESSING, Operation.Status.PENDING],
+      type: [Operation.Type.FETCH_REPOSITORIES],
+    });
 
   const { sync } = useSyncRepository();
   const { delete2 } = useDeleteRepository();

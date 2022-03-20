@@ -1,7 +1,8 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class CreateCommitDailyCountTable1613872308506
-  implements MigrationInterface {
+  implements MigrationInterface
+{
   name = 'CreateCommitDailyCountTable1613872308506';
 
   public async up(queryRunner: QueryRunner): Promise<void> {

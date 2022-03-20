@@ -1,7 +1,8 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class CreateMergeRequestTable1613363938398
-  implements MigrationInterface {
+  implements MigrationInterface
+{
   name = 'CreateMergeRequestTable1613363938398';
 
   public async up(queryRunner: QueryRunner): Promise<void> {

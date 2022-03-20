@@ -5,8 +5,7 @@ export default () => ({
     process.env.SFU_VALIDATION_ENDPOINT ||
     'https://cas.sfu.ca/cas/serviceValidate',
   gitlabBaseUrl:
-    process.env.GITLAB_BASE_URL ||
-    'https://cmpt373-1211-09.cmpt.sfu.ca/api/v4',
+    process.env.GITLAB_BASE_URL || 'https://cmpt373-1211-09.cmpt.sfu.ca/api/v4',
   database: {
     type: 'postgres',
     database: 'glimps',

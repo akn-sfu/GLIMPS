@@ -1,7 +1,8 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class CreateScoringConfigEntity1615587956123
-  implements MigrationInterface {
+  implements MigrationInterface
+{
   name = 'CreateScoringConfigEntity1615587956123';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
