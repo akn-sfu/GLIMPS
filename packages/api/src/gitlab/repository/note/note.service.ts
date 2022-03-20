@@ -45,15 +45,21 @@ export class NoteService extends BaseService<Note, NoteEntity, NoteQueryDto> {
     }
 
     if (filters.created_start_date) {
-      query.andWhere("(note.resource #>> '{created_at}')::timestamptz >= ((:startDate))::timestamptz", {
-        startDate: filters.created_start_date,
-      });
+      query.andWhere(
+        "(note.resource #>> '{created_at}')::timestamptz >= ((:startDate))::timestamptz",
+        {
+          startDate: filters.created_start_date,
+        },
+      );
     }
 
     if (filters.created_end_date) {
-      query.andWhere("(note.resource #>> '{created_at}')::timestamptz <= ((:endDate))::timestamptz", {
-        endDate: filters.created_end_date,
-      });
+      query.andWhere(
+        "(note.resource #>> '{created_at}')::timestamptz <= ((:endDate))::timestamptz",
+        {
+          endDate: filters.created_end_date,
+        },
+      );
     }
 
     if (filters.repository_id) {
@@ -91,18 +97,23 @@ export class NoteService extends BaseService<Note, NoteEntity, NoteQueryDto> {
     return query.orderBy("note.resource #>> '{created_at}'", 'DESC');
   }
 
-  async getTotalCounts(filters: NoteQueryDto): Promise<number>{
+  async getTotalCounts(filters: NoteQueryDto): Promise<number> {
     let query = this.serviceRepository.createQueryBuilder('note');
     query = this.buildFilters(query, filters);
     return query.getCount();
   }
 
-
   async buildDailyCounts(filters: NoteQueryDto): Promise<Note.DailyCount[]> {
     let query = this.serviceRepository.createQueryBuilder('note');
     query = this.buildFilters(query, filters);
-    query.select("DATE((note.resource #>>'{created_at}')::timestamptz AT time zone" + " '" + filters.timezone + "' " +
-     "AT time zone 'utc')", 'date');
+    query.select(
+      "DATE((note.resource #>>'{created_at}')::timestamptz AT time zone" +
+        " '" +
+        filters.timezone +
+        "' " +
+        "AT time zone 'utc')",
+      'date',
+    );
     query.addSelect('count(*)::integer', 'count');
     query.addSelect(
       "sum((note.resource #>> '{extensions,wordCount}')::float)",

@@ -4,6 +4,8 @@
   "scripts": {
     "bootstrap": "lerna bootstrap --no-ci",
     "bootstrap:ci": "lerna bootstrap --ci",
+    "bootstrap:ci:api": "lerna bootstrap --ci --include-dependents --include-dependencies --scope @ceres/api",
+    "bootstrap:ci:webapp": "lerna bootstrap --ci --include-dependents --include-dependencies --scope @ceres/webapp",
     "build": "lerna run build",
     "format": "lerna run --parallel format",
     "link": "lerna link",

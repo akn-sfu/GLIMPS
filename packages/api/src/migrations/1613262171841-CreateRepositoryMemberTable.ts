@@ -1,7 +1,8 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class CreateRepositoryMemberTable1613262171841
-  implements MigrationInterface {
+  implements MigrationInterface
+{
   name = 'CreateRepositoryMemberTable1613262171841';
 
   public async up(queryRunner: QueryRunner): Promise<void> {

@@ -22,7 +22,7 @@ export abstract class Fetch {
           })
           .toPromise();
       } catch (err) {
-        console.error(`Fetch Attempt ${attemptsCount+1}`, err);
+        console.error(`Fetch Attempt ${attemptsCount + 1}`, err);
       }
       attemptsCount++;
     }
@@ -51,7 +51,7 @@ export abstract class Fetch {
           })
           .toPromise();
       } catch (err) {
-        console.error(`Fetch Attempt ${attemptsCount+1}`, err);
+        console.error(`Fetch Attempt ${attemptsCount + 1}`, err);
       }
       attemptsCount++;
     }

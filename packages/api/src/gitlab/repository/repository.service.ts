@@ -189,11 +189,8 @@ export class RepositoryService extends BaseService<
     );
     return axiosResponse.data;
   }
-  
-  async getDefaultBranch(
-    project_id: number,
-    token: string,
-  ): Promise<string> {
+
+  async getDefaultBranch(project_id: number, token: string): Promise<string> {
     const url = `/projects/${project_id}`;
     const params = { membership: true };
     const axiosResponse = await this.fetchWithRetries<string>(
@@ -203,7 +200,7 @@ export class RepositoryService extends BaseService<
     );
 
     const json = JSON.parse(JSON.stringify(axiosResponse.data));
-    return json.default_branch
+    return json.default_branch;
   }
 
   async updateDefaultBranch(
@@ -216,16 +213,11 @@ export class RepositoryService extends BaseService<
     return this.update(repository);
   }
 
-  async deleteRepositoryEntity(
-    repo: RepositoryEntity
-  ){
+  async deleteRepositoryEntity(repo: RepositoryEntity) {
     return this.delete(repo);
   }
 
-  async addRepositoryEntity(
-    repo: RepositoryEntity,
-    user: User
-  ){
+  async addRepositoryEntity(repo: RepositoryEntity, user: User) {
     return this.createOrUpdate(user, [repo.resource]);
   }
 }

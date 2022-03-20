@@ -1,7 +1,8 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class FixGitlabTokenRelationship1612336481729
-  implements MigrationInterface {
+  implements MigrationInterface
+{
   name = 'FixGitlabTokenRelationship1612336481729';
 
   public async up(queryRunner: QueryRunner): Promise<void> {

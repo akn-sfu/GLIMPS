@@ -42,12 +42,8 @@ const ScoringConfigSelector: React.FC<ScoringConfigSelectorProps> = ({
   const [selectedScoringConfig, setSelectedScoringConfig] = useState(
     repository?.extensions?.scoringConfig?.id || 'None',
   );
-  const {
-    setShowDrawer,
-    setOverrides,
-    setShowCurrentConfig,
-    overrides,
-  } = useRepositoryScoringContext();
+  const { setShowDrawer, setOverrides, setShowCurrentConfig, overrides } =
+    useRepositoryScoringContext();
 
   const repositoryOverrides = repository?.extensions?.scoringConfig?.overrides;
   useEffect(() => {

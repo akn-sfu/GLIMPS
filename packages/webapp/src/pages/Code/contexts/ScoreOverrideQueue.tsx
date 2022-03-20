@@ -16,9 +16,8 @@ const scoreOverrideDefault: ScoreOverrideQueueState = {
   reset: () => null,
 };
 
-const ScoreOverrideQueue = React.createContext<ScoreOverrideQueueState>(
-  scoreOverrideDefault,
-);
+const ScoreOverrideQueue =
+  React.createContext<ScoreOverrideQueueState>(scoreOverrideDefault);
 
 function useScoreOverrideQueueState(): ScoreOverrideQueueState {
   const [queue, setQueue] = useState<StagedScoreOverride[]>([]);

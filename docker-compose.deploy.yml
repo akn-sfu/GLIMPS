@@ -4,15 +4,12 @@ services:
   caddy:
     container_name: glimps_caddy
     restart: always
-    image: caddy:2.3.0
-    volumes:
-        - ./caddy/Caddyfile:/etc/caddy/Caddyfile
-        - caddy_data:/root/.caddy   # persist certificates
+    build: devops/caddy
     ports:
-        - 80:80
-        - 443:443
+      - 80:80
+      - 443:443
     environment:
-        DOMAIN: ${DOMAIN}
+      DOMAIN: ${DOMAIN}
   db:
     restart: always
     environment:
@@ -21,9 +18,7 @@ services:
   api:
     container_name: glimps_api
     restart: always
-    build:
-      context: .
-      dockerfile: packages/api/Dockerfile
+    build: packages/api
     depends_on:
       - db
     environment:
@@ -36,13 +31,3 @@ services:
       JWT_SIGNING_KEY: ${JWT_SIGNING_KEY}
       GITLAB_BASE_URL: ${GITLAB_BASE_URL}
       TZ: "America/Vancouver"
-  webapp:
-    container_name: glimps_webapp
-    restart: always
-    build:
-      context: .
-      dockerfile: packages/webapp/Dockerfile
-
-volumes:
-  pgdata:
-  caddy_data:

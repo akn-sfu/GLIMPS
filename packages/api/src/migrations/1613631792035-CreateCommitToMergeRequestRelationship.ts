@@ -1,7 +1,8 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class CreateCommitToMergeRequestRelationship1613631792035
-  implements MigrationInterface {
+  implements MigrationInterface
+{
   name = 'CreateCommitToMergeRequestRelationship1613631792035';
 
   public async up(queryRunner: QueryRunner): Promise<void> {

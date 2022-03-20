@@ -41,10 +41,8 @@ const MainContainer = styled.div`
 const RepoSetupPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { push } = useHistory();
-  const {
-    mutate: updateScoring,
-    isLoading: updateScoreLoading,
-  } = useUpdateScoring();
+  const { mutate: updateScoring, isLoading: updateScoreLoading } =
+    useUpdateScoring();
   const { user } = useAuthContext();
   const { setRepositoryId } = useRepositoryContext();
   const { data, invalidate } = useGetRepository(id);

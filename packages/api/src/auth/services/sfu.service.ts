@@ -11,8 +11,11 @@ export class SfuService {
     return SfuService.extractUserIdFromXml(response.data);
   }
   private async authorizeWithSfu(ticket: string): Promise<AxiosResponse> {
-    const service =
-      `${process.env.DOMAIN ? `https://${process.env.DOMAIN}` : 'http://localhost:3000'}/sfu`;
+    const service = `${
+      process.env.DOMAIN
+        ? `https://${process.env.DOMAIN}`
+        : 'http://localhost:3000'
+    }/sfu`;
     const sfuValidationEndpoint = this.configService.get<string>(
       'sfuValidationEndpoint',
     );

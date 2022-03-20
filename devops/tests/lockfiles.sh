@@ -1,9 +1,10 @@
 #!/bin/bash
 
-LOCKFILES=("package-lock.json" "packages/webapp/package-lock.json" "packages/api/package-lock.json" )
-for i in "${LOCKFILES[@]}"; do
-  if [[ "$(jq '.lockfileVersion' $i)" != "2" ]]; then
-    echo "ERROR: Invalid lockfileVersion for $i"
+LOCKFILES=("package-lock.json" "packages/api/package-lock.json" "packages/types/package-lock.json" "packages/webapp/package-lock.json")
+
+for file in "${LOCKFILES[@]}"; do
+  if ! grep -q '"lockfileVersion": 2' $file; then
+    echo "ERROR: Invalid lockfileVersion for $file"
     exit 1
   fi
 done
