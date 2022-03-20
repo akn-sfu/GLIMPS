@@ -18,6 +18,10 @@
     }
 
     handle {
-        reverse_proxy webapp:3000
+        file_server
+        root * /var/www
+
+        # If there is a 404, serve index.html (required for React SPA)
+        try_files {path} index.html
     }
 }

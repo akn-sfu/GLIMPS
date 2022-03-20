@@ -4,11 +4,10 @@ services:
   db:
     container_name: glimps_db
     image: postgres:12
-    restart: always
     environment:
       POSTGRES_DB: glimps
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - glimps_pgdata:/var/lib/postgresql/data
 
 volumes:
-  pgdata:
+  glimps_pgdata:
