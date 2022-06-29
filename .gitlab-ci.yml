@@ -18,9 +18,25 @@ test lockfiles:
   script:
     - ./devops/tests/lockfiles.sh
 
+build info:
+  # Always runs: allows pipeline execution to happen even if no other tasks run.
+  stage: build
+  image: node:14
+  tags:
+    - docker
+  rules:
+    - if: $CI_PIPELINE_SOURCE != "push"
+  script:
+    - echo "This task give the CI/CD pipeline something to (almost always) run."
+    - echo "  CI_PIPELINE_SOURCE  = $CI_PIPELINE_SOURCE"
+    - echo "  CI_MERGE_REQUEST_ID = $CI_MERGE_REQUEST_ID"
+    - echo "  CI_COMMIT_BRANCH    = $CI_COMMIT_BRANCH"
+    - node --version
+    - npm --version
+
 build api:
   stage: build
-  image: node:16
+  image: node:14
   tags:
     - docker
   rules:
@@ -50,7 +66,7 @@ build api:
 
 build webapp:
   stage: build
-  image: node:16
+  image: node:14
   tags:
     - docker
   rules:

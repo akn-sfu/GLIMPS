@@ -7,7 +7,9 @@
 # Setup Development Environment
 
 1. In the project root, run `docker-compose up`. This command will start up the postgres database on port `5432` on your computer.
-2. In the project root, run `npm install` and then `npm run bootstrap`. This will install and link dependencies.
+2. In the project root, run:  
+   `npm install` and then  
+   `npm run bootstrap`. This will install and link dependencies.
 3. In the project root, run `npm run build`, this will build all our packages in order.
 4. In **packages/api** folder run: `npm run migrate` and then `npm run start:dev` to start the API.
 5. In **packages/webapp** run `npm run start` to start the webapp at `http://localhost:3000`.
