@@ -10,9 +10,10 @@ export function useSyncRepository() {
   const mutation = useCreateOperation();
   const sync = (
     id: string,
+    name?: string,
     options?: MutateOptions<Operation, any, OperationInput>,
   ) => {
-    mutation.mutate(Operation.buildSyncRepositoryPayload(id), options);
+    mutation.mutate(Operation.buildSyncRepositoryPayload(id, name), options);
   };
   return {
     ...mutation,
