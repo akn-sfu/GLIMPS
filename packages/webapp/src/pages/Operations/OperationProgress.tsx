@@ -15,6 +15,7 @@ interface OperationProgressProps {
 }
 
 const OperationProgress: React.FC<OperationProgressProps> = ({ operation }) => {
+  console.log(operation);
   return (
     <Accordion>
       <AccordionSummary expandIcon={<ExpandMore />}>
@@ -26,6 +27,9 @@ const OperationProgress: React.FC<OperationProgressProps> = ({ operation }) => {
         >
           <div>
             <Typography>{operation.type}</Typography>
+            {operation.input?.name && (
+              <Typography>{operation.input.name}</Typography>
+            )}
             <Typography variant='body2'>
               {new Date(operation.meta.createdAt).toDateString()}
               {' - '}
