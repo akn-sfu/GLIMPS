@@ -17,7 +17,7 @@ interface RepositoryCardProps {
   repository: ApiResource<Repository>;
   isShared: boolean;
   isSyncing: boolean;
-  syncRepository: (id: string) => void;
+  syncRepository: (id: string, name: string) => void;
   deleteRepository: (id: string) => void;
 }
 
@@ -74,6 +74,7 @@ const RepositoryCard: React.FC<RepositoryCardProps> = ({
 }) => {
   const hasBeenSynced = !!repository?.extensions?.lastSync;
   const collaboratorsCount = repository?.extensions?.collaborators?.length || 0;
+  console.log('card', repository);
   return (
     <Box my={3} position='relative'>
       <UndecoratedLink
@@ -137,7 +138,9 @@ const RepositoryCard: React.FC<RepositoryCardProps> = ({
       {!isShared && (
         <SyncButton
           syncing={isSyncing}
-          onClick={() => syncRepository(repository.meta.id)}
+          onClick={() =>
+            syncRepository(repository.meta.id, repository.name_with_namespace)
+          }
         />
       )}
       {!isShared && (
