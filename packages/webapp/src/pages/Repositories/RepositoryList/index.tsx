@@ -76,8 +76,8 @@ const RepositoryList: React.FC = () => {
   const { fetch } = useFetchRepositories();
   const isFetchingRepositories = pendingFetches?.total > 0;
   const isSyncingRepositories = operationsData?.total > 0;
-  const syncRepository = (id: string) => {
-    sync(id, {
+  const syncRepository = (id: string, name: string) => {
+    sync(id, name, {
       onSuccess: () => {
         void invalidateOperations();
       },
