@@ -26,8 +26,8 @@ export class OperationController {
     @Auth() auth: VerifiedUser,
     @Body() createOperationDto: CreateOperationDto,
   ) {
-    const { type, input } = createOperationDto;
-    return this.operationService.create(auth.user, type, input);
+    const { type, input, name } = createOperationDto;
+    return this.operationService.create(auth.user, type, input, name);
   }
 
   @Cron('* * * * * *')
