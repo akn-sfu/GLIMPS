@@ -12,6 +12,7 @@ export interface Operation {
   };
   input?: any;
   subscribers?: string[];
+  repository_name?: string;
 }
 
 export namespace Operation {
