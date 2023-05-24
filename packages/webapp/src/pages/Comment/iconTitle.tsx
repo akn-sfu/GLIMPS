@@ -15,7 +15,7 @@ const MakeIconTitle: React.FC<MakeIconTitleProps> = ({ tab, css }) => {
   let my_comments, other_comments;
   if (tab == TabOption.codeReview) {
     my_comments = 'Notes on my own merge request(s)';
-    other_comments = 'Notes on other members&apos; merge request(s)';
+    other_comments = "Notes on other members's merge request(s)";
   } else {
     my_comments = 'Notes on my own issue(s)';
     other_comments = "Notes on other members's issue(s)";
