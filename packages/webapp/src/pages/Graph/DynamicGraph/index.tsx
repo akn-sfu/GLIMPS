@@ -11,7 +11,6 @@ import { useRepositoryContext } from '../../../contexts/RepositoryContext';
 import { useGetCountMergeRequests } from '../../../api/mergeRequests';
 import { useGetCountCommits } from '../../../api/commit';
 import { Commit, MergeRequest, Note, RepositoryMember } from '@ceres/types';
-import { uniq } from 'lodash';
 import { DateTime } from 'luxon';
 import { isSameDay } from 'date-fns';
 import { useGetWordCount } from '../../../api/note';
@@ -44,21 +43,8 @@ function combineData(
   issueWordCounts: Note.DailyCount[] = [],
   mergeRequestWordCounts: Note.DailyCount[] = [],
 ) {
-  const allDates = uniq([
-    ...commitCounts.map((count) => count.date),
-    ...mergeRequestCounts.map((count) => count.date),
-    ...issueWordCounts.map((count) => count.date),
-    ...mergeRequestWordCounts.map((count) => count.date),
-  ]).sort((a, b) => a.localeCompare(b));
-  const startDateRounded = DateTime.fromISO(startDate)
-    .startOf('day')
-    .toJSDate();
-  const earliestDateDatset = new Date(allDates[0]);
+  let date = DateTime.fromISO(startDate).startOf('day').toJSDate();
   const endDateRounded = DateTime.fromISO(endDate).startOf('day').toJSDate();
-  let date =
-    startDateRounded < earliestDateDatset
-      ? startDateRounded
-      : earliestDateDatset;
   const dates: Date[] = [];
   while (date <= endDateRounded) {
     dates.push(date);
