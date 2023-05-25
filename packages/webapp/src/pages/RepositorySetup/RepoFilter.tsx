@@ -41,12 +41,19 @@ const RepoFilter: React.FC = () => {
   } = useFilterContext();
 
   const handleStartDateChange = (date: DateTime) => {
-    setStartDate(date.startOf('second').toISO());
+    const selectedDate =
+      date.startOf('second').toISO() <= endDate
+        ? date.startOf('second').toISO()
+        : endDate;
+    setStartDate(selectedDate);
     setIteration('none');
   };
-
   const handleEndDateChange = (date: DateTime) => {
-    setEndDate(date.startOf('second').toISO());
+    const selectedDate =
+      date.startOf('second').toISO() >= startDate
+        ? date.startOf('second').toISO()
+        : startDate;
+    setEndDate(selectedDate);
     setIteration('none');
   };
 
@@ -78,6 +85,7 @@ const RepoFilter: React.FC = () => {
               KeyboardButtonProps={{
                 'aria-label': 'change date',
               }}
+              maxDate={endDate}
               fullWidth
             />
           </Grid>
@@ -94,6 +102,7 @@ const RepoFilter: React.FC = () => {
               KeyboardButtonProps={{
                 'aria-label': 'change date',
               }}
+              minDate={startDate}
               fullWidth
             />
           </Grid>
