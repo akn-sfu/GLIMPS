@@ -6,12 +6,13 @@ export interface Operation {
   status: Operation.Status;
   stages: Operation.Stage[];
   output?: {
-    errors?: { code: string, payload: any }[];
-    warnings?: { code: string, payload: any }[];
+    errors?: { code: string; payload: any }[];
+    warnings?: { code: string; payload: any }[];
     artifacts: any[];
   };
   input?: any;
   subscribers?: string[];
+  repository_name?: string;
 }
 
 export namespace Operation {
@@ -40,13 +41,17 @@ export namespace Operation {
     repository_id: string;
   }
 
-  export function buildSyncRepositoryPayload(repositoryId: string) {
+  export function buildSyncRepositoryPayload(
+    repositoryId: string,
+    name: string
+  ) {
     return {
       type: Operation.Type.SYNC_REPOSITORY,
       input: {
         repository_id: repositoryId,
-      }
-    }
+        name: name,
+      },
+    };
   }
 
   export function buildDeleteRepositoryPayload(repositoryId: string) {
@@ -54,7 +59,7 @@ export namespace Operation {
       type: Operation.Type.DELETE_REPOSITORY,
       input: {
         repository_id: repositoryId,
-      }
-    }
+      },
+    };
   }
 }

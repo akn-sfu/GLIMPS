@@ -8,4 +8,7 @@ export class CreateOperationDto {
   @IsOptional()
   @IsObject()
   input: any;
+
+  @IsOptional()
+  name: string;
 }

@@ -57,7 +57,7 @@ export class OperationService {
     return query.getManyAndCount();
   }
 
-  create(user: User, type: Operation.Type, input: any) {
+  create(user: User, type: Operation.Type, input: any, name?: string) {
     const operation = this.operationRepository.create({
       user,
       resource: {
@@ -67,6 +67,7 @@ export class OperationService {
         stages: [],
         input,
         subscribers: this.buildSubscribers(type, input),
+        repository_name: name,
       },
     });
     return this.operationRepository.save(operation);
