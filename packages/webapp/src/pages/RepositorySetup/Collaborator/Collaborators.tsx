@@ -15,7 +15,10 @@ import React, { useState } from 'react';
 import {
   AddCollaboratorPayload,
   RemoveCollaboratorPayload,
+  useAddCollaborator,
+  useGetRepository,
 } from '../../../api/repository';
+
 import { ApiResource } from '../../../api/base';
 
 const NoCollaborators = () => (
@@ -71,14 +74,14 @@ const CollaboratorList: React.FC<CollaboratorListProps> = ({
 
 interface CollaboratorsProps {
   repository?: ApiResource<Repository>;
-  onAddCollaborator?: (payload: AddCollaboratorPayload) => void;
   onRemoveCollaborator?: (payload: RemoveCollaboratorPayload) => void;
+  id: string;
 }
 
 const AddCollaboratorForm = ({
   handleAdd,
 }: {
-  handleAdd: CollaboratorsProps['onAddCollaborator'];
+  handleAdd: (payload: AddCollaboratorPayload) => void;
 }) => {
   const [accessLevel, setAccessLevel] = useState(Repository.AccessLevel.editor);
   const [sfuId, setSfuId] = useState('');
@@ -134,11 +137,24 @@ const AddCollaboratorForm = ({
 };
 
 const Collaborators: React.FC<CollaboratorsProps> = ({
-  onAddCollaborator,
   onRemoveCollaborator,
   repository,
+  id,
 }) => {
   const collaborators = repository?.extensions?.collaborators || [];
+  const { mutate: addCollaborator } = useAddCollaborator(id);
+  const { invalidate } = useGetRepository(id);
+
+  const handleAddCollaborator = (payload: AddCollaboratorPayload) => {
+    addCollaborator(payload, {
+      onSuccess: invalidate,
+      onError: (error) => {
+        console.log('data', error.response.data);
+        console.log('message', error.message);
+      },
+    });
+  };
+
   return (
     <Grid container>
       <Grid item xs={6}>
@@ -153,7 +169,7 @@ const Collaborators: React.FC<CollaboratorsProps> = ({
       </Grid>
       <Grid item xs={6}>
         <Container maxWidth='xs'>
-          <AddCollaboratorForm handleAdd={onAddCollaborator} />
+          <AddCollaboratorForm handleAdd={handleAddCollaborator} />
         </Container>
       </Grid>
     </Grid>
