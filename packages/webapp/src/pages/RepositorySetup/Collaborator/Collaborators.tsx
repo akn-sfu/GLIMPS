@@ -80,8 +80,10 @@ interface CollaboratorsProps {
 
 const AddCollaboratorForm = ({
   handleAdd,
+  errorMessage,
 }: {
   handleAdd: (payload: AddCollaboratorPayload) => void;
+  errorMessage: string;
 }) => {
   const [accessLevel, setAccessLevel] = useState(Repository.AccessLevel.editor);
   const [sfuId, setSfuId] = useState('');
@@ -132,6 +134,13 @@ const AddCollaboratorForm = ({
           </Button>
         </Box>
       </Grid>
+      <Grid item>
+        <Box textAlign='center'>
+          <Typography variant='body1' color='error'>
+            {errorMessage}
+          </Typography>
+        </Box>
+      </Grid>
     </Grid>
   );
 };
@@ -144,13 +153,17 @@ const Collaborators: React.FC<CollaboratorsProps> = ({
   const collaborators = repository?.extensions?.collaborators || [];
   const { mutate: addCollaborator } = useAddCollaborator(id);
   const { invalidate } = useGetRepository(id);
+  const [errorMsg, setErrorMsg] = useState('');
 
   const handleAddCollaborator = (payload: AddCollaboratorPayload) => {
     addCollaborator(payload, {
-      onSuccess: invalidate,
+      onSuccess: () => {
+        invalidate();
+        setErrorMsg('');
+      },
       onError: (error) => {
-        console.log('data', error.response.data);
-        console.log('message', error.message);
+        console.error(error.response.data?.message);
+        setErrorMsg(error.response.data?.message);
       },
     });
   };
@@ -169,7 +182,10 @@ const Collaborators: React.FC<CollaboratorsProps> = ({
       </Grid>
       <Grid item xs={6}>
         <Container maxWidth='xs'>
-          <AddCollaboratorForm handleAdd={handleAddCollaborator} />
+          <AddCollaboratorForm
+            handleAdd={handleAddCollaborator}
+            errorMessage={errorMsg}
+          />
         </Container>
       </Grid>
     </Grid>
