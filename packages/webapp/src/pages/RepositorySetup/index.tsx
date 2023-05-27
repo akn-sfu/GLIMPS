@@ -6,9 +6,7 @@ import { useSnackbar } from 'notistack';
 import React, { useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import {
-  AddCollaboratorPayload,
   RemoveCollaboratorPayload,
-  useAddCollaborator,
   useGetRepository,
   useRemoveCollaborator,
 } from '../../api/repository';
@@ -46,7 +44,6 @@ const RepoSetupPage: React.FC = () => {
   const { user } = useAuthContext();
   const { setRepositoryId } = useRepositoryContext();
   const { data, invalidate } = useGetRepository(id);
-  const { mutate: addCollaborator } = useAddCollaborator(id);
   const { mutate: removeCollaborator } = useRemoveCollaborator(id);
   const { enqueueSnackbar } = useSnackbar();
   const isOwner = user?.id === data?.extensions?.owner?.id;
@@ -76,11 +73,6 @@ const RepoSetupPage: React.FC = () => {
         },
       },
     );
-  };
-  const handleAddCollaborator = (payload: AddCollaboratorPayload) => {
-    addCollaborator(payload, {
-      onSuccess: invalidate,
-    });
   };
 
   const handleRemoveCollaborator = (payload: RemoveCollaboratorPayload) => {
@@ -162,8 +154,8 @@ const RepoSetupPage: React.FC = () => {
             {data && isOwner && (
               <Collaborators
                 repository={data}
-                onAddCollaborator={handleAddCollaborator}
                 onRemoveCollaborator={handleRemoveCollaborator}
+                id={id}
               />
             )}
             {data && !isOwner && (
