@@ -31,8 +31,15 @@ export class CommitAuthorService {
     repositoryMember?: RepositoryMember,
   ) {
     const entity = await this.repository.preload(author);
-    entity.owner = repositoryMember;
-    entity.resource.repository_member_id = repositoryMember?.id;
+
+    if (repositoryMember !== undefined && repositoryMember !== null) {
+      entity.resource.repository_member_id = repositoryMember.id;
+    } else {
+      entity.owner = null;
+      delete entity.resource.repository_member_id;
+    }
+
+    author.resource.isSet = true;
     return this.repository.save(entity);
   }
 

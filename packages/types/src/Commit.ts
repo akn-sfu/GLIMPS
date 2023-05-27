@@ -32,6 +32,7 @@ export namespace Commit {
     author_name: string;
     author_email: string;
     repository_member_id?: string;
+    isSet?: boolean;
   }
 
   export interface DailyCount {

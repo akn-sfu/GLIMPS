@@ -28,9 +28,10 @@ const Author: React.FC<AuthorProps> = ({ author, member, allMembers }) => {
     setValue(member?.meta.id);
   }, [member?.meta.id]);
   useEffect(() => {
-    const newMember = allMembers.find((m) => m.meta.id === value);
-    if (newMember && member?.meta.id !== newMember.meta.id) {
-      mutate(newMember);
+    if (value === '') mutate(null); // empty member
+    else {
+      const newMember = allMembers.find((m) => m.meta.id === value);
+      if (newMember && member?.meta.id !== newMember.meta.id) mutate(newMember);
     }
   }, [value]);
   return (
@@ -50,12 +51,15 @@ const Author: React.FC<AuthorProps> = ({ author, member, allMembers }) => {
               <InputLabel>Member</InputLabel>
               <Select
                 style={{ minWidth: '18rem' }}
-                value={value || 'None'}
+                value={value || ''}
                 onChange={(e) => {
                   e.preventDefault();
                   setValue(e.target.value as string);
                 }}
               >
+                <MenuItem key={'None'} value=''>
+                  <em>None</em>
+                </MenuItem>
                 {allMembers?.sort(compareMember)?.map((m) => (
                   <MenuItem key={m.meta.id} value={m.meta.id}>
                     {m.username} - {m.name}
