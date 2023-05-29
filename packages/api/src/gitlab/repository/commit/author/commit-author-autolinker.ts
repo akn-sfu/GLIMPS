@@ -63,7 +63,7 @@ function getRoot(u: string): string {
     : u;
 }
 
-export function autoLinkAuthorAndMember(
+export function autoLinkAuthorsMembersHelper(
   authors: CommitAuthor[],
   members: RepositoryMember[],
 ) {
@@ -78,7 +78,6 @@ export function autoLinkAuthorAndMember(
       ),
     );
 
-  const res = {};
   root.clear();
 
   // initialize with empty value
@@ -119,22 +118,18 @@ export function autoLinkAuthorAndMember(
     if (max_score > threshold_score && root_s1 !== root_s2)
       root.set(root_s1, root_s2);
   }
-  console.log(root);
 
-  console.log('End of world');
-
+  let result_array: CommitAuthor[] = new Array();
   for (let i = 0; i < authors.length; ++i) {
-    if (
-      authors[i].resource.repository_member_id === undefined ||
-      authors[i].resource.repository_member_id === null
-    ) {
+    if (!authors[i].resource.isSet) {
       const author_name = authors[i].resource.author_name.toLowerCase();
       const author_email_username = authors[i].resource.author_email
         .split('@')[0]
         .toLowerCase();
-      // if doesn't set repository member
       let max_score_index = 0;
       let max_score = 0;
+
+      // find the member that matches best the author i base on the similarity metric
       for (let j = 0; j < members.length; ++j) {
         const member_username = members[j].resource.username.toLowerCase();
         const member_name = members[j].resource.name.toLowerCase();
@@ -156,36 +151,36 @@ export function autoLinkAuthorAndMember(
       }
 
       if (max_score >= threshold_score) {
-        res[authors[i].id] = members[max_score_index];
-
-        console.log(
-          'Link ' +
-            authors[i].resource.author_name +
-            ' to ' +
-            members[max_score_index].resource.username,
-        );
+        // set the author to repository member that has the highest matching score
+        authors[i].owner = members[max_score_index];
+        authors[i].resource.repository_member_id = members[max_score_index].id;
+        result_array.push(authors[i]);
       }
     }
 
-    // const member = members.find((member) => {
-    //   member.meta.id == authors[i].repository_member_id;
-    // });
+    const member = members.find(
+      (member) => member.id === authors[i].resource.repository_member_id,
+    );
 
-    // if (!isUndefined(member)) {
-    //   for (let j = 0; j < authors.length; ++j) {
-    //     if (
-    //       i != j &&
-    //       getRoot(authors[i].author_name) == getRoot(authors[j].author_name)
-    //     ) {
-    //       const { mutate } = useLinkAuthorToMember(authors[j].meta.id);
-    //       mutate(member);
-    //       console.log(
-    //         'Link' + authors[i].author_name + ' to ' + member.username,
-    //       );
-    //     }
-    //   }
-    // }
+    for (let j = 0; j < authors.length; ++j) {
+      // if author i and author j are in the same cluster, and author j is not set, set the repository member to repository member of author i
+      if (
+        i != j &&
+        !authors[j].resource.isSet &&
+        getRoot(authors[i].resource.author_name.toLowerCase()) ===
+          getRoot(authors[j].resource.author_name.toLowerCase())
+      ) {
+        if (member) {
+          authors[j].owner = member;
+          authors[j].resource.repository_member_id = member.id;
+        } else {
+          authors[j].owner = null;
+          delete authors[j].resource.repository_member_id;
+        }
+
+        result_array.push(authors[j]);
+      }
+    }
   }
-
-  return res;
+  return result_array;
 }

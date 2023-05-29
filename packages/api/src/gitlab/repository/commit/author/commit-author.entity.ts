@@ -16,6 +16,7 @@ export class CommitAuthor extends BaseEntity<Commit.Author> {
   @ManyToOne(
     () => Repository,
     (repositoryMember) => repositoryMember.commitAuthors,
+    { eager: true },
   )
   @JoinColumn({ name: 'repository_id' })
   repository: Repository;

@@ -92,9 +92,15 @@ export class RepositoryController {
         (member as any).meta.id,
       );
     }
-    
+
+    const repository = author.repository;
+    const members = await this.repositoryMemberService.findAllForRepository(
+      repository,
+    );
+
     return this.commitAuthorService.updateRepositoryMember(
       author,
+      members,
       memberEntity,
     );
   }
