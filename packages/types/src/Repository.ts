@@ -78,6 +78,7 @@ interface RepositoryExtensions {
 
 export interface Repository extends WithExtensions<RepositoryExtensions> {
   id: number;
+  needs_recalculation: boolean;
   description: string;
   name: string;
   name_with_namespace: string;
