@@ -23,11 +23,15 @@ function findSelectedMember(
 // Sort level 1: Authors without an associated repository member come first
 // Sort level 2: Sort by author name
 function compareCommitAuthors(a: Commit.Author, b: Commit.Author) {
-  if (a.repository_member_id && !b.repository_member_id) {
-    return 1;
-  } else if (!a.repository_member_id && b.repository_member_id) {
-    return -1;
-  }
+  // disable sort level
+  // if (a.repository_member_id && !b.repository_member_id) {
+  //   return 1;
+  // } else if (!a.repository_member_id && b.repository_member_id) {
+  //   return -1;
+  // }
+
+  if (a.author_name.localeCompare(b.author_name) === 0)
+    return a.author_email.localeCompare(b.author_email);
   return a.author_name.localeCompare(b.author_name);
 }
 
@@ -39,7 +43,7 @@ const Members: React.FC<MembersProps> = ({ id }) => {
     <Container maxWidth='sm'>
       <Box>
         {members &&
-          authors?.sort(compareCommitAuthors)?.map((author) => {
+          authors?.sort(compareCommitAuthors).map((author) => {
             const member = findSelectedMember(author, members);
             return (
               <Author
