@@ -5,13 +5,13 @@ export class AddRequireSyncToRepository1685319537029
 {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
-      `ALTER TABLE "repository" ADD "needs_sync" boolean NOT NULL DEFAULT true`,
+      `ALTER TABLE "repository" ADD "needs_recalculation" boolean NOT NULL DEFAULT true`,
     );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
-      `ALTER TABLE "repository" DROP COLUMN "needs_sync"`,
+      `ALTER TABLE "repository" DROP COLUMN "needs_recalculation"`,
     );
   }
 }
