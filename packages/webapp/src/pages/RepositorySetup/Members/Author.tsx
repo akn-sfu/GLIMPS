@@ -50,7 +50,10 @@ const Author: React.FC<AuthorProps> = ({ author, member, allMembers }) => {
             <FormControl variant='filled'>
               <InputLabel>Member</InputLabel>
               <Select
-                style={{ minWidth: '18rem' }}
+                style={{
+                  minWidth: '18rem',
+                  color: author.isSet ? 'GrayText' : 'red',
+                }}
                 value={value || ''}
                 onChange={(e) => {
                   e.preventDefault();
