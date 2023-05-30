@@ -133,16 +133,9 @@ export function autoLinkAuthorsMembersHelper(
       if (linked_member) {
         authors[i].owner = linked_member;
         authors[i].resource.repository_member_id = linked_member.id;
-        console.log(
-          'Linked ' +
-            authors[i].resource.author_name +
-            ' to ' +
-            linked_member.resource.username,
-        );
       } else {
         authors[i].owner = null;
         delete authors[i].resource.repository_member_id;
-        console.log('Linked ' + authors[i].resource.author_name + ' to None');
       }
 
       result_array.push(authors[i]);
@@ -185,12 +178,6 @@ export function findBestMatchedMember(
 
   if (max_score >= threshold_score) {
     // set the author to repository member that has the highest matching score
-    console.log(
-      'Linked ' +
-        author.author_name +
-        ' to ' +
-        members[max_score_index].resource.username,
-    );
     return members[max_score_index];
   } else return undefined;
 }
