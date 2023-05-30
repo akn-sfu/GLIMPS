@@ -46,7 +46,11 @@ export class CommitAuthorService {
 
     const authors = await this.findAllForRepository(author.repository);
 
-    const links = autoLinkAuthorsMembersHelper(authors, repositoryMembers);
+    const links = autoLinkAuthorsMembersHelper(
+      entity,
+      authors,
+      repositoryMembers,
+    );
     await links.forEach((link) => {
       this.repository.save(link);
     });

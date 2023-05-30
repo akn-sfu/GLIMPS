@@ -1,3 +1,4 @@
+import { Commit } from '@ceres/types';
 import { RepositoryMember } from '../../repository-member/repository-member.entity';
 import { CommitAuthor } from './commit-author.entity';
 
@@ -64,12 +65,10 @@ function getRoot(u: string): string {
 }
 
 export function autoLinkAuthorsMembersHelper(
+  modified_author: CommitAuthor,
   authors: CommitAuthor[],
   members: RepositoryMember[],
 ) {
-  if (!authors || authors.length === 0 || !members || members.length === 0)
-    return;
-
   const author_names = authors
     .map((author) => author.resource.author_name.toLowerCase())
     .concat(
@@ -120,67 +119,78 @@ export function autoLinkAuthorsMembersHelper(
   }
 
   let result_array: CommitAuthor[] = new Array();
+  const linked_member = members.find(
+    (member) => member.id === modified_author.resource.repository_member_id,
+  );
   for (let i = 0; i < authors.length; ++i) {
-    if (!authors[i].resource.isSet) {
-      const author_name = authors[i].resource.author_name.toLowerCase();
-      const author_email_username = authors[i].resource.author_email
-        .split('@')[0]
-        .toLowerCase();
-      let max_score_index = 0;
-      let max_score = 0;
-
-      // find the member that matches best the author i base on the similarity metric
-      for (let j = 0; j < members.length; ++j) {
-        const member_username = members[j].resource.username.toLowerCase();
-        const member_name = members[j].resource.name.toLowerCase();
-        const score = Math.max(
-          Math.max(
-            calSimilarityMetric(author_name, member_name),
-            calSimilarityMetric(author_name, member_username),
-          ),
-          Math.max(
-            calSimilarityMetric(author_email_username, member_name),
-            calSimilarityMetric(author_email_username, member_username),
-          ),
+    // if author i and author j are in the same cluster, and author j is not set, set the repository member to repository member of author i
+    if (
+      modified_author.id !== authors[i].id &&
+      !authors[i].resource.isSet &&
+      getRoot(authors[i].resource.author_name.toLowerCase()) ===
+        getRoot(modified_author.resource.author_name.toLowerCase())
+    ) {
+      if (linked_member) {
+        authors[i].owner = linked_member;
+        authors[i].resource.repository_member_id = linked_member.id;
+        console.log(
+          'Linked ' +
+            authors[i].resource.author_name +
+            ' to ' +
+            linked_member.resource.username,
         );
-
-        if (max_score < score) {
-          max_score_index = j;
-          max_score = score;
-        }
+      } else {
+        authors[i].owner = null;
+        delete authors[i].resource.repository_member_id;
+        console.log('Linked ' + authors[i].resource.author_name + ' to None');
       }
 
-      if (max_score >= threshold_score) {
-        // set the author to repository member that has the highest matching score
-        authors[i].owner = members[max_score_index];
-        authors[i].resource.repository_member_id = members[max_score_index].id;
-        result_array.push(authors[i]);
-      }
-    }
-
-    const member = members.find(
-      (member) => member.id === authors[i].resource.repository_member_id,
-    );
-
-    for (let j = 0; j < authors.length; ++j) {
-      // if author i and author j are in the same cluster, and author j is not set, set the repository member to repository member of author i
-      if (
-        i != j &&
-        !authors[j].resource.isSet &&
-        getRoot(authors[i].resource.author_name.toLowerCase()) ===
-          getRoot(authors[j].resource.author_name.toLowerCase())
-      ) {
-        if (member) {
-          authors[j].owner = member;
-          authors[j].resource.repository_member_id = member.id;
-        } else {
-          authors[j].owner = null;
-          delete authors[j].resource.repository_member_id;
-        }
-
-        result_array.push(authors[j]);
-      }
+      result_array.push(authors[i]);
     }
   }
   return result_array;
+}
+
+export function findBestMatchedMember(
+  author: Commit.Author,
+  members: RepositoryMember[],
+) {
+  const author_name = author.author_name.toLowerCase();
+  const author_email_username = author.author_email.split('@')[0].toLowerCase();
+
+  let max_score_index = 0;
+  let max_score = 0;
+  const threshold_score = 0.6;
+
+  // find the member that matches best the author i base on the similarity metric
+  for (let j = 0; j < members.length; ++j) {
+    const member_username = members[j].resource.username.toLowerCase();
+    const member_name = members[j].resource.name.toLowerCase();
+    const score = Math.max(
+      Math.max(
+        calSimilarityMetric(author_name, member_name),
+        calSimilarityMetric(author_name, member_username),
+      ),
+      Math.max(
+        calSimilarityMetric(author_email_username, member_name),
+        calSimilarityMetric(author_email_username, member_username),
+      ),
+    );
+
+    if (max_score < score) {
+      max_score_index = j;
+      max_score = score;
+    }
+  }
+
+  if (max_score >= threshold_score) {
+    // set the author to repository member that has the highest matching score
+    console.log(
+      'Linked ' +
+        author.author_name +
+        ' to ' +
+        members[max_score_index].resource.username,
+    );
+    return members[max_score_index];
+  } else return undefined;
 }

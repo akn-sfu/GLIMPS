@@ -11,6 +11,7 @@ import { GitlabTokenService } from '../../gitlab/services/gitlab-token.service';
 import { Operation as OperationEntity } from '../operation.entity';
 import { BaseExecutor } from './base.executor';
 import { IssueService } from '../../gitlab/repository/issue/issue.service';
+import { findBestMatchedMember } from 'src/gitlab/repository/commit/author/commit-author-autolinker';
 
 enum Stage {
   sync = 'sync',
@@ -185,9 +186,7 @@ export class SyncRepositoryExecutor extends BaseExecutor<Stage> {
             a.resource.author_email === author.author_email,
         );
         if (!authorEntity) {
-          const repositoryMember = this.members.find((member) => {
-            return member.resource.name === author.author_name;
-          });
+          const repositoryMember = findBestMatchedMember(author, this.members);
           if (repositoryMember) {
             author.repository_member_id = repositoryMember.id;
           }
