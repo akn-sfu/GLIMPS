@@ -127,6 +127,7 @@ export function autoLinkAuthorsMembersHelper(
     if (
       modified_author.id !== authors[i].id &&
       !authors[i].resource.isSet &&
+      !authors[i].resource.repository_member_id &&
       getRoot(authors[i].resource.author_name.toLowerCase()) ===
         getRoot(modified_author.resource.author_name.toLowerCase())
     ) {
@@ -144,7 +145,7 @@ export function autoLinkAuthorsMembersHelper(
   return result_array;
 }
 
-export function findBestMatchedMember(
+export function findBestMatchingMember(
   author: Commit.Author,
   members: RepositoryMember[],
 ) {
