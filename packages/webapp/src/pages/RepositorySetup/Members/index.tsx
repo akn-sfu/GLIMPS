@@ -47,6 +47,7 @@ const Members: React.FC<MembersProps> = ({ id }) => {
                 author={author}
                 member={member}
                 allMembers={members}
+                id={id}
               />
             );
           })}

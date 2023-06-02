@@ -93,6 +93,14 @@ export class RepositoryService extends BaseService<
     return this.update(repository);
   }
 
+  async updateRecalculation(
+    repository: RepositoryEntity,
+    recalculationRequired: boolean,
+  ) {
+    repository.needsRecalculation = recalculationRequired;
+    return this.update(repository);
+  }
+
   updateScoringConfig(
     repository: RepositoryEntity,
     scoringConfig: Repository['extensions']['scoringConfig'],

@@ -121,10 +121,16 @@ export class RepositoryController {
 
   @Put(':id/recalculate')
   async updateRequiredToSync(
-    @Param('id') id: number,
+    @Param() { id }: IdParam,
     @Body('recalculationRequired') recalculationRequired: boolean,
   ): Promise<void> {
-    await this.repositoryService.updateRecalculation(id, recalculationRequired);
+    const repo = await this.repositoryService.findOne(id);
+    if (!repo)
+      throw new NotFoundException(`Could not find a repository with id: ${id}`);
+    return this.repositoryService.updateRecalculation(
+      repo,
+      recalculationRequired,
+    );
   }
 
   @Post(':id/collaborator')
