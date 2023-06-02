@@ -15,25 +15,47 @@ interface AuthorProps {
   author: ApiResource<Commit.Author>;
   member?: ApiResource<RepositoryMember>;
   allMembers: ApiResource<RepositoryMember>[];
+  invalidateMembers: () => Promise<void>;
+  invalidateAuthors: () => Promise<void>;
 }
 
 function compareMember(a: RepositoryMember, b: RepositoryMember) {
   return a.username.localeCompare(b.username);
 }
 
-const Author: React.FC<AuthorProps> = ({ author, member, allMembers }) => {
-  const { mutate, isLoading } = useLinkAuthorToMember(author.meta.id);
+const Author: React.FC<AuthorProps> = ({
+  author,
+  member,
+  allMembers,
+  invalidateMembers,
+  invalidateAuthors,
+}) => {
+  const { mutate, isLoading, isSuccess } = useLinkAuthorToMember(
+    author.meta.id,
+  );
   const [value, setValue] = useState<string>();
   useEffect(() => {
     setValue(member?.meta.id);
   }, [member?.meta.id]);
+
   useEffect(() => {
-    if (value === '') mutate(null); // empty member
-    else {
+    if (value === '') {
+      mutate(null); // empty member
+    } else {
       const newMember = allMembers.find((m) => m.meta.id === value);
-      if (newMember && member?.meta.id !== newMember.meta.id) mutate(newMember);
+      if (newMember && member?.meta.id !== newMember.meta.id) {
+        mutate(newMember);
+      }
     }
   }, [value]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      invalidateMembers();
+      invalidateAuthors();
+    }
+  }, [isSuccess]);
+
   return (
     <Box my={4}>
       <Grid justify='space-between' xs={12} alignItems='flex-start' container>

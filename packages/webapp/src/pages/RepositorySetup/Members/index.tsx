@@ -36,8 +36,10 @@ function compareCommitAuthors(a: Commit.Author, b: Commit.Author) {
 }
 
 const Members: React.FC<MembersProps> = ({ id }) => {
-  const { data: members } = useRepositoryMembers(id);
-  const { data: authors } = useRepositoryAuthors(id);
+  const { data: members, invalidate: invalidateMembers } =
+    useRepositoryMembers(id);
+  const { data: authors, invalidate: invalidateAuthors } =
+    useRepositoryAuthors(id);
 
   return (
     <Container maxWidth='sm'>
@@ -51,6 +53,8 @@ const Members: React.FC<MembersProps> = ({ id }) => {
                 author={author}
                 member={member}
                 allMembers={members}
+                invalidateMembers={invalidateMembers}
+                invalidateAuthors={invalidateAuthors}
               />
             );
           })}
