@@ -32,7 +32,7 @@ const Author: React.FC<AuthorProps> = ({
   invalidateMembers,
   invalidateAuthors,
 }) => {
-  const { mutate, isLoading, isSuccess } = useLinkAuthorToMember(
+  const { mutate: setMemberToThisAuthor, isLoading } = useLinkAuthorToMember(
     author.meta.id,
   );
   const [value, setValue] = useState<string>();
@@ -42,21 +42,24 @@ const Author: React.FC<AuthorProps> = ({
 
   useEffect(() => {
     if (value === '') {
-      mutate(null); // empty member
+      setMemberToThisAuthor(null, {
+        onSuccess: () => {
+          invalidateAuthors();
+          invalidateMembers();
+        },
+      }); // empty member
     } else {
       const newMember = allMembers.find((m) => m.meta.id === value);
       if (newMember && member?.meta.id !== newMember.meta.id) {
-        mutate(newMember);
+        setMemberToThisAuthor(newMember, {
+          onSuccess: () => {
+            invalidateAuthors();
+            invalidateMembers();
+          },
+        });
       }
     }
   }, [value]);
-
-  useEffect(() => {
-    if (isSuccess) {
-      invalidateMembers();
-      invalidateAuthors();
-    }
-  }, [isSuccess]);
 
   return (
     <Box my={4}>
