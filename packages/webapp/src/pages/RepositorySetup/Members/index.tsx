@@ -42,7 +42,7 @@ const Members: React.FC<MembersProps> = ({ id }) => {
     useRepositoryAuthors(id);
 
   return (
-    <Container maxWidth='sm'>
+    <Container maxWidth='md'>
       <Box>
         {members &&
           authors?.sort(compareCommitAuthors).map((author) => {
