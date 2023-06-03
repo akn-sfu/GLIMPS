@@ -99,8 +99,8 @@ const ListMergeRequestPage = () => {
   } = useInfiniteMergeRequest({
     repository: id,
     author_email: emails,
-    merged_start_date: startDate.toString(),
-    merged_end_date: endDate.toString(),
+    commit_start_date: startDate.toString(),
+    commit_end_date: endDate.toString(),
   });
   const {
     data: commits,

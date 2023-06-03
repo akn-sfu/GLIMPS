@@ -18,6 +18,14 @@ export class MergeRequestQueryDto extends QueryDto {
   merged_end_date?: string;
 
   @IsOptional()
+  @IsDateString()
+  commit_start_date?: string;
+
+  @IsOptional()
+  @IsDateString()
+  commit_end_date?: string;
+
+  @IsOptional()
   @IsUUID()
   note_id?: string;
 
