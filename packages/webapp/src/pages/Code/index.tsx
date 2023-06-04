@@ -206,6 +206,8 @@ const ListMergeRequestPage = () => {
                         {active && (
                           <CommitList
                             mergeRequest={commitOrMergeRequest}
+                            commitStartDate={startDate}
+                            commitEndDate={endDate}
                             activeCommit={activeCommit}
                             setActiveCommit={setActiveCommit}
                             authorEmails={emails}
