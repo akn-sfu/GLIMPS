@@ -13,6 +13,8 @@ import { Button } from '@material-ui/core';
 
 interface CommitListProps {
   mergeRequest: ApiResource<MergeRequest>;
+  commitStartDate: string;
+  commitEndDate: string;
   activeCommit?: ApiResource<Commit>;
   setActiveCommit: (commit: ApiResource<Commit>) => void;
   authorEmails: string[];
@@ -26,6 +28,8 @@ const Root = styled(Box)<{ disabled?: boolean }>`
 
 const CommitList: React.FC<CommitListProps> = ({
   mergeRequest,
+  commitStartDate,
+  commitEndDate,
   activeCommit,
   setActiveCommit,
   authorEmails,
@@ -37,6 +41,8 @@ const CommitList: React.FC<CommitListProps> = ({
   } = useInfiniteCommit(
     {
       merge_request: mergeRequest.meta.id,
+      start_date: commitStartDate,
+      end_date: commitEndDate,
     },
     10,
   );
