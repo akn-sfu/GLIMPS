@@ -15,6 +15,7 @@ import { useFilterContext } from '../../contexts/FilterContext';
 import OverridePopper from './OverridePopper';
 import styled from 'styled-components';
 import { DateTime } from 'luxon';
+import { useGetCommits } from '../../api/commit';
 
 const StyledAccordionDetails = styled(AccordionDetails)`
   &&& {
@@ -58,22 +59,18 @@ function getSumAndHasOverride(
   };
 }
 
-function getAuthorMergeSumCommitScore(
-  filteredAuthorEmails: string[],
-  commitScoreSum: number,
-  mergeRequest: ApiResource<MergeRequest>,
-): string {
-  let mergeScore = 0;
-  if (filteredAuthorEmails.length > 0) {
-    for (const email of filteredAuthorEmails) {
-      if (mergeRequest?.extensions?.commitScoreSums?.[email]) {
-        mergeScore += mergeRequest.extensions.commitScoreSums[email].sum;
-      }
-    }
-  } else {
-    mergeScore = commitScoreSum;
-  }
-  return mergeScore.toFixed(1);
+function getSumCommitScore(commits: ApiResource<Commit>[]): string {
+  const sumCommitScore = commits?.reduce((accummulator: number, commit) => {
+    return (
+      accummulator +
+      ScoreOverride.computeScore(
+        commit.extensions?.override,
+        commit?.extensions?.score,
+      )
+    );
+  }, 0);
+
+  return sumCommitScore?.toFixed(1);
 }
 
 const CommitOrMergeRequestRenderer: React.FC<
@@ -82,7 +79,6 @@ const CommitOrMergeRequestRenderer: React.FC<
   active,
   mergeRequest,
   commit,
-  filteredAuthorEmails,
   onClickSummary,
   children,
   shrink,
@@ -115,19 +111,17 @@ const CommitOrMergeRequestRenderer: React.FC<
   const accordionColor = mergeRequest ? '' : '#f7ebef';
   const warningColor = '#Fba2a2';
   const { emails } = useFilterContext();
-  const { hasOverride: commitHasOverride, score: commitScoreSum } =
-    getSumAndHasOverride(
-      emails || [],
-      mergeRequest?.extensions?.commitScoreSums || {},
-    );
+  const { hasOverride: commitHasOverride } = getSumAndHasOverride(
+    emails || [],
+    mergeRequest?.extensions?.commitScoreSums || {},
+  );
 
-  const mergeScore = mergeRequest
-    ? getAuthorMergeSumCommitScore(
-        filteredAuthorEmails,
-        commitScoreSum,
-        mergeRequest,
-      )
-    : null;
+  const { data: commits } = useGetCommits({
+    merge_request: mergeRequest?.meta.id,
+    end_date: endDate,
+  });
+
+  const mergeScore = mergeRequest ? getSumCommitScore(commits?.results) : null;
 
   return (
     <Accordion
