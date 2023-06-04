@@ -232,7 +232,7 @@ const ListMergeRequestPage = () => {
                     );
                   }
                 })}
-                {hasNextPage && hasNextPageCommit && (
+                {(hasNextPage || hasNextPageCommit) && (
                   <LoadMore
                     onClick={() => {
                       if (hasNextPage) void fetchNextPage();

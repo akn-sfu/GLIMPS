@@ -89,11 +89,11 @@ const CommitOrMergeRequestRenderer: React.FC<
   endDate,
 }) => {
   const theme = useTheme();
+  const isMerged =
+    DateTime.fromISO(mergeRequest?.merged_at) <= DateTime.fromISO(endDate);
   const title =
     commit?.title ||
-    (DateTime.fromISO(mergeRequest?.merged_at) <= DateTime.fromISO(endDate)
-      ? mergeRequest?.title
-      : '(Unmerged) ' + mergeRequest?.title);
+    (isMerged ? mergeRequest?.title : '(Unmerged) ' + mergeRequest?.title);
   const author = mergeRequest?.author.name || commit?.committer_name;
   const extensions = (commit || mergeRequest).extensions;
   const isExcluded = extensions?.override?.exclude;
@@ -113,6 +113,7 @@ const CommitOrMergeRequestRenderer: React.FC<
   ).toFixed(1);
 
   const accordionColor = mergeRequest ? '' : '#f7ebef';
+  const warningColor = '#Fba2a2';
   const { emails } = useFilterContext();
   const { hasOverride: commitHasOverride, score: commitScoreSum } =
     getSumAndHasOverride(
@@ -137,7 +138,11 @@ const CommitOrMergeRequestRenderer: React.FC<
         expandIcon={<ExpandMore />}
         onClick={onClickSummary}
         style={{
-          background: active ? theme.palette.primary.light : accordionColor,
+          background: active
+            ? theme.palette.primary.light
+            : isMerged
+            ? accordionColor
+            : warningColor,
         }}
       >
         <Grid container>
