@@ -89,7 +89,7 @@ const CommitOrMergeRequestRenderer: React.FC<
     DateTime.fromISO(mergeRequest?.merged_at) <= DateTime.fromISO(endDate);
   const title =
     commit?.title ||
-    (isMerged ? mergeRequest?.title : '(Unmerged) ' + mergeRequest?.title);
+    (isMerged ? mergeRequest?.title : '[Unmerged] ' + mergeRequest?.title);
   const author = mergeRequest?.author.name || commit?.committer_name;
   const extensions = (commit || mergeRequest).extensions;
   const isExcluded = extensions?.override?.exclude;
