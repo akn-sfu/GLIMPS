@@ -192,6 +192,7 @@ const ListMergeRequestPage = () => {
                         mergeRequest={commitOrMergeRequest}
                         active={active}
                         shrink={!!showSpiltView}
+                        endDate={endDate}
                         filteredAuthorEmails={emails}
                         onClickSummary={() => {
                           setActiveCommit(undefined);
@@ -232,8 +233,8 @@ const ListMergeRequestPage = () => {
                 {hasNextPage && hasNextPageCommit && (
                   <LoadMore
                     onClick={() => {
-                      void fetchNextPage();
-                      void fetchNextPageCommit();
+                      if (hasNextPage) void fetchNextPage();
+                      if (hasNextPageCommit) void fetchNextPageCommit();
                     }}
                     ref={loadMoreRef}
                   />

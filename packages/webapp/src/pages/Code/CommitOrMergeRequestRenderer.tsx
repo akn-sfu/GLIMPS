@@ -14,6 +14,7 @@ import SmartDate from '../../shared/components/SmartDate';
 import { useFilterContext } from '../../contexts/FilterContext';
 import OverridePopper from './OverridePopper';
 import styled from 'styled-components';
+import { DateTime } from 'luxon';
 
 const StyledAccordionDetails = styled(AccordionDetails)`
   &&& {
@@ -28,6 +29,7 @@ interface CommitOrMergeRequestRendererProps {
   filteredAuthorEmails?: string[];
   onClickSummary?: () => void;
   shrink?: boolean;
+  endDate?: string;
 }
 
 function shortenTitle(title: string, shrink?: boolean) {
@@ -84,9 +86,14 @@ const CommitOrMergeRequestRenderer: React.FC<
   onClickSummary,
   children,
   shrink,
+  endDate,
 }) => {
   const theme = useTheme();
-  const title = mergeRequest?.title || commit?.title;
+  const title =
+    commit?.title ||
+    (DateTime.fromISO(mergeRequest?.merged_at) <= DateTime.fromISO(endDate)
+      ? mergeRequest?.title
+      : '(Unmerged) ' + mergeRequest?.title);
   const author = mergeRequest?.author.name || commit?.committer_name;
   const extensions = (commit || mergeRequest).extensions;
   const isExcluded = extensions?.override?.exclude;
