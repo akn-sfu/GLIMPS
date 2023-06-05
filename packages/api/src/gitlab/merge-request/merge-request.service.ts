@@ -61,6 +61,34 @@ export class MergeRequestService extends BaseService<
       );
     }
 
+    if (filters.commit_start_date) {
+      query.andWhere(
+        `merge_request.id IN (
+          SELECT mr.id
+          FROM commit c, merge_request_commits_commit mrc, merge_request mr
+          WHERE c.id = mrc."commitId" AND mrc."mergeRequestId" = mr.id
+          AND (c.resource #>> '{committed_date}')::timestamptz >= ((:startDate)::timestamptz)
+        )`,
+        {
+          startDate: filters.commit_start_date,
+        },
+      );
+    }
+
+    if (filters.commit_end_date) {
+      query.andWhere(
+        `merge_request.id IN (
+          SELECT mr.id
+          FROM commit c, merge_request_commits_commit mrc, merge_request mr
+          WHERE c.id = mrc."commitId" AND mrc."mergeRequestId" = mr.id
+          AND (c.resource #>> '{committed_date}')::timestamptz <= ((:endDate)::timestamptz)
+        )`,
+        {
+          endDate: filters.commit_end_date,
+        },
+      );
+    }
+
     if (filters.merged_start_date) {
       query.andWhere(
         "(merge_request.resource #>> '{merged_at}')::timestamptz >= ((:startDate)::timestamptz)",

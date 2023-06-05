@@ -12,6 +12,8 @@ interface MergeRequestSearchParams {
   author_email?: string[];
   merged_start_date?: string;
   merged_end_date?: string;
+  commit_start_date?: string;
+  commit_end_date?: string;
   note_id?: string;
   timezone?: string;
 }

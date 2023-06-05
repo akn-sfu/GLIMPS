@@ -99,8 +99,8 @@ const ListMergeRequestPage = () => {
   } = useInfiniteMergeRequest({
     repository: id,
     author_email: emails,
-    merged_start_date: startDate.toString(),
-    merged_end_date: endDate.toString(),
+    commit_start_date: startDate.toString(),
+    commit_end_date: endDate.toString(),
   });
   const {
     data: commits,
@@ -192,6 +192,7 @@ const ListMergeRequestPage = () => {
                         mergeRequest={commitOrMergeRequest}
                         active={active}
                         shrink={!!showSpiltView}
+                        endDate={endDate}
                         filteredAuthorEmails={emails}
                         onClickSummary={() => {
                           setActiveCommit(undefined);
@@ -205,6 +206,8 @@ const ListMergeRequestPage = () => {
                         {active && (
                           <CommitList
                             mergeRequest={commitOrMergeRequest}
+                            commitStartDate={startDate}
+                            commitEndDate={endDate}
                             activeCommit={activeCommit}
                             setActiveCommit={setActiveCommit}
                             authorEmails={emails}
@@ -229,11 +232,11 @@ const ListMergeRequestPage = () => {
                     );
                   }
                 })}
-                {hasNextPage && hasNextPageCommit && (
+                {(hasNextPage || hasNextPageCommit) && (
                   <LoadMore
                     onClick={() => {
-                      void fetchNextPage();
-                      void fetchNextPageCommit();
+                      if (hasNextPage) void fetchNextPage();
+                      if (hasNextPageCommit) void fetchNextPageCommit();
                     }}
                     ref={loadMoreRef}
                   />
