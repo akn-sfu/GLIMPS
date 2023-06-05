@@ -6,9 +6,7 @@ import { useSnackbar } from 'notistack';
 import React, { useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import {
-  AddCollaboratorPayload,
   RemoveCollaboratorPayload,
-  useAddCollaborator,
   useGetRepository,
   useRemoveCollaborator,
 } from '../../api/repository';
@@ -31,6 +29,7 @@ import ScoringConfigDialog from './ScoringConfig/ScoringConfigDialog';
 import ScrollToTop from '../../shared/components/ScrollToTop';
 import { useRepositoryContext } from '../../contexts/RepositoryContext';
 import MakeWarning from './MakeWarning';
+import { updateRecalculation } from '../../api/repository';
 
 const MainContainer = styled.div`
   display: grid;
@@ -40,13 +39,13 @@ const MainContainer = styled.div`
 
 const RepoSetupPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const { mutate: setRecalculation } = updateRecalculation(id);
   const { push } = useHistory();
   const { mutate: updateScoring, isLoading: updateScoreLoading } =
     useUpdateScoring();
   const { user } = useAuthContext();
   const { setRepositoryId } = useRepositoryContext();
   const { data, invalidate } = useGetRepository(id);
-  const { mutate: addCollaborator } = useAddCollaborator(id);
   const { mutate: removeCollaborator } = useRemoveCollaborator(id);
   const { enqueueSnackbar } = useSnackbar();
   const isOwner = user?.id === data?.extensions?.owner?.id;
@@ -72,15 +71,17 @@ const RepoSetupPage: React.FC = () => {
       },
       {
         onSuccess: () => {
-          void invalidate();
+          setRecalculation(
+            { recalculationRequired: false },
+            {
+              onSuccess: () => {
+                invalidate();
+              },
+            },
+          );
         },
       },
     );
-  };
-  const handleAddCollaborator = (payload: AddCollaboratorPayload) => {
-    addCollaborator(payload, {
-      onSuccess: invalidate,
-    });
   };
 
   const handleRemoveCollaborator = (payload: RemoveCollaboratorPayload) => {
@@ -141,7 +142,7 @@ const RepoSetupPage: React.FC = () => {
           </AccordionMenu>
           {isEditor && (
             <AccordionMenu title='Members' color='#ffd9cf'>
-              <Members id={id} />
+              <Members id={id} invalidate={invalidate} />
             </AccordionMenu>
           )}
           <AccordionMenu title='Scoring Rubric' color='#cff4fc'>
@@ -162,8 +163,8 @@ const RepoSetupPage: React.FC = () => {
             {data && isOwner && (
               <Collaborators
                 repository={data}
-                onAddCollaborator={handleAddCollaborator}
                 onRemoveCollaborator={handleRemoveCollaborator}
+                id={id}
               />
             )}
             {data && !isOwner && (

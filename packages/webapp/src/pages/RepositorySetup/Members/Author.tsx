@@ -12,6 +12,7 @@ import { useLinkAuthorToMember } from '../../../api/author';
 import { ApiResource } from '../../../api/base';
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import Tooltip from '@material-ui/core/Tooltip';
+import { updateRecalculation } from '../../../api/repository';
 
 interface AuthorProps {
   author: ApiResource<Commit.Author>;
@@ -19,6 +20,8 @@ interface AuthorProps {
   allMembers: ApiResource<RepositoryMember>[];
   invalidateMembers: () => Promise<void>;
   invalidateAuthors: () => Promise<void>;
+  id: string;
+  invalidateCalculation: () => void;
 }
 
 function compareMember(a: RepositoryMember, b: RepositoryMember) {
@@ -31,23 +34,35 @@ const Author: React.FC<AuthorProps> = ({
   allMembers,
   invalidateMembers,
   invalidateAuthors,
+  id,
+  invalidateCalculation,
 }) => {
-  const { mutate: setMemberToThisAuthor, isLoading } = useLinkAuthorToMember(
-    author.meta.id,
-  );
+  const { mutate: setMemberToThisAuthor, isLoading } = useLinkAuthorToMember(author.meta.id);
+  const { mutate: setRecalculation } = updateRecalculation(id);
   const [value, setValue] = useState<string>();
+
   useEffect(() => {
     setValue(member?.meta.id);
   }, [member?.meta.id]);
 
   useEffect(() => {
     if (value === '') {
+
+      // set author to null member
       setMemberToThisAuthor(null, {
         onSuccess: () => {
           invalidateAuthors();
           invalidateMembers();
         },
-      }); // empty member
+      }); 
+      setRecalculation(
+        { recalculationRequired: true },
+        {
+          onSuccess: () => {
+            invalidateCalculation();
+          },
+        },
+      );
     } else {
       const newMember = allMembers.find((m) => m.meta.id === value);
       if (newMember && member?.meta.id !== newMember.meta.id) {
@@ -57,6 +72,14 @@ const Author: React.FC<AuthorProps> = ({
             invalidateMembers();
           },
         });
+        setRecalculation(
+        { recalculationRequired: true },
+        {
+          onSuccess: () => {
+            invalidateCalculation();
+          },
+        },
+      );
       }
     }
   }, [value]);

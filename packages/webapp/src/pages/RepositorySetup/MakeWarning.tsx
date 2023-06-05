@@ -48,6 +48,7 @@ const MakeWarning: React.FC<MakeWarningProps> = ({
   let Alert_pendingScore = null;
   let Alert_endDate = null;
   let successful_message = null;
+  let Alert_authorMemberSync = null;
 
   // construct a prompt showing all the warning message
   let needsPrompt = false;
@@ -85,6 +86,19 @@ const MakeWarning: React.FC<MakeWarningProps> = ({
     const warning =
       'This repository has not been evaluated since the last sync.';
     Alert_outdatedScore = makeAlert('error', 'Outdated scores', warning);
+  }
+  // remind for recalculating the score
+  if (repository?.needs_recalculation) {
+    needsPrompt = true;
+    prompt_msg +=
+      '\n-->You have not evaluated the score since the last member author sync.';
+    const warning =
+      'This repository has not been evaluated since the last member author sync.';
+    Alert_authorMemberSync = makeAlert(
+      'error',
+      'Author and Member Synced',
+      warning,
+    );
   }
 
   // check for pending scoring override
@@ -124,6 +138,7 @@ const MakeWarning: React.FC<MakeWarningProps> = ({
       {Alert_missAuthors}
       {Alert_missRubric}
       {Alert_outdatedScore}
+      {Alert_authorMemberSync}
       {Alert_pendingScore}
       {Alert_endDate}
       {successful_message}
