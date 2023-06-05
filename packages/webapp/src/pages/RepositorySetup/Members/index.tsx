@@ -9,7 +9,7 @@ import Author from './Author';
 
 interface MembersProps {
   id: string;
-  invalidate: () => void;
+  invalidateCalculation: () => void;
 }
 
 function findSelectedMember(
@@ -21,16 +21,8 @@ function findSelectedMember(
   );
 }
 
-// Sort level 1: Authors without an associated repository member come first
-// Sort level 2: Sort by author name
+// sort author by strings
 function compareCommitAuthors(a: Commit.Author, b: Commit.Author) {
-  // disable sort level
-  // if (a.repository_member_id && !b.repository_member_id) {
-  //   return 1;
-  // } else if (!a.repository_member_id && b.repository_member_id) {
-  //   return -1;
-  // }
-
   if (a.author_name.localeCompare(b.author_name) === 0)
     return a.author_email.localeCompare(b.author_email);
   return a.author_name.localeCompare(b.author_name);
@@ -56,7 +48,7 @@ const Members: React.FC<MembersProps> = ({ id, invalidateCalculation }) => {
                 allMembers={members}
                 invalidateMembers={invalidateMembers}
                 invalidateAuthors={invalidateAuthors}
-                invalidate={invalidateCalculation}
+                invalidateCalculation={invalidateCalculation}
                 id={id}
               />
             );

@@ -37,8 +37,21 @@ const Author: React.FC<AuthorProps> = ({
   id,
   invalidateCalculation,
 }) => {
-  const { mutate: setMemberToThisAuthor, isLoading } = useLinkAuthorToMember(author.meta.id);
+  const { mutate: setMemberToThisAuthor, isLoading } = useLinkAuthorToMember(
+    author.meta.id,
+  );
+  const onLinkAuthorToMemberSuccessHandler = {
+    onSuccess: () => {
+      invalidateAuthors();
+      invalidateMembers();
+    },
+  };
   const { mutate: setRecalculation } = updateRecalculation(id);
+  const onRecalculationSuccessHandler = {
+    onSuccess: () => {
+      invalidateCalculation();
+    },
+  };
   const [value, setValue] = useState<string>();
 
   useEffect(() => {
@@ -47,39 +60,20 @@ const Author: React.FC<AuthorProps> = ({
 
   useEffect(() => {
     if (value === '') {
-
       // set author to null member
-      setMemberToThisAuthor(null, {
-        onSuccess: () => {
-          invalidateAuthors();
-          invalidateMembers();
-        },
-      }); 
+      setMemberToThisAuthor(null, onLinkAuthorToMemberSuccessHandler);
       setRecalculation(
         { recalculationRequired: true },
-        {
-          onSuccess: () => {
-            invalidateCalculation();
-          },
-        },
+        onRecalculationSuccessHandler,
       );
     } else {
       const newMember = allMembers.find((m) => m.meta.id === value);
       if (newMember && member?.meta.id !== newMember.meta.id) {
-        setMemberToThisAuthor(newMember, {
-          onSuccess: () => {
-            invalidateAuthors();
-            invalidateMembers();
-          },
-        });
+        setMemberToThisAuthor(newMember, onLinkAuthorToMemberSuccessHandler);
         setRecalculation(
-        { recalculationRequired: true },
-        {
-          onSuccess: () => {
-            invalidateCalculation();
-          },
-        },
-      );
+          { recalculationRequired: true },
+          onRecalculationSuccessHandler,
+        );
       }
     }
   }, [value]);
