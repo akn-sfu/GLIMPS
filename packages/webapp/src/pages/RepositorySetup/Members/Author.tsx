@@ -10,14 +10,18 @@ import Typography from '@material-ui/core/Typography';
 import React, { useEffect, useState } from 'react';
 import { useLinkAuthorToMember } from '../../../api/author';
 import { ApiResource } from '../../../api/base';
+import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
+import Tooltip from '@material-ui/core/Tooltip';
 import { updateRecalculation } from '../../../api/repository';
 
 interface AuthorProps {
   author: ApiResource<Commit.Author>;
   member?: ApiResource<RepositoryMember>;
   allMembers: ApiResource<RepositoryMember>[];
+  invalidateMembers: () => Promise<void>;
+  invalidateAuthors: () => Promise<void>;
   id: string;
-  invalidate: () => void;
+  invalidateCalculation: () => void;
 }
 
 function compareMember(a: RepositoryMember, b: RepositoryMember) {
@@ -28,12 +32,26 @@ const Author: React.FC<AuthorProps> = ({
   author,
   member,
   allMembers,
+  invalidateMembers,
+  invalidateAuthors,
   id,
-  invalidate,
+  invalidateCalculation,
 }) => {
-  const { mutate, isLoading } = useLinkAuthorToMember(author.meta.id);
+  const { mutate: setMemberToThisAuthor, isLoading } = useLinkAuthorToMember(
+    author.meta.id,
+  );
+  const onLinkAuthorToMemberSuccessHandler = {
+    onSuccess: () => {
+      invalidateAuthors();
+      invalidateMembers();
+    },
+  };
   const { mutate: setRecalculation } = updateRecalculation(id);
-
+  const onRecalculationSuccessHandler = {
+    onSuccess: () => {
+      invalidateCalculation();
+    },
+  };
   const [value, setValue] = useState<string>();
 
   useEffect(() => {
@@ -41,43 +59,51 @@ const Author: React.FC<AuthorProps> = ({
   }, [member?.meta.id]);
 
   useEffect(() => {
-    const newMember = allMembers.find((m) => m.meta.id === value);
-    if (newMember && member?.meta.id !== newMember.meta.id) {
-      mutate(newMember);
+    if (value === '') {
+      // set author to null member
+      setMemberToThisAuthor(null, onLinkAuthorToMemberSuccessHandler);
       setRecalculation(
         { recalculationRequired: true },
-        {
-          onSuccess: () => {
-            invalidate();
-          },
-        },
+        onRecalculationSuccessHandler,
       );
+    } else {
+      const newMember = allMembers.find((m) => m.meta.id === value);
+      if (newMember && member?.meta.id !== newMember.meta.id) {
+        setMemberToThisAuthor(newMember, onLinkAuthorToMemberSuccessHandler);
+        setRecalculation(
+          { recalculationRequired: true },
+          onRecalculationSuccessHandler,
+        );
+      }
     }
   }, [value]);
 
   return (
     <Box my={4}>
-      <Grid justify='space-between' xs={12} alignItems='flex-start' container>
-        <Grid item xs={6}>
+      <Grid justify='space-between' xs={12} alignItems='center' container>
+        <Grid item xs={6} style={{ paddingLeft: '15%' }}>
           <Typography variant='h4'>{author.author_name}</Typography>
           <Typography variant='body1' style={{ wordWrap: 'break-word' }}>
             {author.author_email}
           </Typography>
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={4}>
           {isLoading ? (
             <CircularProgress />
           ) : (
-            <FormControl variant='filled'>
+            <FormControl variant='filled' fullWidth>
               <InputLabel>Member</InputLabel>
               <Select
                 style={{ minWidth: '18rem' }}
-                value={value || 'None'}
+                value={value || ''}
                 onChange={(e) => {
                   e.preventDefault();
                   setValue(e.target.value as string);
                 }}
               >
+                <MenuItem key={'None'} value=''>
+                  <em>None</em>
+                </MenuItem>
                 {allMembers?.sort(compareMember)?.map((m) => (
                   <MenuItem key={m.meta.id} value={m.meta.id}>
                     {m.username} - {m.name}
@@ -85,6 +111,13 @@ const Author: React.FC<AuthorProps> = ({
                 ))}
               </Select>
             </FormControl>
+          )}
+        </Grid>
+        <Grid item xs={2} style={{ paddingLeft: '10pt' }}>
+          {!author.isSet && author.repository_member_id && (
+            <Tooltip title='Auto-match Member'>
+              <HelpOutlineIcon color='primary' />
+            </Tooltip>
           )}
         </Grid>
       </Grid>

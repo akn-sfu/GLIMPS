@@ -45,7 +45,7 @@ const RepoSetupPage: React.FC = () => {
     useUpdateScoring();
   const { user } = useAuthContext();
   const { setRepositoryId } = useRepositoryContext();
-  const { data, invalidate } = useGetRepository(id);
+  const { data, invalidate: invalidateRepository } = useGetRepository(id);
   const { mutate: removeCollaborator } = useRemoveCollaborator(id);
   const { enqueueSnackbar } = useSnackbar();
   const isOwner = user?.id === data?.extensions?.owner?.id;
@@ -75,7 +75,7 @@ const RepoSetupPage: React.FC = () => {
             { recalculationRequired: false },
             {
               onSuccess: () => {
-                invalidate();
+                invalidateRepository();
               },
             },
           );
@@ -86,7 +86,7 @@ const RepoSetupPage: React.FC = () => {
 
   const handleRemoveCollaborator = (payload: RemoveCollaboratorPayload) => {
     removeCollaborator(payload, {
-      onSuccess: invalidate,
+      onSuccess: invalidateRepository,
     });
   };
 
@@ -142,7 +142,7 @@ const RepoSetupPage: React.FC = () => {
           </AccordionMenu>
           {isEditor && (
             <AccordionMenu title='Members' color='#ffd9cf'>
-              <Members id={id} invalidate={invalidate} />
+              <Members id={id} invalidateCalculation={invalidateRepository} />
             </AccordionMenu>
           )}
           <AccordionMenu title='Scoring Rubric' color='#cff4fc'>

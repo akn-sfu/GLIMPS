@@ -1,9 +1,10 @@
 import { Commit } from '@ceres/types';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository as TypeORMRepository } from 'typeorm';
+import { getRepository, Repository as TypeORMRepository } from 'typeorm';
 import { RepositoryMember } from '../../repository-member/repository-member.entity';
 import { Repository } from '../../repository.entity';
+import { autoLinkAuthorsMembersHelper } from './commit-author-autolinker';
 import { CommitAuthor } from './commit-author.entity';
 
 @Injectable()
@@ -28,12 +29,32 @@ export class CommitAuthorService {
 
   async updateRepositoryMember(
     author: CommitAuthor,
+    repositoryMembers: RepositoryMember[],
     repositoryMember?: RepositoryMember,
   ) {
     const entity = await this.repository.preload(author);
-    entity.owner = repositoryMember;
-    entity.resource.repository_member_id = repositoryMember?.id;
-    return this.repository.save(entity);
+    if (repositoryMember !== undefined && repositoryMember !== null) {
+      entity.owner = repositoryMember;
+      entity.resource.repository_member_id = repositoryMember.id;
+    } else {
+      entity.owner = null;
+      delete entity.resource.repository_member_id;
+    }
+
+    author.resource.isSet = true;
+    const result = await this.repository.save(entity);
+
+    const authors = await this.findAllForRepository(author.repository);
+
+    const links = autoLinkAuthorsMembersHelper(
+      entity,
+      authors,
+      repositoryMembers,
+    );
+    await links.forEach((link) => {
+      this.repository.save(link);
+    });
+    return result;
   }
 
   findAllForRepository(repository: Repository) {

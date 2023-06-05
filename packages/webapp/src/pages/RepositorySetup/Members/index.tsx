@@ -9,7 +9,7 @@ import Author from './Author';
 
 interface MembersProps {
   id: string;
-  invalidate: () => void;
+  invalidateCalculation: () => void;
 }
 
 function findSelectedMember(
@@ -21,26 +21,24 @@ function findSelectedMember(
   );
 }
 
-// Sort level 1: Authors without an associated repository member come first
-// Sort level 2: Sort by author name
+// sort author by strings
 function compareCommitAuthors(a: Commit.Author, b: Commit.Author) {
-  if (a.repository_member_id && !b.repository_member_id) {
-    return 1;
-  } else if (!a.repository_member_id && b.repository_member_id) {
-    return -1;
-  }
+  if (a.author_name.localeCompare(b.author_name) === 0)
+    return a.author_email.localeCompare(b.author_email);
   return a.author_name.localeCompare(b.author_name);
 }
 
-const Members: React.FC<MembersProps> = ({ id, invalidate }) => {
-  const { data: members } = useRepositoryMembers(id);
-  const { data: authors } = useRepositoryAuthors(id);
+const Members: React.FC<MembersProps> = ({ id, invalidateCalculation }) => {
+  const { data: members, invalidate: invalidateMembers } =
+    useRepositoryMembers(id);
+  const { data: authors, invalidate: invalidateAuthors } =
+    useRepositoryAuthors(id);
 
   return (
-    <Container maxWidth='sm'>
+    <Container maxWidth='md'>
       <Box>
         {members &&
-          authors?.sort(compareCommitAuthors)?.map((author) => {
+          authors?.sort(compareCommitAuthors).map((author) => {
             const member = findSelectedMember(author, members);
             return (
               <Author
@@ -48,7 +46,9 @@ const Members: React.FC<MembersProps> = ({ id, invalidate }) => {
                 author={author}
                 member={member}
                 allMembers={members}
-                invalidate={invalidate}
+                invalidateMembers={invalidateMembers}
+                invalidateAuthors={invalidateAuthors}
+                invalidateCalculation={invalidateCalculation}
                 id={id}
               />
             );

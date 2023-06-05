@@ -84,15 +84,23 @@ export class RepositoryController {
     @Param() { id }: IdParam,
     @Body() member?: RepositoryMember,
   ) {
+    const author = await this.commitAuthorService.findOne(id);
+    let memberMetaId = (member as any)?.meta?.id;
     let memberEntity;
-    if (member) {
+    if (memberMetaId !== undefined) {
       memberEntity = await this.repositoryMemberService.findOne(
         (member as any).meta.id,
       );
     }
-    const author = await this.commitAuthorService.findOne(id);
+
+    const repository = author.repository;
+    const members = await this.repositoryMemberService.findAllForRepository(
+      repository,
+    );
+
     return this.commitAuthorService.updateRepositoryMember(
       author,
+      members,
       memberEntity,
     );
   }
