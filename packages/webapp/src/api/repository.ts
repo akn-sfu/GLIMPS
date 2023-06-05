@@ -49,3 +49,14 @@ export function useRemoveCollaborator(id: string) {
     'DELETE',
   );
 }
+
+export type UpdateNeedsRecalculation = {
+  recalculationRequired: boolean;
+};
+
+export function updateRecalculation(id: string) {
+  return useApiMutation<ApiResource<Repository>, UpdateNeedsRecalculation>(
+    `/repository/${id}/recalculate`,
+    'PUT',
+  );
+}

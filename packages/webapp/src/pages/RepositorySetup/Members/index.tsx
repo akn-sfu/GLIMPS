@@ -9,6 +9,7 @@ import Author from './Author';
 
 interface MembersProps {
   id: string;
+  invalidate: () => void;
 }
 
 function findSelectedMember(
@@ -31,7 +32,7 @@ function compareCommitAuthors(a: Commit.Author, b: Commit.Author) {
   return a.author_name.localeCompare(b.author_name);
 }
 
-const Members: React.FC<MembersProps> = ({ id }) => {
+const Members: React.FC<MembersProps> = ({ id, invalidate }) => {
   const { data: members } = useRepositoryMembers(id);
   const { data: authors } = useRepositoryAuthors(id);
 
@@ -47,6 +48,8 @@ const Members: React.FC<MembersProps> = ({ id }) => {
                 author={author}
                 member={member}
                 allMembers={members}
+                invalidate={invalidate}
+                id={id}
               />
             );
           })}

@@ -10,29 +10,51 @@ import Typography from '@material-ui/core/Typography';
 import React, { useEffect, useState } from 'react';
 import { useLinkAuthorToMember } from '../../../api/author';
 import { ApiResource } from '../../../api/base';
+import { updateRecalculation } from '../../../api/repository';
 
 interface AuthorProps {
   author: ApiResource<Commit.Author>;
   member?: ApiResource<RepositoryMember>;
   allMembers: ApiResource<RepositoryMember>[];
+  id: string;
+  invalidate: () => void;
 }
 
 function compareMember(a: RepositoryMember, b: RepositoryMember) {
   return a.username.localeCompare(b.username);
 }
 
-const Author: React.FC<AuthorProps> = ({ author, member, allMembers }) => {
+const Author: React.FC<AuthorProps> = ({
+  author,
+  member,
+  allMembers,
+  id,
+  invalidate,
+}) => {
   const { mutate, isLoading } = useLinkAuthorToMember(author.meta.id);
+  const { mutate: setRecalculation } = updateRecalculation(id);
+
   const [value, setValue] = useState<string>();
+
   useEffect(() => {
     setValue(member?.meta.id);
   }, [member?.meta.id]);
+
   useEffect(() => {
     const newMember = allMembers.find((m) => m.meta.id === value);
     if (newMember && member?.meta.id !== newMember.meta.id) {
       mutate(newMember);
+      setRecalculation(
+        { recalculationRequired: true },
+        {
+          onSuccess: () => {
+            invalidate();
+          },
+        },
+      );
     }
   }, [value]);
+
   return (
     <Box my={4}>
       <Grid justify='space-between' xs={12} alignItems='flex-start' container>

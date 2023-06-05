@@ -220,7 +220,7 @@ export class MergeRequestService extends BaseService<
 
       // when you squash a MR, git replaces them all with a single squash commit
       // we actually want to display the squashed commits instead of the single one so we delete the single one
-      let squashCommit = await this.commitService.findByGitlabId(
+      const squashCommit = await this.commitService.findByGitlabId(
         repository,
         mergeRequest.resource.squash_commit_sha,
       );
@@ -323,7 +323,7 @@ export class MergeRequestService extends BaseService<
       // first request gets us the first page and lets us know if there are more to fetch
       // if there are, enter the for loop and fetch the remaining pages
       if (pages > 1) {
-        let remainingPagePromises = [];
+        const remainingPagePromises = [];
         for (let curPage = 2; curPage <= pages; curPage++) {
           const params = {
             page: curPage,

@@ -1,5 +1,5 @@
 import { Repository as RepositoryResource } from '@ceres/types';
-import { Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
+import { Entity, JoinColumn, ManyToOne, OneToMany, Column } from 'typeorm';
 import { BaseEntity } from '../../common/base-entity';
 import { User } from '../../user/entities/user.entity';
 import { MergeRequest } from '../merge-request/merge-request.entity';
@@ -31,4 +31,7 @@ export class Repository extends BaseEntity<RepositoryResource> {
 
   @OneToMany(() => CommitAuthor, (commitAuthor) => commitAuthor.repository)
   commitAuthors: CommitAuthor[];
+
+  @Column({ type: 'boolean', name: 'needs_recalculation' })
+  needsRecalculation: boolean;
 }
