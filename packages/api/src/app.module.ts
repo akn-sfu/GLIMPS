@@ -14,6 +14,7 @@ import { OperationModule } from './operation/operation.module';
 import { ScoringModule } from './scoring/scoring.module';
 import { GroupModule } from './group/group.module';
 import { SysinfoModule } from './sysinfo/sysinfo.module';
+import { GithubModule } from './github/github.module';
 import config from './config';
 
 @Module({
@@ -37,6 +38,7 @@ import config from './config';
     ScoringModule,
     GroupModule,
     SysinfoModule,
+    GithubModule,
   ],
   controllers: [AppController],
   providers: [

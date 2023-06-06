@@ -85,7 +85,7 @@ export class RepositoryController {
     @Body() member?: RepositoryMember,
   ) {
     const author = await this.commitAuthorService.findOne(id);
-    let memberMetaId = (member as any)?.meta?.id;
+    const memberMetaId = (member as any)?.meta?.id;
     let memberEntity;
     if (memberMetaId !== undefined) {
       memberEntity = await this.repositoryMemberService.findOne(
