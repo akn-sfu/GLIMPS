@@ -26,7 +26,6 @@ jobs:
     needs: test-lockfiles
     runs-on:
       - ubuntu-latest
-      - docker
     container:
       image: node:14
     if: ${{ github.event_name }} != "push"
@@ -48,7 +47,6 @@ jobs:
     needs: test-lockfiles
     runs-on:
       - ubuntu-latest
-      - docker
     container:
       image: node:14
     if: # Unable to map conditional expression to GitHub Actions equivalent
@@ -80,7 +78,6 @@ jobs:
     needs: test-lockfiles
     runs-on:
       - ubuntu-latest
-      - docker
     container:
       image: node:14
     if: # Unable to map conditional expression to GitHub Actions equivalent
