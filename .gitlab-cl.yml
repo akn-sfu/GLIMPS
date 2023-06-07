@@ -1,0 +1,149 @@
+stages:
+  - test
+  - build
+  - deploy
+
+variables:
+  DEV_BRANCH: "master"
+  PROD_BRANCH: "prod"
+
+test lockfiles:
+  stage: test
+  image: node:16
+  tags:
+    - docker
+  rules:
+    - if: '$CI_MERGE_REQUEST_ID != null'
+      when: always
+  script:
+    - ./devops/tests/lockfiles.sh
+
+build info:
+  # Always runs: allows pipeline execution to happen even if no other tasks run.
+  stage: build
+  image: node:14
+  tags:
+    - docker
+  rules:
+    - if: $CI_PIPELINE_SOURCE != "push"
+  script:
+    - echo "This task give the CI/CD pipeline something to (almost always) run."
+    - echo "  CI_PIPELINE_SOURCE  = $CI_PIPELINE_SOURCE"
+    - echo "  CI_MERGE_REQUEST_ID = $CI_MERGE_REQUEST_ID"
+    - echo "  CI_COMMIT_BRANCH    = $CI_COMMIT_BRANCH"
+    - node --version
+    - npm --version
+
+build api:
+  stage: build
+  image: node:14
+  tags:
+    - docker
+  rules:
+    - if: '$CI_MERGE_REQUEST_ID != null'
+      changes:
+        - packages/api/**/*
+        - packages/types/**/*
+        - .gitlab-ci.yml
+      when: always
+    - if: '$CI_COMMIT_BRANCH == $DEV_BRANCH || $CI_COMMIT_BRANCH == $PROD_BRANCH'
+      when: always
+  before_script:
+    - npm ci
+    - npm run bootstrap:ci:api
+    - cd packages/types && npm run build && cd ../../
+    - npm run link
+    - cd packages/api
+  script:
+    - npx prettier --check .
+    - npm run build
+  after_script:
+    - tar -czf api_build.tar.gz .
+  artifacts:
+    expire_in: 1 week
+    paths:
+      - api_build.tar.gz
+
+build webapp:
+  stage: build
+  image: node:14
+  tags:
+    - docker
+  rules:
+    - if: '$CI_MERGE_REQUEST_ID != null'
+      changes:
+        - packages/webapp/**/*
+        - packages/types/**/*
+        - .gitlab-ci.yml
+      when: always
+    - if: '$CI_COMMIT_BRANCH == $DEV_BRANCH || $CI_COMMIT_BRANCH == $PROD_BRANCH'
+      when: always
+  before_script:
+    - npm ci
+    - npm run bootstrap:ci:webapp
+    - cd packages/types && npm run build && cd ../../
+    - npm run link
+    - cd packages/webapp
+  script:
+    - npx prettier --check .
+    - GENERATE_SOURCEMAP=false npm run build
+  after_script:
+    - cd packages/webapp/build && tar -czvf ../../../webapp_build.tar.gz .
+  artifacts:
+    expire_in: 1 week
+    paths:
+      - webapp_build.tar.gz
+
+.deploy-script: &deploy-script
+  - cp /var/glimps/.env ./.env
+  - mv webapp_build.tar.gz devops/caddy
+  - mv api_build.tar.gz packages/api
+  - docker-compose -f docker-compose.yml -f docker-compose.deploy.yml build
+  - docker-compose -f docker-compose.yml -f docker-compose.deploy.yml up --force-recreate -d
+  - docker image prune -f
+  - sleep 15 && docker exec glimps_api npx typeorm migration:run
+
+deploy development:
+  stage: deploy
+  environment:
+    name: development
+    url: https://glimps-dev.cmpt.sfu.ca
+  tags:
+    - deploy-development
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $DEV_BRANCH'
+      when: on_success
+  script:
+    - *deploy-script
+
+deploy production:
+  stage: deploy
+  environment:
+    name: production
+    url: https://glimps-prod.cmpt.sfu.ca
+  tags:
+    - deploy-production
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $PROD_BRANCH'
+      when: manual
+  script:
+    - *deploy-script
+
+deploy gitlab:
+  stage: deploy
+  environment:
+    name: gitlab
+    url: https://glimps-dev-glb.cmpt.sfu.ca
+  tags:
+    - deploy-gitlab
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $DEV_BRANCH'
+      changes:
+        - devops/gitlab/**/*
+      when: manual
+  before_script:
+    - cd devops/gitlab
+    - cp /var/glimps/.env ./.env
+  script:
+    - docker-compose pull
+    - docker-compose up --force-recreate -d
