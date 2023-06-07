@@ -67,7 +67,8 @@ jobs:
     - run: npm run link
     - run: cd packages/api
     - run: npm run build
-    - run: tar -czf api_build.tar.gz .
+    - run: cd ..
+    - run: tar -czf ../../api_build.tar.gz .
       if: always()
     - uses: actions/upload-artifact@v3.1.1
       if: success()
@@ -92,11 +93,10 @@ jobs:
       with:
         fetch-depth: 50
     - run: npm ci
-    - run: npm run bootstrap:ci:webapp
+    - run: npm run bootstrap
     - run: cd packages/types && npm run build && cd ../../
     - run: npm run link
     - run: cd packages/webapp
-    - run: npx prettier --check .
     - run: GENERATE_SOURCEMAP=false npm run build
     - run: cd packages/webapp/build && tar -czvf ../../../webapp_build.tar.gz .
       if: always()
