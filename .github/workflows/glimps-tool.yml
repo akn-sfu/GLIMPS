@@ -10,7 +10,6 @@ jobs:
   test-lockfiles:
     runs-on:
       - ubuntu-latest
-      - docker
     container:
       image: node:16
     if: (always() && ${{ github.event.pull_request.number }} != null)
