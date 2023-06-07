@@ -1,0 +1,201 @@
+name: 415-glimps/glimps-tool
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+concurrency:
+  group: "${{ github.ref }}"
+  cancel-in-progress: true
+jobs:
+  test-lockfiles:
+    runs-on:
+      - self-hosted
+      - docker
+    container:
+      image: node:16
+    if: (always() && ${{ github.event.pull_request.number }} != null)
+    timeout-minutes: 60
+    env:
+      DEV_BRANCH: master
+      PROD_BRANCH: prod
+    steps:
+    - uses: actions/checkout@v3.5.0
+      with:
+        fetch-depth: 50
+        lfs: true
+    - run: "./devops/tests/lockfiles.sh"
+  build-info:
+    needs: test-lockfiles
+    runs-on:
+      - self-hosted
+      - docker
+    container:
+      image: node:14
+    if: ${{ github.event_name }} != "push"
+    timeout-minutes: 60
+    env:
+      DEV_BRANCH: master
+      PROD_BRANCH: prod
+    steps:
+    - uses: actions/checkout@v3.5.0
+      with:
+        fetch-depth: 50
+        lfs: true
+    - run: echo "This task give the CI/CD pipeline something to (almost always) run."
+    - run: echo "  CI_PIPELINE_SOURCE  = ${{ github.event_name }}"
+    - run: echo "  CI_MERGE_REQUEST_ID = ${{ github.event.pull_request.number }}"
+    - run: echo "  CI_COMMIT_BRANCH    = ${{ github.ref }}"
+    - run: node --version
+    - run: npm --version
+  build-api:
+    needs: test-lockfiles
+    runs-on:
+      - self-hosted
+      - docker
+    container:
+      image: node:14
+    if: # Unable to map conditional expression to GitHub Actions equivalent
+#         (always() && ${{ github.event.pull_request.number }} != null) || (always() && ${{ github.ref }} == $DEV_BRANCH || ${{ github.ref }} == $PROD_BRANCH)
+    timeout-minutes: 60
+    env:
+      DEV_BRANCH: master
+      PROD_BRANCH: prod
+    steps:
+    - uses: actions/checkout@v3.5.0
+      with:
+        fetch-depth: 50
+        lfs: true
+    - run: npm ci
+    - run: npm run bootstrap:ci:api
+    - run: cd packages/types && npm run build && cd ../../
+    - run: npm run link
+    - run: cd packages/api
+    - run: npx prettier --check .
+    - run: npm run build
+    - run: tar -czf api_build.tar.gz .
+      if: always()
+    - uses: actions/upload-artifact@v3.1.1
+      if: success()
+      with:
+        name: "${{ github.job }}"
+        retention-days: 7
+        path: api_build.tar.gz
+  build-webapp:
+    needs: test-lockfiles
+    runs-on:
+      - self-hosted
+      - docker
+    container:
+      image: node:14
+    if: # Unable to map conditional expression to GitHub Actions equivalent
+#         (always() && ${{ github.event.pull_request.number }} != null) || (always() && ${{ github.ref }} == $DEV_BRANCH || ${{ github.ref }} == $PROD_BRANCH)
+    timeout-minutes: 60
+    env:
+      DEV_BRANCH: master
+      PROD_BRANCH: prod
+    steps:
+    - uses: actions/checkout@v3.5.0
+      with:
+        fetch-depth: 50
+        lfs: true
+    - run: npm ci
+    - run: npm run bootstrap:ci:webapp
+    - run: cd packages/types && npm run build && cd ../../
+    - run: npm run link
+    - run: cd packages/webapp
+    - run: npx prettier --check .
+    - run: GENERATE_SOURCEMAP=false npm run build
+    - run: cd packages/webapp/build && tar -czvf ../../../webapp_build.tar.gz .
+      if: always()
+    - uses: actions/upload-artifact@v3.1.1
+      if: success()
+      with:
+        name: "${{ github.job }}"
+        retention-days: 7
+        path: webapp_build.tar.gz
+  deploy-development:
+    needs:
+    - build-info
+    - build-api
+    - build-webapp
+    runs-on:
+      - self-hosted
+      - deploy-development
+    if: (success() && ${{ github.ref }} == $DEV_BRANCH)
+    environment:
+      name: development
+      url: https://glimps-dev.cmpt.sfu.ca
+    timeout-minutes: 60
+    env:
+      DEV_BRANCH: master
+      PROD_BRANCH: prod
+    steps:
+    - uses: actions/checkout@v3.5.0
+      with:
+        fetch-depth: 50
+        lfs: true
+    - uses: actions/download-artifact@v3.0.1
+    - run: cp /var/glimps/.env ./.env
+    - run: mv webapp_build.tar.gz devops/caddy
+    - run: mv api_build.tar.gz packages/api
+    - run: docker-compose -f docker-compose.yml -f docker-compose.deploy.yml build
+    - run: docker-compose -f docker-compose.yml -f docker-compose.deploy.yml up --force-recreate -d
+    - run: docker image prune -f
+    - run: sleep 15 && docker exec glimps_api npx typeorm migration:run
+  deploy-production:
+    needs:
+    - build-info
+    - build-api
+    - build-webapp
+    runs-on:
+      - self-hosted
+      - deploy-production
+    if: # Unable to map conditional expression to GitHub Actions equivalent
+#         ${{ github.ref }} == $PROD_BRANCH
+    environment:
+      name: production
+      url: https://glimps-prod.cmpt.sfu.ca
+    timeout-minutes: 60
+    env:
+      DEV_BRANCH: master
+      PROD_BRANCH: prod
+    steps:
+    - uses: actions/checkout@v3.5.0
+      with:
+        fetch-depth: 50
+        lfs: true
+    - uses: actions/download-artifact@v3.0.1
+    - run: cp /var/glimps/.env ./.env
+    - run: mv webapp_build.tar.gz devops/caddy
+    - run: mv api_build.tar.gz packages/api
+    - run: docker-compose -f docker-compose.yml -f docker-compose.deploy.yml build
+    - run: docker-compose -f docker-compose.yml -f docker-compose.deploy.yml up --force-recreate -d
+    - run: docker image prune -f
+    - run: sleep 15 && docker exec glimps_api npx typeorm migration:run
+  deploy-gitlab:
+    needs:
+    - build-info
+    - build-api
+    - build-webapp
+    runs-on:
+      - self-hosted
+      - deploy-gitlab
+    if: # Unable to map conditional expression to GitHub Actions equivalent
+#         ${{ github.ref }} == $DEV_BRANCH
+    environment:
+      name: gitlab
+      url: https://glimps-dev-glb.cmpt.sfu.ca
+    timeout-minutes: 60
+    env:
+      DEV_BRANCH: master
+      PROD_BRANCH: prod
+    steps:
+    - uses: actions/checkout@v3.5.0
+      with:
+        fetch-depth: 50
+        lfs: true
+    - uses: actions/download-artifact@v3.0.1
+    - run: cd devops/gitlab
+    - run: cp /var/glimps/.env ./.env
+    - run: docker-compose pull
+    - run: docker-compose up --force-recreate -d
