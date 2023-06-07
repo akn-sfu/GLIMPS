@@ -9,7 +9,7 @@ concurrency:
 jobs:
   test-lockfiles:
     runs-on:
-      - self-hosted
+      - ubuntu-latest
       - docker
     container:
       image: node:16
@@ -27,7 +27,7 @@ jobs:
   build-info:
     needs: test-lockfiles
     runs-on:
-      - self-hosted
+      - ubuntu-latest
       - docker
     container:
       image: node:14
@@ -50,7 +50,7 @@ jobs:
   build-api:
     needs: test-lockfiles
     runs-on:
-      - self-hosted
+      - ubuntu-latest
       - docker
     container:
       image: node:14
@@ -83,7 +83,7 @@ jobs:
   build-webapp:
     needs: test-lockfiles
     runs-on:
-      - self-hosted
+      - ubuntu-latest
       - docker
     container:
       image: node:14
@@ -119,7 +119,7 @@ jobs:
     - build-api
     - build-webapp
     runs-on:
-      - self-hosted
+      - ubuntu-latest
       - deploy-development
     if: (success() && ${{ github.ref }} == $DEV_BRANCH)
     environment:
@@ -148,7 +148,7 @@ jobs:
     - build-api
     - build-webapp
     runs-on:
-      - self-hosted
+      - ubuntu-latest
       - deploy-production
     if: # Unable to map conditional expression to GitHub Actions equivalent
 #         ${{ github.ref }} == $PROD_BRANCH
@@ -178,7 +178,7 @@ jobs:
     - build-api
     - build-webapp
     runs-on:
-      - self-hosted
+      - ubuntu-latest
       - deploy-gitlab
     if: # Unable to map conditional expression to GitHub Actions equivalent
 #         ${{ github.ref }} == $DEV_BRANCH
