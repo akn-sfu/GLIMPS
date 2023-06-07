@@ -60,6 +60,7 @@ jobs:
       with:
         fetch-depth: 50
     - run: npm ci
+    - run: npm install
     - run: npm run bootstrap:ci:api
     - run: cd packages/types && npm run build && cd ../../
     - run: npm run link
