@@ -68,7 +68,7 @@ jobs:
     - run: cd packages/api
     - run: npm run build
     - run: tar -czf ../../api_build.tar.gz .
-    - run: cd ../..
+    - run: cd ../../
       if: always()
     - uses: actions/upload-artifact@v3.1.1
       if: success()
@@ -113,7 +113,6 @@ jobs:
     - build-webapp
     runs-on:
       - ubuntu-latest
-      - deploy-development
     if: (success() && ${{ github.ref }} == $DEV_BRANCH)
     environment:
       name: development
@@ -141,16 +140,12 @@ jobs:
     - build-webapp
     runs-on:
       - ubuntu-latest
-      - deploy-production
     if: # Unable to map conditional expression to GitHub Actions equivalent
 #         ${{ github.ref }} == $PROD_BRANCH
     environment:
       name: production
       url: https://glimps-prod.cmpt.sfu.ca
     timeout-minutes: 60
-    env:
-      DEV_BRANCH: master
-      PROD_BRANCH: prod
     steps:
     - uses: actions/checkout@v3.5.0
       with:
@@ -163,29 +158,3 @@ jobs:
     - run: docker-compose -f docker-compose.yml -f docker-compose.deploy.yml up --force-recreate -d
     - run: docker image prune -f
     - run: sleep 15 && docker exec glimps_api npx typeorm migration:run
-  deploy-gitlab:
-    needs:
-    - build-info
-    - build-api
-    - build-webapp
-    runs-on:
-      - ubuntu-latest
-      - deploy-gitlab
-    if: # Unable to map conditional expression to GitHub Actions equivalent
-#         ${{ github.ref }} == $DEV_BRANCH
-    environment:
-      name: gitlab
-      url: https://glimps-dev-glb.cmpt.sfu.ca
-    timeout-minutes: 60
-    env:
-      DEV_BRANCH: master
-      PROD_BRANCH: prod
-    steps:
-    - uses: actions/checkout@v3.5.0
-      with:
-        fetch-depth: 50
-    - uses: actions/download-artifact@v3.0.1
-    - run: cd devops/gitlab
-    - run: cp /var/glimps/.env ./.env
-    - run: docker-compose pull
-    - run: docker-compose up --force-recreate -d
