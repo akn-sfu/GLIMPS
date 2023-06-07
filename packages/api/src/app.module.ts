@@ -15,7 +15,6 @@ import { ScoringModule } from './scoring/scoring.module';
 import { GroupModule } from './group/group.module';
 import { SysinfoModule } from './sysinfo/sysinfo.module';
 import { GithubModule } from './github/github.module';
-import { TokenController } from './token/token.controller';
 import config from './config';
 
 @Module({
@@ -41,7 +40,7 @@ import config from './config';
     SysinfoModule,
     GithubModule,
   ],
-  controllers: [AppController, TokenController],
+  controllers: [AppController],
   providers: [
     AppService,
     {
