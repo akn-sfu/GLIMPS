@@ -67,7 +67,6 @@ jobs:
     - run: npm run link
     - run: cd packages/api
     - run: npm run build
-    - run: cd ..
     - run: tar -czf ../../api_build.tar.gz .
       if: always()
     - uses: actions/upload-artifact@v3.1.1
