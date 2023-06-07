@@ -65,13 +65,8 @@ jobs:
     - run: npm run bootstrap
     - run: cd packages/types && npm run build && cd ../../
     - run: npm run link
-    - run: cd packages/api
-    - run: npm run build
-    - run: tar -czf ../../api_build.tar.gz .
-    - run: pwd
-    - run: ls
-    - run: cd ../../
-    - run: pwd
+    - run: cd packages/api && npm run build
+    - run: cd packages/api && tar -czf ../../api_build.tar.gz .
     - run: ls
       if: always()
     - uses: actions/upload-artifact@v3.1.1
